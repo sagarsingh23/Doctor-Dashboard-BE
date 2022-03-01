@@ -37,9 +37,13 @@ public class PatientServiceImpl implements PatientService {
         Patient value = patientRepository.findById(id).get();
         value.setFullName(patient.getFullName());
         value.setAge(patient.getAge());
-        value.setDateOfBirth(patient.getDateOfBirth());
+        value.setCategory(patient.getCategory());
         value.setEmailId(patient.getEmailId());
         value.setGender(patient.getGender());
+        value.setLastVisitedDate(patient.getLastVisitedDate());
+        value.setMobileNo(patient.getMobileNo());
+
+
 
         return patientRepository.save(value);
     }

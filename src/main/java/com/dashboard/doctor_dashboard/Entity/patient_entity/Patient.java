@@ -18,15 +18,15 @@ import java.time.LocalDate;
 public class Patient {
 
     @Id
-    @GeneratedValue(generator = "patient_sequence")
-    @SequenceGenerator(name = "patient_sequence",initialValue = 1,allocationSize = 100)
     @Column(name = "id")
     private Long pID;
     private String fullName;
     private String emailId;
-    private LocalDate dateOfBirth;
+    private LocalDate lastVisitedDate;
     private String gender;
     private int age;
+    private String category;
+    private String mobileNo;
 
     @JsonManagedReference
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)

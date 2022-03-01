@@ -35,9 +35,9 @@ public class PatientController {
     }
 
     @DeleteMapping("api/patient/{id}")
-    public void deletePatientById(@PathVariable("id") Long id) {
-
+    public String deletePatientById(@PathVariable("id") Long id) {
         patientService.deletePatientById(id);
+        return "Successfully Deleted";
 
     }
 

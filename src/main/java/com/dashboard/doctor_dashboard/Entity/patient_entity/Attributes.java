@@ -6,8 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,16 +16,14 @@ import java.util.Date;
 public class Attributes {
 
     @Id
-    @GeneratedValue(generator = "attribute_sequence")
-    @SequenceGenerator(name = "attribute_sequence",initialValue = 1,allocationSize = 100)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aID;
     private Long bloodPressure;
     private String bloodGroup;
     private Long glucoseLevel;
     private Double bodyTemp;
-    private String category;
-    private Date lastVisitedDate;
     private String Notes;
+    private String symptoms;
 
     @JsonBackReference
     @OneToOne()
