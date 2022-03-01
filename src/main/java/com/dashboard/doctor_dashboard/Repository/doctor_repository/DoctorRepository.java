@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Repository.doctot_repository;
+package com.dashboard.doctor_dashboard.Repository.doctor_repository;
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
 import org.springframework.data.jpa.repository.JpaRepository;

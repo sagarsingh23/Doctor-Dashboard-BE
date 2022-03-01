@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
-import com.dashboard.doctor_dashboard.Repository.doctot_repository.DoctorRepository;
+import com.dashboard.doctor_dashboard.Repository.doctor_repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
