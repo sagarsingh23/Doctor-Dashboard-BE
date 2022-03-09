@@ -10,7 +10,8 @@ public interface DoctorService {
     public DoctorDetails addDoctor(DoctorDetails details);
     public List<DoctorDetails> getAllDoctors();
     public DoctorDetails getDoctorById(long id);
-    public List<DoctorDetails> getDoctorByName(String name);
+    public List<DoctorDetails> getDoctorByFirstName(String name);
+    public List<DoctorDetails> getDoctorByLastName(String name);
     public List<DoctorDetails>  getDoctorByAge(short age);
     public DoctorDetails  getDoctorByEmail(String email);
     public List<DoctorDetails>  getDoctorBySpeciality(String speciality);

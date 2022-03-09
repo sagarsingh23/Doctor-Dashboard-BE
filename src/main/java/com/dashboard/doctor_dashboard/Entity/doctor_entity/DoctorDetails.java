@@ -15,16 +15,19 @@ import javax.persistence.*;
 )
 public class DoctorDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name", nullable = false)
-    private String name;
-    @Column(name="age",nullable = false)
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+    @Column(name="age")
     private short age;
     @Column(name = "email",nullable = false,unique = true)
     private String email;
-    @Column(name="specialty",nullable = false)
+    @Column(name="specialty")
     private String speciality;
+
+    private String phoneNo;
 
     //references
 }

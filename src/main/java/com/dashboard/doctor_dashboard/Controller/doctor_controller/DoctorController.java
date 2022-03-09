@@ -24,7 +24,7 @@ public class DoctorController {
     }
     @GetMapping("/name/{name}")
     public List<DoctorDetails> getDoctorsByName(@PathVariable("name") String name){
-        return service.getDoctorByName(name);
+        return service.getDoctorByFirstName(name);
     }
     @GetMapping("/age/{age}")
     public List<DoctorDetails> getDoctorsByAge(@PathVariable("age") short age){

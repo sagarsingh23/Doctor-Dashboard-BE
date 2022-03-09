@@ -40,6 +40,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client-assembly</artifactId>
+			<version>1.33.2</version>
+			<type>pom</type>
+		</dependency>
 	</dependencies>
 
 	<build>
