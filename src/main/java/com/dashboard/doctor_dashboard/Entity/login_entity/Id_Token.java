@@ -1,11 +1,8 @@
 package com.dashboard.doctor_dashboard.Entity.login_entity;
 
+import lombok.Data;
+
+@Data
 public class Id_Token {
-
-
-    public String getIdtoken() {
-        return idtoken;
-    }
-
     private String idtoken;
 }

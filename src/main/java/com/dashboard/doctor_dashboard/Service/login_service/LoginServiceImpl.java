@@ -4,6 +4,8 @@ import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Entity.login_entity.DoctorLoginDetails;
 import com.dashboard.doctor_dashboard.Repository.login_repo.LoginRepo;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.jwt.Entity.Login;
+import com.dashboard.doctor_dashboard.jwt.Service.JwtService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -15,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -26,6 +27,8 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private DoctorService doctorService;
     private boolean flag;
+    private long id;
+
 
     public boolean addUser( Map<String ,Object> loginDetails){
          System.out.println("email="+loginDetails.get("email"));
@@ -49,28 +52,50 @@ public class LoginServiceImpl implements LoginService {
      }
 
      //Token verification
-    public void tokenVerification(String idTokenString) throws GeneralSecurityException, IOException {
+    public String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList("66297814659-gkj68lfu116ai19tb6e2rfacqt9bja0s.apps.googleusercontent.com","866430808019-d5872q91thgcf3k52afir72g1autpjpn.apps.googleusercontent.com"))
                 .build();
         GoogleIdToken idToken = verifier.verify(idTokenString);
-
         if (idToken != null) {
             Payload payload = idToken.getPayload();
+            String email=payload.getEmail();
+            System.out.println("email="+email);
+            String firstName=payload.get("given_name").toString();
+            String lastName=payload.get("family_name").toString();
+
             boolean flag=addUser(payload);
+            id= (long) loginRepo.getId(email);
             if(flag==true){
-                int id=loginRepo.getId(payload.get("email").toString());
+
                 DoctorDetails newDoctor = new DoctorDetails();
                 newDoctor.setId(id);
-                newDoctor.setFirstName(payload.get("given_name").toString());
-                newDoctor.setLastName(payload.get("family_name").toString());
-                newDoctor.setEmail(payload.get("email").toString());
+                newDoctor.setFirstName(firstName);
+                newDoctor.setLastName(lastName);
+                newDoctor.setEmail(email);
                 doctorService.addDoctor(newDoctor);
                 System.out.println(newDoctor);
             }
+            String token=loginCreator(id,email,firstName);
+            System.out.println("token="+token);
+            return token;
         }
         else {
             System.out.println("Invalid ID token.");
         }
+        return "invalid ID token";
     }
+
+    @Autowired
+    JwtService jwtService;
+    @Override
+    public String loginCreator(long id,String email,String firstName) {
+        Login login=new Login();
+        login.setId(id);
+        login.setEmail(email);
+        login.setUsername(firstName);
+        return jwtService.authenticateUser(login);
+    }
+
+
 }
