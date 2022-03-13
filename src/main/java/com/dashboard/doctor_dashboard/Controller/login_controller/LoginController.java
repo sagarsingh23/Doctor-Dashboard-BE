@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.security.GeneralSecurityException;
 
 @CrossOrigin
@@ -24,15 +24,9 @@ public class LoginController {
     private LoginService login;
 
     @PostMapping(value = "api/doctor/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> loginIdToken(@RequestBody Id_Token idToken, HttpServletResponse response) throws GeneralSecurityException, IOException, JSONException {
-//        System.out.println(idToken.getIdtoken());
-//        HttpHeaders responseHeaders = new HttpHeaders();
+    public ResponseEntity<String> loginIdToken(@RequestBody Id_Token idToken) throws GeneralSecurityException, IOException, JSONException {
             Id_Token jwt =new Id_Token();
             jwt.setIdtoken(login.tokenVerification(idToken.getIdtoken()));
-//            responseHeaders.set("jwt_token","jwt");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Jwt_token", login.tokenVerification(idToken.getIdtoken()));
-//        response.setHeader("jwt_token",jwt.toString());
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("jwt_token",jwt.getIdtoken());
         return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);

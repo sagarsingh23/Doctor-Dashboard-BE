@@ -1,10 +1,12 @@
 package com.dashboard.doctor_dashboard.Entity.doctor_entity;
 
+import com.dashboard.doctor_dashboard.Entity.patient_entity.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,4 +32,7 @@ public class DoctorDetails {
     private String phoneNo;
 
     //references
+
+    @OneToMany(mappedBy = "doctorDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Patient> patient;
 }
