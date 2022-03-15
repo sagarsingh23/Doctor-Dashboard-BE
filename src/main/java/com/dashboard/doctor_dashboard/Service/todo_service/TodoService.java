@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.Service.todo_service;
 
-import com.dashboard.doctor_dashboard.Entity.todo_entity.Todolist;
+import com.dashboard.doctor_dashboard.Entity.Todolist;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

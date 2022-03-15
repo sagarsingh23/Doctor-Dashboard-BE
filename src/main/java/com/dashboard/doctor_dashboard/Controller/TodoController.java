@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.Controller.todo_controller;
+package com.dashboard.doctor_dashboard.Controller;
 
-import com.dashboard.doctor_dashboard.Entity.todo_entity.Todolist;
+import com.dashboard.doctor_dashboard.Entity.Todolist;
 
 import com.dashboard.doctor_dashboard.Service.todo_service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;

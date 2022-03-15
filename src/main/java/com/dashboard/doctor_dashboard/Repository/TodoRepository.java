@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.Repository.todo_repository;
+package com.dashboard.doctor_dashboard.Repository;
 
-import com.dashboard.doctor_dashboard.Entity.todo_entity.Todolist;
+import com.dashboard.doctor_dashboard.Entity.Todolist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
