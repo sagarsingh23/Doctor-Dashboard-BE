@@ -1,6 +1,5 @@
-package com.dashboard.doctor_dashboard.Entity.doctor_entity;
+package com.dashboard.doctor_dashboard.Entity;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

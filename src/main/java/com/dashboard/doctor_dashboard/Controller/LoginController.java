@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Controller.login_controller;
+package com.dashboard.doctor_dashboard.Controller;
 
 
 import com.dashboard.doctor_dashboard.Entity.login_entity.Id_Token;

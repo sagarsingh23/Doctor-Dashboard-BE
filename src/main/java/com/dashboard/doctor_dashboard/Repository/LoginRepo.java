@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Repository.login_repo;
+package com.dashboard.doctor_dashboard.Repository;
 
 import com.dashboard.doctor_dashboard.Entity.login_entity.DoctorLoginDetails;
 import org.springframework.data.jpa.repository.JpaRepository;

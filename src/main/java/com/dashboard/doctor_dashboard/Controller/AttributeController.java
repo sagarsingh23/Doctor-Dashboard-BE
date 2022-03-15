@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.Controller.patient_controller;
+package com.dashboard.doctor_dashboard.Controller;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Attributes;
+import com.dashboard.doctor_dashboard.Entity.Attributes;
 import com.dashboard.doctor_dashboard.Service.patient_service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
 public class AttributeController {
 
     @Autowired

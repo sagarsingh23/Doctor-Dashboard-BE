@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.Service.login_service;
 
-import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
+import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Entity.login_entity.DoctorLoginDetails;
-import com.dashboard.doctor_dashboard.Repository.login_repo.LoginRepo;
+import com.dashboard.doctor_dashboard.Repository.LoginRepo;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.jwt.Entity.Login;
 import com.dashboard.doctor_dashboard.jwt.Service.JwtService;

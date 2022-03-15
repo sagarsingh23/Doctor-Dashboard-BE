@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Attributes;
-import com.dashboard.doctor_dashboard.Repository.patient_repository.AttributeRepository;
+import com.dashboard.doctor_dashboard.Entity.Attributes;
+import com.dashboard.doctor_dashboard.Repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.AttributeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
