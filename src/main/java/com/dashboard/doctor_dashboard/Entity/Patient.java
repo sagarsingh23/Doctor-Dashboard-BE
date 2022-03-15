@@ -34,7 +34,7 @@ public class Patient {
 
     @JsonManagedReference
     @ManyToOne
-    @JoinColumn(name="d_id",nullable = false)
+    @JoinColumn(name="doctor_id",nullable = false)
     private DoctorDetails doctorDetails;
 
 }

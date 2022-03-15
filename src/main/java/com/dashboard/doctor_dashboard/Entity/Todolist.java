@@ -24,6 +24,6 @@ public class Todolist {
     private Boolean status;
 
     @OneToMany
-    @JoinColumn(name = "d_id",nullable = false)
+    @JoinColumn(name = "doctor_id",nullable = false)
     private DoctorDetails doctorDetails;
 }
