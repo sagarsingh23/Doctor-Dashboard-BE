@@ -3,7 +3,9 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Repository.doctor_repository.DoctorRepository;
+import com.dashboard.doctor_dashboard.jwt.exception.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,8 +61,14 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDetails updateDoctor(DoctorDetails details, long id) {
-        if(details.getId()==id)
-        return repository.save(details);
+        if(details.getId()==id){
+            String email= repository.findEmail(id);
+            System.out.println(email.equals( details.getEmail()));
+            if(!email.equals( details.getEmail())) {
+                throw new APIException(HttpStatus.FORBIDDEN, "change in email not allowed");
+            }
+            return repository.save(details);
+        }
         return null;
     }
 

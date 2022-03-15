@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.Repository.doctor_repository;
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,4 +14,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails,Long> {
     public List<DoctorDetails>  findByAge(short age);
     public DoctorDetails findByEmail(String email);
     public List<DoctorDetails>  findBySpeciality(String speciality);
+
+    @Query(value = "select email from doctor_details d where d.id=:id", nativeQuery = true)
+    String findEmail(long id);
 }

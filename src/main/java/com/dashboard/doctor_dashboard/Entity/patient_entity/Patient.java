@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.Entity.patient_entity;
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class Patient {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pID;
     private String fullName;
     private String emailId;
@@ -33,9 +35,9 @@ public class Patient {
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Attributes attributes;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name="d_id",nullable = false)
+    @JoinColumn(name="doctor_id",nullable = false)
     private DoctorDetails doctorDetails;
 
 }
