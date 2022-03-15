@@ -9,35 +9,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/todolist")
 public class TodoController {
-   @Autowired
+
+    @Autowired
     private TodoService todoService;
 
-    @PostMapping("api/todolist")
-    public Todolist addlist (@RequestBody Todolist todolist){
+    @PostMapping()
+    public Todolist addTodo(@RequestBody Todolist todolist){
         return todoService.addlist(todolist);
     }
 
-    @GetMapping("api/todolist")
-    public List<Todolist> getalllist(){
-        return todoService.getalllist();
+    @GetMapping("doctor/{doctorId}")
+    public List<Todolist> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId){
+        return todoService.getAllTodoByDoctorId(doctorId);
     }
 
-    @GetMapping("api/todolist/{id}")
-    public Todolist getlistById(@PathVariable("id") Long id){
-        return  todoService.getlistById(id);
+    @GetMapping("/{id}")
+    public Todolist getTodoById(@PathVariable("id") Long id){
+        return todoService.getlistById(id);
 
     }
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id" ) Long id){
+    public String deleteTodo(@PathVariable("id" ) Long id){
         todoService.deletelistById(id);
         return "successfully deleted";
     }
     @PutMapping("/{id}")
-    public Todolist updatelist(@PathVariable("id") Long id,@RequestBody Todolist todolist){
+    public Todolist updateTodo(@PathVariable("id") Long id,@RequestBody Todolist todolist){
         return todoService.updatelist(id,todolist);
     }
-
-
 
 }

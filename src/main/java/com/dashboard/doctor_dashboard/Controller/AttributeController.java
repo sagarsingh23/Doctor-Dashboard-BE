@@ -8,34 +8,35 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("api/attribute")
 public class AttributeController {
 
     @Autowired
     private AttributeService attributeService;
 
-    @PostMapping("api/attribute")
+    @PostMapping()
     public Attributes addAttribute(@RequestBody Attributes attributes) {
         return attributeService.addAttribute(attributes);
     }
 
-    @GetMapping("api/attribute")
+    @GetMapping()
     public List<Attributes> getAllAttribute() {
         return attributeService.getAllAttribute();
     }
 
 
-    @GetMapping("api/attribute/{id}")
+    @GetMapping("/{id}")
     public Attributes getAttributeById(@PathVariable("id") Long id) {
         return attributeService.getAttributeById(id);
     }
 
 
-    @PutMapping("api/attribute/{id}")
+    @PutMapping("/{id}")
     public Attributes updateAttribute(@PathVariable("id") Long id, @RequestBody Attributes attributes) {
         return attributeService.updateAttribute(id, attributes);
     }
 
-    @DeleteMapping("api/attribute/{id}")
+    @DeleteMapping("/{id}")
     public String deleteAttributeById(@PathVariable("id") Long id) {
         attributeService.deleteAttributeById(id);
         return "Successfully Deleted";

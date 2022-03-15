@@ -23,10 +23,9 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public List<Todolist> getalllist() {
-        return todoRepository.findAll();
+    public List<Todolist> getAllTodoByDoctorId(Long doctorId) {
+        return todoRepository.findByDoctorId(doctorId);
     }
-
     @Override
     public Todolist updatelist(Long id, Todolist todolist) {
         Todolist value = todoRepository.findById(id).get();
