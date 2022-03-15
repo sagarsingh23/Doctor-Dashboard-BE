@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.jwt.exception;
 
 import java.util.Date;
 
-public class ErrorDetails {
+public class ErrorDetails extends  RuntimeException{
     private Date timestamp;
     private String message;
     private String details;

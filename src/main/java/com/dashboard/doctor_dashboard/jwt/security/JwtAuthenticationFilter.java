@@ -1,5 +1,8 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
+import com.dashboard.doctor_dashboard.jwt.exception.APIException;
+import com.dashboard.doctor_dashboard.jwt.exception.ErrorDetails;
+import com.dashboard.doctor_dashboard.jwt.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -31,6 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // get JWT (token) from http request
         String token = getJWTfromRequest(request);
+//        if(token==null)
+////            response.sendError(401,"Jwt token not found");
+//            throw new ErrorDetails(new java.util.Date(),"Jwt token not found","You need to login for jwt token");
+
         // validate token
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             // get username from token
@@ -55,6 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;
+
     }
 
 

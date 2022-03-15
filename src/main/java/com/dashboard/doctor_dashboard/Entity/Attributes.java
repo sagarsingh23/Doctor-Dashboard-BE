@@ -27,7 +27,7 @@ public class Attributes {
 
     @JsonBackReference
     @OneToOne()
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id",nullable = false)
     private Patient patient;
 
 
