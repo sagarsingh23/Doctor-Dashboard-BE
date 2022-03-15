@@ -15,6 +15,4 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails,Long> {
     public DoctorDetails findByEmail(String email);
     public List<DoctorDetails>  findBySpeciality(String speciality);
 
-    @Query(value = "select email from doctor_details d where d.id=:id", nativeQuery = true)
-    String findEmail(long id);
 }
