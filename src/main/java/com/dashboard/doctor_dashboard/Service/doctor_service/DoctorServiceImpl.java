@@ -63,6 +63,7 @@ public class DoctorServiceImpl implements DoctorService {
     public DoctorDetails updateDoctor(DoctorDetails details, long id) {
         if(details.getId()==id){
             String email= repository.findEmail(id);
+            System.out.println(email+" "+details.getEmail());
             System.out.println(email.equals( details.getEmail()));
             if(!email.equals( details.getEmail())) {
                 throw new APIException(HttpStatus.FORBIDDEN, "change in email not allowed");
