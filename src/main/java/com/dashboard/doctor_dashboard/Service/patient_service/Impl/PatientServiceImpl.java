@@ -85,5 +85,11 @@ public class PatientServiceImpl implements PatientService {
         return patientRepository.findAll();
     }
 
+    @Override
+    public ArrayList<String> ageChart(Long doctorId) {
+        return patientRepository.ageChart(doctorId);
+    }
+
+
 
 }

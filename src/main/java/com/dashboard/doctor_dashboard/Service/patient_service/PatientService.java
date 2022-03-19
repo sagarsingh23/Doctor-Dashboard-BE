@@ -19,4 +19,6 @@ public interface PatientService {
     public ArrayList<String> activePatient(Long doctorId);
     public ArrayList<String> bloodGroup(Long doctorId);
     public List<Patient> getAllPatient();
+    public ArrayList<String> ageChart(Long doctorId);
+
 }

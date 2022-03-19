@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/patient")
 public class PatientController {
 
@@ -69,15 +70,14 @@ public class PatientController {
         return patientService.bloodGroup(doctorId);
     }
 
-//    @GetMapping("/{doctorId}/averageGlucoseLevel")
-//    public float averageGlucoseLevel(@PathVariable("doctorId") Long doctorId){
-//        return patientService.averageGlucoseLevel(doctorId);
-//    }
-
     @GetMapping()
     public List<Patient> getAllPatients(){
         return patientService.getAllPatient();
     }
 
+    @GetMapping("/{doctorId}/ageChart")
+    public ArrayList<String> ageChart(@PathVariable("doctorId") Long doctorId){
+        return patientService.ageChart(doctorId);
+    }
 
 }
