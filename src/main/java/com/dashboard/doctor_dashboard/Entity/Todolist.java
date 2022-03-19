@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.Entity;
 
-import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +23,8 @@ public class Todolist {
     private String description;
     private Boolean status;
 
-    @OneToMany
+    @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "doctor_id",nullable = false)
     private DoctorDetails doctorDetails;
 }
