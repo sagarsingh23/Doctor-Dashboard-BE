@@ -21,8 +21,5 @@ public class DoctorLoginDetails {
     private String lastName;
     @Column(name="emailId",nullable = false)
     private String emailId;
-
     private String domain;
-    private String profileId;
-
 }
