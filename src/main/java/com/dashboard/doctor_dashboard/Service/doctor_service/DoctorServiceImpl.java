@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
+import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Repository.doctor_repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.jwt.exception.APIException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,9 +55,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorDetails>  getDoctorBySpeciality(String speciality) {
+    public DoctorSpecialityDto getDoctorBySpeciality(long id) {
 
-        return repository.findBySpeciality(speciality);
+        DoctorSpecialityDto doctorSpecialityDto =new DoctorSpecialityDto();
+        String speciality=repository.findBySpeciality(id);
+        System.out.println(speciality);
+                doctorSpecialityDto.setSpeciality(speciality);
+        return doctorSpecialityDto;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.Controller.doctor_controller;
 
 import com.dashboard.doctor_dashboard.Entity.doctor_entity.DoctorDetails;
+import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,9 @@ public class DoctorController {
     public DoctorDetails getDoctorsByEmail(@PathVariable("email") String email){
         return service.getDoctorByEmail(email);
     }
-    @GetMapping("/speciality/{speciality}")
-    public List<DoctorDetails> getDoctorsBySpeciality(@PathVariable("speciality") String speciality){
-        return service.getDoctorBySpeciality(speciality);
+    @GetMapping("/speciality/{id}")
+    public DoctorSpecialityDto getDoctorsBySpeciality(@PathVariable("id") long id){
+        return service.getDoctorBySpeciality(id);
     }
 
     @PutMapping("/update/{id}")
