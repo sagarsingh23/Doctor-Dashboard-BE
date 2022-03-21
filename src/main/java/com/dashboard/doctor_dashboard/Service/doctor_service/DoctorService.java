@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 
-import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

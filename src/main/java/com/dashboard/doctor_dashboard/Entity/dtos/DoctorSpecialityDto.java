@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Entity.dto;
+package com.dashboard.doctor_dashboard.Entity.dtos;
 
 import lombok.Data;
 

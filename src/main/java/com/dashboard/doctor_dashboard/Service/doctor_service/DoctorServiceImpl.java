@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 
 import com.dashboard.doctor_dashboard.jwt.exception.APIException;
 

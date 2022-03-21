@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.Controller;
 
-import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
