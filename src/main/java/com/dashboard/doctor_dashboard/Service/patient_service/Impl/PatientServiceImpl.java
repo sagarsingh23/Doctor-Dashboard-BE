@@ -1,19 +1,28 @@
 package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 
 import com.dashboard.doctor_dashboard.Entity.Patient;
+import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.jwt.exception.ResourceNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private ModelMapper mapper;
+
 
 
     @Override
@@ -23,13 +32,24 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public List<Patient> getAllPatientByDoctorId(Long doctorId) {
-        return  patientRepository.getAllPatientByDoctorId(doctorId);
+    public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
+        List<Patient> patient =  patientRepository.getAllPatientByDoctorId(doctorId);
+        List<PatientListDto> patientListDto = patient.stream()
+                .map(value -> mapToDto2(value)).collect(Collectors.toList());
+
+        return patientListDto;
+
     }
 
+
+
+
     @Override
-    public Patient getPatientById(Long id) {
-        return patientRepository.findById(id).get();
+    public PatientDto getPatientById(Long id) {
+
+        Patient patient = patientRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Patient","id",id));
+        return mapToDto(patient);
     }
 
     @Override
@@ -88,6 +108,19 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ArrayList<String> ageChart(Long doctorId) {
         return patientRepository.ageChart(doctorId);
+    }
+
+
+    //DTOS
+
+    private PatientDto mapToDto(Patient patient){
+        PatientDto patientDto = mapper.map(patient,PatientDto.class);
+        return patientDto;
+    }
+
+    private PatientListDto mapToDto2(Patient patient){
+        PatientListDto patientListDto = mapper.map(patient,PatientListDto.class);
+        return patientListDto;
     }
 
 

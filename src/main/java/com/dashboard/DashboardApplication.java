@@ -1,5 +1,6 @@
 package com.dashboard;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -38,8 +39,14 @@ public class DashboardApplication {
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("DoctorDashBoard API")
 				.description("DoctorDashBoard API for developers")
-				.termsOfServiceUrl("https://simplifyingtechcode.wordpress.com/")
-				.licenseUrl("simplifyingtech@gmail.com").version("2.0").build();
+				.termsOfServiceUrl("http://localhost:3000/")
+				.licenseUrl("DoctorDashBoard09@gmial.com").version("1.0").build();
 	}
+
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
+
 
 }

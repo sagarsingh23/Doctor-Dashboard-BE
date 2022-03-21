@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.Controller;
 
 import com.dashboard.doctor_dashboard.Entity.Patient;
+import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,12 +26,12 @@ public class PatientController {
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public List<Patient> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId ){
+    public List<PatientListDto> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId ){
         return patientService.getAllPatientByDoctorId(doctorId);
     }
 
     @GetMapping("/{id}")
-    public Patient getPatientById(@PathVariable("id") Long id){
+    public PatientDto getPatientDtoById(@PathVariable("id") Long id){
         return  patientService.getPatientById(id);
     }
 
