@@ -1,7 +1,5 @@
-package com.dashboard.doctor_dashboard.Entity.doctor_entity;
+package com.dashboard.doctor_dashboard.Entity;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Patient;
-import com.dashboard.doctor_dashboard.Entity.todo_entity.Todolist;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +28,6 @@ public class DoctorDetails {
     private String email;
     @Column(name="speciality")
     private String speciality;
-
     private String phoneNo;
 
     private String gender;
@@ -43,4 +40,5 @@ public class DoctorDetails {
     @JsonManagedReference
     @OneToMany(mappedBy = "doctorDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Todolist> todolist;
+
 }

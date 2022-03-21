@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.Service.patient_service;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Attributes;
+import com.dashboard.doctor_dashboard.Entity.Attributes;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

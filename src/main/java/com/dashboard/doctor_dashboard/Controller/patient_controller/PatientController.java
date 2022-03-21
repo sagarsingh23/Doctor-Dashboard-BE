@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.Controller.patient_controller;
 
-import com.dashboard.doctor_dashboard.Entity.patient_entity.Patient;
+import com.dashboard.doctor_dashboard.Entity.Patient;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

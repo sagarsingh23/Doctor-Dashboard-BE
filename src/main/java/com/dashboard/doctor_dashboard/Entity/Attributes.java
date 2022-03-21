@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Entity.patient_entity;
+package com.dashboard.doctor_dashboard.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ public class Attributes {
 
     @JsonBackReference
     @OneToOne()
-    @JoinColumn(name = "id",nullable = false)
+    @JoinColumn(name = "id")
     private Patient patient;
 
 

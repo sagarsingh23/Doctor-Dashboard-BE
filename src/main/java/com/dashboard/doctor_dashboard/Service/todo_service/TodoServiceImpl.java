@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.Service.todo_service;
 
-import com.dashboard.doctor_dashboard.Entity.todo_entity.Todolist;
-import com.dashboard.doctor_dashboard.Repository.todo_repository.TodoRepository;
+import com.dashboard.doctor_dashboard.Entity.Todolist;
+import com.dashboard.doctor_dashboard.Repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,10 +23,9 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public List<Todolist> getalllist() {
-        return todoRepository.findAll();
+    public List<Todolist> getAllTodoByDoctorId(Long doctorId) {
+        return todoRepository.findByDoctorId(doctorId);
     }
-
     @Override
     public Todolist updatelist(Long id, Todolist todolist) {
         Todolist value = todoRepository.findById(id).get();
