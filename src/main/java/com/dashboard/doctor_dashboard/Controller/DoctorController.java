@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.Controller;
 
+import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/doctor")
 public class DoctorController {
 
@@ -40,19 +42,20 @@ public class DoctorController {
     public DoctorDetails getDoctorsByEmail(@PathVariable("email") String email){
         return service.getDoctorByEmail(email);
     }
-
-
-    @GetMapping("/speciality/{speciality}")
-    public List<DoctorDetails> getDoctorsBySpeciality(@PathVariable("speciality") String speciality){
-        return service.getDoctorBySpeciality(speciality);
+    @GetMapping("/speciality/{id}")
+    public DoctorSpecialityDto getDoctorBySpeciality(@PathVariable("id") long id){
+        return service.getDoctorBySpeciality(id);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public DoctorDetails updateDoctorDetails(@PathVariable("id") long id, @RequestBody DoctorDetails details){
         return service.updateDoctor(details,id);
     }
 
-    @PostMapping()
+
+
+
+    @PostMapping("/add/")
     public DoctorDetails addNewDoctor(@RequestBody DoctorDetails doctorDetails){
         return service.addDoctor(doctorDetails);
     }

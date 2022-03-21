@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 
+import com.dashboard.doctor_dashboard.Entity.dto.DoctorSpecialityDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface DoctorService {
     public List<DoctorDetails> getDoctorByLastName(String name);
     public List<DoctorDetails>  getDoctorByAge(short age);
     public DoctorDetails  getDoctorByEmail(String email);
-    public List<DoctorDetails>  getDoctorBySpeciality(String speciality);
+    public DoctorSpecialityDto getDoctorBySpeciality(long id);
     public DoctorDetails updateDoctor(DoctorDetails details,long id);
     public String deleteDoctor(long id);
 }

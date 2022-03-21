@@ -23,13 +23,15 @@ public class DoctorDetails {
     @Column(name = "last_name")
     private String lastName;
     @Column(name="age")
-    private short age;
+    private String age;
     @Column(name = "email",nullable = false,unique = true)
     private String email;
-    @Column(name="specialty")
+    @Column(name="speciality")
     private String speciality;
     private String phoneNo;
 
+    private String gender;
+    //references
     @JsonManagedReference
     @OneToMany(mappedBy = "doctorDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Patient> patient;
