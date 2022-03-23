@@ -30,6 +30,9 @@ public class Patient {
     private String category;
     private String mobileNo;
     private String status;
+    private boolean isChanged;
+    private String message;
+
 
     @JsonManagedReference
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)

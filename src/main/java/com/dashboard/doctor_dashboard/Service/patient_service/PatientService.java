@@ -15,6 +15,12 @@ public interface PatientService {
     public PatientDto getPatientById(Long id);
     public Patient updatePatient(Long id,Patient patient);
     public void deletePatientById(Long id);
+    public String referPatients(Long doctorId,Long patientId);
+    public ArrayList<String> getMessageForReferredPatient(Long doctorId);
+    public void changeStatus(Long doctorId);
+
+
+    //charts
     public  int totalNoOfPatient(Long doctorId);
     public ArrayList<String> patientCategory(Long doctorId);
     public ArrayList<String> gender(Long doctorId);

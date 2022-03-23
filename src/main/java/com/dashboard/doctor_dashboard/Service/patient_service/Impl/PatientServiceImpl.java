@@ -76,6 +76,25 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public String referPatients(Long doctorId, Long patientId) {
+        String docName = patientRepository.findDoctorNameByPatientId(patientId);
+        String patientName = patientRepository.findPatientNameByPatientId(patientId);
+
+        patientRepository.referPatients(doctorId,patientId,docName,patientName);
+        return "SuccessFull";
+    }
+
+    @Override
+    public ArrayList<String> getMessageForReferredPatient(Long doctorId) {
+        return patientRepository.getMessageForReferredPatient(doctorId);
+    }
+
+    @Override
+    public void changeStatus(Long doctorId) {
+        patientRepository.changeStatus(doctorId);
+    }
+
+    @Override
     public int totalNoOfPatient(Long doctorId) {
         return patientRepository.totalNoOfPatient(doctorId);
     }

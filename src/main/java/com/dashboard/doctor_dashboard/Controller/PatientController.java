@@ -47,6 +47,26 @@ public class PatientController {
 
     }
 
+    @PutMapping("/{id}/doctor/{doctorId}")
+    public String referPatients(@PathVariable("doctorId") Long doctorId,@PathVariable("id") Long patientId){
+        return patientService.referPatients(doctorId,patientId);
+    }
+
+    @GetMapping("/message/{doctorId}")
+    public ArrayList<String> getMessageForReferredPatient(@PathVariable("doctorId") Long doctorId){
+        return patientService.getMessageForReferredPatient(doctorId);
+    }
+
+    @PutMapping("/changeMessage/{doctorId}")
+    public String changeStatus(@PathVariable("doctorId") Long doctorId){
+        patientService.changeStatus(doctorId);
+        return "Status Changed!!!";
+    }
+
+
+
+    //Charts
+
     @GetMapping("/{doctorId}/totalPatient")
     public int totalPatient(@PathVariable("doctorId") Long doctorId){
         return patientService.totalNoOfPatient(doctorId);
