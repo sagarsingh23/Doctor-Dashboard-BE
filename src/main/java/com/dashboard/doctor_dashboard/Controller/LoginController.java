@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import java.security.GeneralSecurityException;
 
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class LoginController {
 

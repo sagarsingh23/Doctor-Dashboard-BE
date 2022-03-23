@@ -2,12 +2,16 @@ package com.dashboard.doctor_dashboard.Entity.dtos;
 
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 public class PatientListDto {
     private Long pID;
     private String fullName;
     private String emailId;
-    private int age;
     private String status;
+    private String category;
+    private LocalDate lastVisitedDate;
+    private String mobileNo;
 
 }
