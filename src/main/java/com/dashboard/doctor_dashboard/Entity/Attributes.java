@@ -25,7 +25,7 @@ public class Attributes {
     private Long bloodPressure;
 
     @NotEmpty
-    @Pattern(regexp = "O-|O+|A-|B-|A+|AB-|B+|AB+",flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = "^(O-|O[+]|A-|B-|A[+]|AB-|B[+]|AB[+])",flags = Pattern.Flag.CASE_INSENSITIVE)
     private String bloodGroup;
 
     private Long glucoseLevel;

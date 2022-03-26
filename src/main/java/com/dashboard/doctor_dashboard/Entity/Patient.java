@@ -1,6 +1,5 @@
 package com.dashboard.doctor_dashboard.Entity;
 
-import com.dashboard.doctor_dashboard.Entity.report.FileDB;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -32,7 +31,8 @@ public class Patient {
 
 
     @Email(message = "Email is not valid",
-            regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")
+            regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])",
+            flags = Pattern.Flag.CASE_INSENSITIVE)
     @NotEmpty
     private String emailId;
 
@@ -42,7 +42,7 @@ public class Patient {
     private LocalDate lastVisitedDate;
 
     @NotEmpty
-    @Pattern(regexp = "Male|Female|Others",
+    @Pattern(regexp = "^(Male|Female|Others)",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Enter Correct Gender!!")
     private String gender;
@@ -52,7 +52,7 @@ public class Patient {
     private int age;
 
     @NotEmpty
-    @Pattern(regexp = "General|Gastrology|Neurology|Orthology|Cardiology",
+    @Pattern(regexp = "^(General|Gastrology|Neurology|Orthology|Cardiology)",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message ="Category Should be Amongst these choices:" +
                     "General,Gastrology,Neurology,Orthology,Cardiology")
@@ -75,11 +75,8 @@ public class Patient {
 
     @ManyToOne()
     @JsonBackReference
-    @JoinColumn(name = "doctor_id",nullable = false)
+    @JoinColumn(name = "doctor_id")
     private DoctorDetails doctorDetails;
 
-    @JsonManagedReference
-    @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private FileDB fileDB;
 
 }
