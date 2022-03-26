@@ -1,34 +1,43 @@
 package com.dashboard.doctor_dashboard.Entity.report;
 
-import com.dashboard.doctor_dashboard.Entity.Patient;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 
 import javax.persistence.*;
 
 @Entity
+@Data
 @Table(name = "files")
 public class FileDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "report_id")
     private Long id;
     private String name;
     private String type;
     @Lob
-    private byte[] data;
+    private byte[] dataReport;
+
+    @Column(unique = true)
+    private Long patientId;
     public FileDB() {
     }
 
-    @JsonBackReference
-    @OneToOne()
-    @JoinColumn(name = "id")
-    private Patient patient;
 
-
-    public FileDB(String name, String type, byte[] data) {
+    public FileDB(String name, String type, byte[] dataReport, Long patientId) {
         this.name = name;
         this.type = type;
-        this.data = data;
+        this.dataReport = dataReport;
+        this.patientId = patientId;
     }
+
+    public Long getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(Long patientId) {
+        this.patientId = patientId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -44,10 +53,10 @@ public class FileDB {
     public void setType(String type) {
         this.type = type;
     }
-    public byte[] getData() {
-        return data;
+    public byte[] getDataReport() {
+        return dataReport;
     }
-    public void setData(byte[] data) {
-        this.data = data;
+    public void setDataReport(byte[] dataReport) {
+        this.dataReport = dataReport;
     }
 }

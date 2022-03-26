@@ -63,5 +63,7 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Transactional
     void changeStatus(Long doctorId);
 
+    @Query(value = "select id from patients where id=:patientId ",nativeQuery = true)
+    Long getId(Long patientId);
 
 }
