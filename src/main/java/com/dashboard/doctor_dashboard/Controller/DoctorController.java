@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.Controller;
 
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
@@ -20,8 +21,8 @@ public class DoctorController {
     @Autowired
     private DoctorService service;
 
-    @GetMapping
-    public List<DoctorDetails> getAllDoctors(){
+    @GetMapping("/get-all")
+    public List<DoctorListDto> getAllDoctors(){
         return service.getAllDoctors();
     }
 
@@ -31,21 +32,21 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/name/{name}")
-    public List<DoctorDetails> getDoctorsByName(@PathVariable("name") String name){
-        return service.getDoctorByFirstName(name);
-    }
-
-    @GetMapping("/age/{age}")
-    public List<DoctorDetails> getDoctorsByAge(@PathVariable("age") short age){
-        return service.getDoctorByAge(age);
-    }
-
-
-    @GetMapping("/email/{email}")
-    public DoctorDetails getDoctorsByEmail(@PathVariable("email") String email){
-        return service.getDoctorByEmail(email);
-    }
+//    @GetMapping("/name/{name}")
+//    public List<DoctorDetails> getDoctorsByName(@PathVariable("name") String name){
+//        return service.getDoctorByFirstName(name);
+//    }
+//
+//    @GetMapping("/age/{age}")
+//    public List<DoctorDetails> getDoctorsByAge(@PathVariable("age") short age){
+//        return service.getDoctorByAge(age);
+//    }
+//
+//
+//    @GetMapping("/email/{email}")
+//    public DoctorDetails getDoctorsByEmail(@PathVariable("email") String email){
+//        return service.getDoctorByEmail(email);
+//    }
     @GetMapping("/speciality/{id}")
     public DoctorSpecialityDto getDoctorBySpeciality(@PathVariable("id") long id){
         return service.getDoctorBySpeciality(id);
@@ -59,13 +60,10 @@ public class DoctorController {
         return new ResponseEntity("id mismatch",HttpStatus.BAD_REQUEST);
     }
 
-
-
-
-    @PostMapping("/add/")
-    public DoctorDetails addNewDoctor(@RequestBody DoctorDetails doctorDetails){
-        return service.addDoctor(doctorDetails);
-    }
+//    @PostMapping("/add/")
+//    public DoctorDetails addNewDoctor(@RequestBody DoctorDetails doctorDetails){
+//        return service.addDoctor(doctorDetails);
+//    }
 
     @DeleteMapping("/{id}")
     public String deleteDoctor(@PathVariable("id") int id){

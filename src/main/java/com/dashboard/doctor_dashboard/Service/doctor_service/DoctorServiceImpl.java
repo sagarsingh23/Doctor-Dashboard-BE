@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 
 import com.dashboard.doctor_dashboard.jwt.exception.APIException;
@@ -29,8 +30,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorDetails> getAllDoctors() {
-       List<DoctorDetails> details= repository.findAll();
+    public List<DoctorListDto> getAllDoctors() {
+       List<DoctorListDto> details= repository.getAllDoctors();
         return details;
     }
 
@@ -39,24 +40,24 @@ public class DoctorServiceImpl implements DoctorService {
         return repository.findById(id).get();
     }
 
-    @Override
-    public List<DoctorDetails>  getDoctorByFirstName(String name) {
-        return repository.findByFirstName(name);
-    }
-    @Override
-    public List<DoctorDetails>  getDoctorByLastName(String name) {
-        return repository.findByLastName(name);
-    }
-
-    @Override
-    public List<DoctorDetails>  getDoctorByAge(short age) {
-        return repository.findByAge(age);
-    }
-
-    @Override
-    public DoctorDetails getDoctorByEmail(String email) {
-        return repository.findByEmail(email);
-    }
+//    @Override
+//    public List<DoctorDetails>  getDoctorByFirstName(String name) {
+//        return repository.findByFirstName(name);
+//    }
+//    @Override
+//    public List<DoctorDetails>  getDoctorByLastName(String name) {
+//        return repository.findByLastName(name);
+//    }
+//
+//    @Override
+//    public List<DoctorDetails>  getDoctorByAge(short age) {
+//        return repository.findByAge(age);
+//    }
+//
+//    @Override
+//    public DoctorDetails getDoctorByEmail(String email) {
+//        return repository.findByEmail(email);
+//    }
 
     @Override
     public DoctorSpecialityDto getDoctorBySpeciality(long id) {

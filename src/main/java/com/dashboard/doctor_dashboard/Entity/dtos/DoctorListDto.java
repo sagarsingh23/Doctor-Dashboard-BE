@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class DoctorListDto {
     private long id;
     private String name;
+    private String email;
 
 }
