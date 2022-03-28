@@ -23,7 +23,7 @@ public class DoctorDetails {
     @Column(name = "last_name")
     private String lastName;
     @Column(name="age")
-    private String age;
+    private Short age;
     @Column(name = "email",nullable = false,unique = true)
     private String email;
     @Column(name="speciality")

@@ -1,11 +1,15 @@
 package com.dashboard.doctor_dashboard.Controller;
 
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -48,8 +52,11 @@ public class DoctorController {
     }
 
     @PutMapping("/update/{id}")
-    public DoctorDetails updateDoctorDetails(@PathVariable("id") long id, @RequestBody DoctorDetails details){
-        return service.updateDoctor(details,id);
+    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details){
+        DoctorFormDto doctorFormDto=service.updateDoctor(details,id);
+        if(doctorFormDto!=null)
+            return new ResponseEntity(doctorFormDto, HttpStatus.CREATED);
+        return new ResponseEntity("id mismatch",HttpStatus.BAD_REQUEST);
     }
 
 
