@@ -25,7 +25,7 @@ public class FileController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/upload/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/patient/upload/{id}", method = RequestMethod.POST)
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam MultipartFile file,@PathVariable("id") Long id) {
         String message = "";
         try {
