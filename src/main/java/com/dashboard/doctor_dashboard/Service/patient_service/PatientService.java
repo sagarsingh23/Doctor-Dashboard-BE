@@ -15,7 +15,6 @@ public interface PatientService {
     public PatientDto getPatientById(Long id);
     public Patient updatePatient(Long id,Patient patient);
     public void deletePatientById(Long id);
-    public List<Patient> getAllPatient();
     public void changePatientStatus(Long id,String status);
     public List<PatientListDto> recentlyAddedPatient(Long doctorId);
 

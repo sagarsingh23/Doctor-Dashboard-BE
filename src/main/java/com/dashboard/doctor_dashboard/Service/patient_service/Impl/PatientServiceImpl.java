@@ -58,6 +58,7 @@ public class PatientServiceImpl implements PatientService {
         value.setLastVisitedDate(patient.getLastVisitedDate());
         value.setMobileNo(patient.getMobileNo());
         value.setDoctorDetails(patient.getDoctorDetails());
+        value.setAttributes(patient.getAttributes());
         value.setStatus(patient.getStatus());
 
         return patientRepository.save(value);
@@ -68,10 +69,6 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.deleteById(id);
     }
 
-    @Override
-    public List<Patient> getAllPatient() {
-        return patientRepository.findAll();
-    }
 
     @Override
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
@@ -146,6 +143,8 @@ public class PatientServiceImpl implements PatientService {
     public void changeStatus(Long doctorId) {
         patientRepository.changeStatus(doctorId);
     }
+
+
 
     // convert entity to dto
     private PatientDto mapToDto(Patient patient){

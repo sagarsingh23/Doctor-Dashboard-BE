@@ -24,7 +24,7 @@ public class PatientController {
     //CRUD operation for patient
 
     @PostMapping()
-    public Patient addPatient(@RequestBody Patient patient){
+    public Patient addPatient(@Valid @RequestBody Patient patient){
         return patientService.addPatient(patient);
     }
 
@@ -44,13 +44,9 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    public void deletePatientById(@PathVariable("id") Long id) {
+    public String deletePatientById(@PathVariable("id") Long id) {
         patientService.deletePatientById(id);
-    }
-
-    @GetMapping()
-    public List<Patient> getAllPatients(){
-        return patientService.getAllPatient();
+        return "Successfully Deleted";
     }
 
     @PutMapping("/changeStatus/{id}")
@@ -63,9 +59,6 @@ public class PatientController {
     public List<PatientListDto> recentlyAddedPatient(@PathVariable("doctorId") Long doctorId){
         return patientService.recentlyAddedPatient(doctorId);
     }
-
-
-
 
 
     //Dashboard Chart
@@ -103,7 +96,6 @@ public class PatientController {
 
 
 
-
     //Add-On feature Refer Patient
 
     @PutMapping("/{id}/doctor/{doctorId}")
@@ -121,7 +113,5 @@ public class PatientController {
         patientService.changeStatus(doctorId);
         return "All Messages have been deleted!!!";
     }
-
-
 
 }
