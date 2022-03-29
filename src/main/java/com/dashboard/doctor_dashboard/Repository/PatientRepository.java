@@ -16,18 +16,34 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query(value = "select * from patients where doctor_id = :doctorId",nativeQuery = true)
     List<Patient> getAllPatientByDoctorId(@Param(value = "doctorId") Long doctorId);
 
+    @Query(value = "update patients set status =:status where id=:patientId ",nativeQuery = true)
+    @Modifying
+    @Transactional
+    void changePatientStatus(Long patientId,String status);
+
+
+    @Query(value = "select id from patients where id=:patientId ",nativeQuery = true)
+    Long getId(Long patientId);
+
+    @Query(value = "select * from patients where doctor_id = :doctorId order by id desc limit 3",nativeQuery = true)
+    List<Patient> recentlyAddedPatient(Long doctorId);
+
+
+
+
+    //Dashboard Chart
+
     @Query(value = "Select COUNT(id) from patients where doctor_id =:doctorId",nativeQuery = true)
     int totalNoOfPatient(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select category,count(category) from patients where doctor_id = :doctorId group by category",nativeQuery = true)
+    @Query(value = "Select upper(category),count(category) from patients where doctor_id = :doctorId group by category",nativeQuery = true)
     ArrayList<String> patientCategory(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select gender,count(gender) from patients where doctor_id =:doctorId group by gender",nativeQuery = true)
+    @Query(value = "Select upper(gender),count(gender) from patients where doctor_id =:doctorId group by gender",nativeQuery = true)
     ArrayList<String> gender(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select status,count(status) from patients where doctor_id =:doctorId group by status",nativeQuery = true)
+    @Query(value = "Select upper(status),count(status) from patients where doctor_id =:doctorId group by status",nativeQuery = true)
     ArrayList<String> activePatient(@Param(value = "doctorId") Long doctorId);
-
 
     @Query(value = "select upper(blood_group),count(blood_group) from attributes inner join patients where patients.id = attributes.id and doctor_id =:doctorId group by blood_group",nativeQuery = true)
     ArrayList<String> bloodGroup(@Param(value = "doctorId") Long doctorId);
@@ -39,16 +55,19 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     ArrayList<String> ageChart(@Param(value = "doctorId") Long doctorId);
 
 
-    //Add On Refer Part
 
-    @Query(value = "select first_name from doctor_details where id = (select doctor_id from patients where id =:patientId)",nativeQuery = true)
+
+    //Add-On feature Refer Patient
+
+
+    @Query(value = "select d_name from doctor_details where doctor_id = (select doctor_id from patients where id =:patientId)",nativeQuery = true)
     String findDoctorNameByPatientId(Long patientId);
 
     @Query(value = "select full_name from patients where id =:patientId",nativeQuery = true)
     String findPatientNameByPatientId(Long patientId);
 
 
-    @Query(value = "update patients set doctor_id=:doctorId, is_changed=true ,message ='Dr. ' :docName ' referred ' :patientName  ' to you'  where id=:patientId",nativeQuery = true)
+    @Query(value = "update patients set doctor_id=:doctorId, is_changed=true ,message ='Dr. ' :docName ' refered ' :patientName  ' to you'  where id=:patientId",nativeQuery = true)
     @Modifying
     @Transactional
     void referPatients(Long doctorId,Long patientId,String docName,String patientName);
@@ -62,8 +81,5 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Modifying
     @Transactional
     void changeStatus(Long doctorId);
-
-    @Query(value = "select id from patients where id=:patientId ",nativeQuery = true)
-    Long getId(Long patientId);
 
 }

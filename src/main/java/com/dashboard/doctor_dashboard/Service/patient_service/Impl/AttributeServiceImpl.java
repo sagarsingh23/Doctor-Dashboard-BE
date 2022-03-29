@@ -48,4 +48,9 @@ public class AttributeServiceImpl implements AttributeService {
         attributeRepository.deleteById(id);
 
     }
+
+    @Override
+    public void changeNotes(Long id, String notes) {
+        attributeRepository.changeNotes(id, notes);
+    }
 }

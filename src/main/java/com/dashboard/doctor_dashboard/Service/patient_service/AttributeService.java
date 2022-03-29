@@ -11,4 +11,6 @@ public interface AttributeService {
     public Attributes getAttributeById(Long id);
     public Attributes updateAttribute(Long id,Attributes attributes);
     public void deleteAttributeById(Long id);
+    public void changeNotes(Long id,String notes);
+
 }
