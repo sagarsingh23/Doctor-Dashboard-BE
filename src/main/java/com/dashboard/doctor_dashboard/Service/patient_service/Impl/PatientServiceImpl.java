@@ -5,7 +5,7 @@ import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
-import com.dashboard.doctor_dashboard.jwt.exception.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

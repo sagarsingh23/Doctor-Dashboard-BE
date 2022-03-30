@@ -8,6 +8,8 @@ import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,7 +55,11 @@ public class DoctorController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details){
+    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @RequestBody @Valid DoctorFormDto details) {
+//        System.out.println("errors "+errors.getAllErrors());
+//        if (errors.hasErrors()) {
+//            throw new MethodArgumentNotValidException(,errors);
+//        }
         DoctorFormDto doctorFormDto=service.updateDoctor(details,id);
         if(doctorFormDto!=null)
             return new ResponseEntity(doctorFormDto, HttpStatus.CREATED);

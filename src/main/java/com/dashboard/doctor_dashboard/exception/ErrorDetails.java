@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.jwt.exception;
+package com.dashboard.doctor_dashboard.exception;
 
 import java.util.Date;
 

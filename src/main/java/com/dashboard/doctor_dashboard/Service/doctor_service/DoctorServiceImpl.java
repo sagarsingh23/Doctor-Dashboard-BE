@@ -5,13 +5,9 @@ import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 
-import com.dashboard.doctor_dashboard.jwt.exception.APIException;
-
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

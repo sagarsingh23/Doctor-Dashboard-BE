@@ -35,4 +35,6 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails,Long> {
     @Query(value = "select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto(a.id,a.firstName,a.email) from DoctorDetails a")
     List<DoctorListDto> getAllDoctors();
 
+
+
 }

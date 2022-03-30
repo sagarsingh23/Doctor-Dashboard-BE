@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.jwt.exception;
+package com.dashboard.doctor_dashboard.exception;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,18 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler  {
 
-    // handle specific exceptions
+    //    @Override
+    //    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    //        List list = ex.getBindingResult().getAllErrors().stream()
+    //                .map(fieldError -> fieldError.getDefaultMessage())
+    //                .collect(Collectors.toList());
+    //        ApiError apiError =
+    //                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), list);
+    //        return handleExceptionInternal(
+    //                ex, apiError, headers, apiError.getStatus(), request);
+    //    }
+
+    //     handle specific exceptions
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                         WebRequest webRequest) {
@@ -44,24 +55,23 @@ public class GlobalExceptionHandler  {
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 
-    // global exceptions
+//     global exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception,
                                                               WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
+
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<List> processException(final MethodArgumentNotValidException ex){
+    public ResponseEntity<Object> handleArgumentNot(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List list = ex.getBindingResult().getAllErrors().stream()
                 .map(fieldError -> fieldError.getDefaultMessage())
                 .collect(Collectors.toList());
-
+        System.out.println("called!!");
         return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
     }
 }

@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.jwt.exception;
+package com.dashboard.doctor_dashboard.exception;
 import org.springframework.http.HttpStatus;
 
 public class APIException extends RuntimeException {
