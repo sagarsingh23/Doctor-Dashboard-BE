@@ -24,12 +24,10 @@ public class PatientServiceImpl implements PatientService {
     private ModelMapper mapper;
 
 
-
     @Override
     public Patient addPatient(Patient patient) {
         return patientRepository.save(patient);
     }
-
 
     @Override
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
@@ -38,11 +36,7 @@ public class PatientServiceImpl implements PatientService {
                 .map(value -> mapToDto2(value)).collect(Collectors.toList());
 
         return patientListDto;
-
     }
-
-
-
 
     @Override
     public PatientDto getPatientById(Long id) {
@@ -63,40 +57,41 @@ public class PatientServiceImpl implements PatientService {
         value.setGender(patient.getGender());
         value.setLastVisitedDate(patient.getLastVisitedDate());
         value.setMobileNo(patient.getMobileNo());
-
-
+        value.setDoctorDetails(patient.getDoctorDetails());
+        value.setAttributes(patient.getAttributes());
+        value.setStatus(patient.getStatus());
 
         return patientRepository.save(value);
     }
 
     @Override
     public void deletePatientById(Long id) {
-
         patientRepository.deleteById(id);
     }
 
-    @Override
-    public String referPatients(Long doctorId, Long patientId) {
-        String docName = patientRepository.findDoctorNameByPatientId(patientId);
-        String patientName = patientRepository.findPatientNameByPatientId(patientId);
-
-        patientRepository.referPatients(doctorId,patientId,docName,patientName);
-        return "SuccessFull";
-    }
 
     @Override
-    public ArrayList<String> getMessageForReferredPatient(Long doctorId) {
-        return patientRepository.getMessageForReferredPatient(doctorId);
+    public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
+        List<Patient> patient =  patientRepository.recentlyAddedPatient(doctorId);
+        List<PatientListDto> patientListDto = patient.stream()
+                .map(value -> mapToDto2(value)).collect(Collectors.toList());
+
+        return patientListDto;
     }
 
-    @Override
-    public void changeStatus(Long doctorId) {
-        patientRepository.changeStatus(doctorId);
-    }
+
+
+
+    //DashBoard Chart
 
     @Override
     public int totalNoOfPatient(Long doctorId) {
         return patientRepository.totalNoOfPatient(doctorId);
+    }
+
+    @Override
+    public void changePatientStatus(Long id, String status) {
+        patientRepository.changePatientStatus(id, status);
     }
 
     @Override
@@ -120,18 +115,38 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<Patient> getAllPatient() {
-        return patientRepository.findAll();
-    }
-
-    @Override
     public ArrayList<String> ageChart(Long doctorId) {
         return patientRepository.ageChart(doctorId);
     }
 
 
-    //DTOS
 
+
+    //Add-On feature Refer Patient
+
+
+    @Override
+    public String referPatients(Long doctorId, Long patientId) {
+        String docName = patientRepository.findDoctorNameByPatientId(patientId);
+        String patientName = patientRepository.findPatientNameByPatientId(patientId);
+
+        patientRepository.referPatients(doctorId,patientId,docName,patientName);
+        return "SuccessFull";
+    }
+
+    @Override
+    public ArrayList<String> getMessageForReferredPatient(Long doctorId) {
+        return patientRepository.getMessageForReferredPatient(doctorId);
+    }
+
+    @Override
+    public void changeStatus(Long doctorId) {
+        patientRepository.changeStatus(doctorId);
+    }
+
+
+
+    // convert entity to dto
     private PatientDto mapToDto(Patient patient){
         PatientDto patientDto = mapper.map(patient,PatientDto.class);
         return patientDto;
@@ -142,6 +157,14 @@ public class PatientServiceImpl implements PatientService {
         return patientListDto;
     }
 
+
+
+    //convert dto to entity
+
+    private Patient mapToEntity(PatientDto patientDto){
+        Patient patient = mapper.map(patientDto,Patient.class);
+        return patient;
+    }
 
 
 }

@@ -15,18 +15,23 @@ public interface PatientService {
     public PatientDto getPatientById(Long id);
     public Patient updatePatient(Long id,Patient patient);
     public void deletePatientById(Long id);
-    public String referPatients(Long doctorId,Long patientId);
-    public ArrayList<String> getMessageForReferredPatient(Long doctorId);
-    public void changeStatus(Long doctorId);
+    public void changePatientStatus(Long id,String status);
+    public List<PatientListDto> recentlyAddedPatient(Long doctorId);
 
 
-    //charts
+    //chart
     public  int totalNoOfPatient(Long doctorId);
     public ArrayList<String> patientCategory(Long doctorId);
     public ArrayList<String> gender(Long doctorId);
     public ArrayList<String> activePatient(Long doctorId);
     public ArrayList<String> bloodGroup(Long doctorId);
-    public List<Patient> getAllPatient();
     public ArrayList<String> ageChart(Long doctorId);
+
+
+    //Add-On feature Refer Patient
+
+    public String referPatients(Long doctorId,Long patientId);
+    public ArrayList<String> getMessageForReferredPatient(Long doctorId);
+    public void changeStatus(Long doctorId);
 
 }
