@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.exception.MyCustomException;
 import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,11 +40,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto getPatientById(Long id) {
+    public PatientDto getPatientById(Long id) throws MyCustomException {
+      try{
+        Patient patient = patientRepository.findById(id).get();
+          return mapToDto(patient);
+       }catch ( Exception e) {
+          throw new MyCustomException("Patient", "id", id);
+      }
 
-        Patient patient = patientRepository.findById(id).orElseThrow(
-                ()-> new ResourceNotFoundException("Patient","id",id));
-        return mapToDto(patient);
     }
 
     @Override

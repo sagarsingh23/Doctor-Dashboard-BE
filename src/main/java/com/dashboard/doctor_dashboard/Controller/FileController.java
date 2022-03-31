@@ -4,11 +4,11 @@ import com.dashboard.doctor_dashboard.Entity.report.FileDB;
 import com.dashboard.doctor_dashboard.Entity.report.ResponseFile;
 import com.dashboard.doctor_dashboard.Entity.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.Service.patient_service.FileStorageService;
+import com.dashboard.doctor_dashboard.exception.ReportNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -26,7 +26,7 @@ public class FileController {
 
     @ResponseBody
     @RequestMapping(value = "/api/patient/upload/{id}", method = RequestMethod.POST)
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam MultipartFile file,@PathVariable("id") Long id) {
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam MultipartFile file,@PathVariable("id") Long id){
         String message = "";
         try {
             FileDB fileDB=storageService.store(file,id);
@@ -58,10 +58,15 @@ public class FileController {
         return ResponseEntity.status(HttpStatus.OK).body(files);
     }
     @GetMapping("/files/{id}")
-    public ResponseEntity<byte[]> getFile(@PathVariable Long id) {
-        FileDB fileDB = storageService.getFile(id);
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
-                .body(fileDB.getDataReport());
+    public ResponseEntity<byte[]> getFile(@PathVariable Long id) throws ReportNotFound {
+           try {
+               FileDB fileDB = storageService.getFile(id);
+               return ResponseEntity.ok()
+                       .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
+                       .body(fileDB.getDataReport());
+           }catch (Exception e){
+               throw new ReportNotFound("No Report Found!!!");
+           }
+
     }
 }

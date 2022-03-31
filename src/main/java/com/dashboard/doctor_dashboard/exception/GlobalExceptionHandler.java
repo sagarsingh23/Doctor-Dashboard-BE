@@ -62,16 +62,28 @@ public class GlobalExceptionHandler  {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
 
-        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseEntity<Object> handleArgumentNot(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    public ResponseEntity<List> handleArgumentNot(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         List list = ex.getBindingResult().getAllErrors().stream()
                 .map(fieldError -> fieldError.getDefaultMessage())
                 .collect(Collectors.toList());
         System.out.println("called!!");
-        return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(list, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(MyCustomException.class)
+    @ResponseBody
+    public ResponseEntity<String> handleMyCustomException(MyCustomException e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ReportNotFound.class)
+    @ResponseBody
+    public ResponseEntity<String> handleReportNotFoundException(ReportNotFound e) {
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.OK);
     }
 }
