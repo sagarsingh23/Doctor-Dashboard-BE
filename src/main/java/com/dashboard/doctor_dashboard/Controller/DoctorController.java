@@ -1,19 +1,24 @@
 package com.dashboard.doctor_dashboard.Controller;
 
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.exception.APIException;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.exception.ValidationsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -21,59 +26,38 @@ import java.util.List;
 public class DoctorController {
 
     @Autowired
-    private DoctorService service;
+    private DoctorService doctorService;
 
     @GetMapping("/get-all")
     public List<DoctorListDto> getAllDoctors(){
-        return service.getAllDoctors();
+        return doctorService.getAllDoctors();
     }
 
     @GetMapping("/id/{id}")
-    public DoctorDetails getDoctorsById(@PathVariable("id") long id){
-        return service.getDoctorById(id);
-    }
-
-
-//    @GetMapping("/name/{name}")
-//    public List<DoctorDetails> getDoctorsByName(@PathVariable("name") String name){
-//        return service.getDoctorByFirstName(name);
-//    }
-//
-//    @GetMapping("/age/{age}")
-//    public List<DoctorDetails> getDoctorsByAge(@PathVariable("age") short age){
-//        return service.getDoctorByAge(age);
-//    }
-//
-//
-//    @GetMapping("/email/{email}")
-//    public DoctorDetails getDoctorsByEmail(@PathVariable("email") String email){
-//        return service.getDoctorByEmail(email);
-//    }
-    @GetMapping("/speciality/{id}")
-    public DoctorSpecialityDto getDoctorBySpeciality(@PathVariable("id") long id){
-        return service.getDoctorBySpeciality(id);
+    public DoctorBasicDetailsDto getDoctorById(@PathVariable("id") long id){
+        if(doctorService.getDoctorById(id)!=null)
+            return doctorService.getDoctorById(id);
+        throw new ResourceNotFoundException("doctor","id",id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @RequestBody @Valid DoctorFormDto details) {
-//        System.out.println("errors "+errors.getAllErrors());
-//        if (errors.hasErrors()) {
-//            throw new MethodArgumentNotValidException(,errors);
-//        }
-        DoctorFormDto doctorFormDto=service.updateDoctor(details,id);
+    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, WebRequest webRequest){
+
+        if(bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .collect(Collectors.toList());
+            throw new ValidationsException(errors);
+        }
+        DoctorFormDto doctorFormDto=doctorService.updateDoctor(details,id);
         if(doctorFormDto!=null)
             return new ResponseEntity(doctorFormDto, HttpStatus.CREATED);
-        return new ResponseEntity("id mismatch",HttpStatus.BAD_REQUEST);
+        throw new APIException(HttpStatus.BAD_REQUEST,"id mismatch");
     }
-
-//    @PostMapping("/add/")
-//    public DoctorDetails addNewDoctor(@RequestBody DoctorDetails doctorDetails){
-//        return service.addDoctor(doctorDetails);
-//    }
 
     @DeleteMapping("/{id}")
     public String deleteDoctor(@PathVariable("id") int id){
-        return service.deleteDoctor(id);
+        return doctorService.deleteDoctor(id);
     }
 
 }

@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.Controller;
 
 import com.dashboard.doctor_dashboard.Entity.login_entity.Id_Token;
 import com.dashboard.doctor_dashboard.Service.login_service.LoginService;
+import com.dashboard.doctor_dashboard.exception.GoogleLoginException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.codehaus.jettison.json.JSONException;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
 
@@ -28,10 +30,10 @@ public class LoginController {
         Id_Token jwt = new Id_Token();
         jwt.setIdtoken(login.tokenVerification(idToken.getIdtoken()));
         JSONObject jsonObject = new JSONObject();
-        if (!jwt.getIdtoken().equals("invalid ID token")){
+        if (!jwt.getIdtoken().equals("ID token expired.")){
             jsonObject.put("jwt_token", jwt.getIdtoken());
         return new ResponseEntity<String>(jsonObject.toString(), HttpStatus.OK);
     }
-        return new ResponseEntity<>(jwt.getIdtoken(),HttpStatus.BAD_REQUEST);
+        throw new GoogleLoginException(jwt.getIdtoken());
     }
 }

@@ -83,7 +83,7 @@ public class LoginServiceImpl implements LoginService {
         else {
             System.out.println("Invalid ID token.");
         }
-        return "invalid ID token";
+        return "ID token expired.";
     }
 
     @Autowired

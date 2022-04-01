@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.exception;
 
 import java.util.Date;
 
-public class ErrorDetails extends  RuntimeException{
+public class ErrorDetails {
     private Date timestamp;
     private String message;
     private String details;
@@ -12,6 +12,7 @@ public class ErrorDetails extends  RuntimeException{
         this.message = message;
         this.details = details;
     }
+
 
     public Date getTimestamp() {
         return timestamp;
@@ -24,4 +25,5 @@ public class ErrorDetails extends  RuntimeException{
     public String getDetails() {
         return details;
     }
+
 }

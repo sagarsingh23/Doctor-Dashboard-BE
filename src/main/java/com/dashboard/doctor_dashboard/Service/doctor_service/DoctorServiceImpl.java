@@ -1,12 +1,14 @@
 package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
+import com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 
 import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Repository.DoctorRepository;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,65 +20,70 @@ public class DoctorServiceImpl implements DoctorService {
 
     }
     @Autowired
-    private DoctorRepository repository;
+    private DoctorRepository doctorRepository;
 
     @Override
     public DoctorDetails addDoctor(DoctorDetails details) {
-       return repository.save(details);
+       return doctorRepository.save(details);
     }
 
     @Override
     public List<DoctorListDto> getAllDoctors() {
-       List<DoctorListDto> details= repository.getAllDoctors();
+       List<DoctorListDto> details= doctorRepository.getAllDoctors();
         return details;
     }
 
     @Override
-    public DoctorDetails getDoctorById(long id) {
-        return repository.findById(id).get();
+    public DoctorBasicDetailsDto getDoctorById(long id) {
+        if(doctorRepository.IsIdAvailable(id)!=null)
+            return doctorRepository.findDoctorById(id);
+        return null;
     }
 
 //    @Override
 //    public List<DoctorDetails>  getDoctorByFirstName(String name) {
-//        return repository.findByFirstName(name);
+//        return doctorRepository.findByFirstName(name);
 //    }
 //    @Override
 //    public List<DoctorDetails>  getDoctorByLastName(String name) {
-//        return repository.findByLastName(name);
+//        return doctorRepository.findByLastName(name);
 //    }
 //
 //    @Override
 //    public List<DoctorDetails>  getDoctorByAge(short age) {
-//        return repository.findByAge(age);
+//        return doctorRepository.findByAge(age);
 //    }
 //
 //    @Override
 //    public DoctorDetails getDoctorByEmail(String email) {
-//        return repository.findByEmail(email);
+//        return doctorRepository.findByEmail(email);
+//    }
+
+//    @Override
+//    public DoctorSpecialityDto getDoctorBySpeciality(long id) {
+//
+//        DoctorSpecialityDto doctorSpecialityDto =new DoctorSpecialityDto();
+//        String speciality=doctorRepository.findBySpeciality(id);
+//        System.out.println(speciality);
+//                doctorSpecialityDto.setSpeciality(speciality);
+//        return doctorSpecialityDto;
 //    }
 
     @Override
-    public DoctorSpecialityDto getDoctorBySpeciality(long id) {
-
-        DoctorSpecialityDto doctorSpecialityDto =new DoctorSpecialityDto();
-        String speciality=repository.findBySpeciality(id);
-        System.out.println(speciality);
-                doctorSpecialityDto.setSpeciality(speciality);
-        return doctorSpecialityDto;
-    }
-
-    @Override
     public DoctorFormDto updateDoctor(DoctorFormDto details, long id) {
-        if(details.getId()==id) {
-            repository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), id);
-            return repository.getDoctorById(id);
+        if(doctorRepository.IsIdAvailable(id)!=null) {
+            if (details.getId() == id) {
+                doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), id);
+                return doctorRepository.getDoctorById(id);
+            }
+            return null;
         }
-        return null;
+        throw new ResourceNotFoundException("doctor", "id", id);
     }
 
     @Override
     public String deleteDoctor(long id) {
-        repository.deleteById(id);
+        doctorRepository.deleteById(id);
         return "Successfully deleted";
     }
 }

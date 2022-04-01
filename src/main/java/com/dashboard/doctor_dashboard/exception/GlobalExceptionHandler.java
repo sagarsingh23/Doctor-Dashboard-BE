@@ -1,35 +1,14 @@
 package com.dashboard.doctor_dashboard.exception;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler  {
-
-    //    @Override
-    //    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    //        List list = ex.getBindingResult().getAllErrors().stream()
-    //                .map(fieldError -> fieldError.getDefaultMessage())
-    //                .collect(Collectors.toList());
-    //        ApiError apiError =
-    //                new ApiError(HttpStatus.BAD_REQUEST, ex.getLocalizedMessage(), list);
-    //        return handleExceptionInternal(
-    //                ex, apiError, headers, apiError.getStatus(), request);
-    //    }
 
     //     handle specific exceptions
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -40,19 +19,17 @@ public class GlobalExceptionHandler  {
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(ErrorDetails.class)
-    public ResponseEntity<ErrorDetails> notLoggedIn(ErrorDetails exception,WebRequest webRequest){
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-                webRequest.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
-
-    }
     @ExceptionHandler(APIException.class)
     public ResponseEntity<ErrorDetails> handleAPIException(APIException exception,
                                                            WebRequest webRequest) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GoogleLoginException.class)
+    public ResponseEntity<GoogleLoginException> handleLoginException(GoogleLoginException ex){
+        return new ResponseEntity<>(ex,HttpStatus.BAD_REQUEST);
     }
 
 //     global exceptions
@@ -65,13 +42,11 @@ public class GlobalExceptionHandler  {
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseBody
-    public ResponseEntity<Object> handleArgumentNot(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        List list = ex.getBindingResult().getAllErrors().stream()
-                .map(fieldError -> fieldError.getDefaultMessage())
-                .collect(Collectors.toList());
-        System.out.println("called!!");
-        return new ResponseEntity<>(list, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(ValidationsException.class)
+    public ResponseEntity<ValidationsSchema> processException(final ValidationsException ex, WebRequest request){
+
+        ValidationsSchema errorDetails=new ValidationsSchema(new Date(), ex.getMessages(),request.getDescription(false));
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
 }
