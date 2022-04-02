@@ -1,8 +1,10 @@
 package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 
+import com.dashboard.doctor_dashboard.Entity.Attributes;
 import com.dashboard.doctor_dashboard.Entity.Patient;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
+import com.dashboard.doctor_dashboard.Repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import com.dashboard.doctor_dashboard.exception.MyCustomException;
@@ -20,6 +22,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private AttributeRepository attributeRepository;
+
 
     @Autowired
     private ModelMapper mapper;
@@ -54,6 +60,8 @@ public class PatientServiceImpl implements PatientService {
     public Patient updatePatient(Long id, Patient patient) {
 
         Patient value = patientRepository.findById(id).get();
+        Attributes value1 =attributeRepository.findById(id).get();
+
         value.setFullName(patient.getFullName());
         value.setAge(patient.getAge());
         value.setCategory(patient.getCategory());
@@ -61,11 +69,16 @@ public class PatientServiceImpl implements PatientService {
         value.setGender(patient.getGender());
         value.setLastVisitedDate(patient.getLastVisitedDate());
         value.setMobileNo(patient.getMobileNo());
-        value.setDoctorDetails(patient.getDoctorDetails());
-        value.setAttributes(patient.getAttributes());
-        value.setStatus(patient.getStatus());
 
-        return patientRepository.save(value);
+        value1.setBloodGroup(patient.getAttributes().getBloodGroup());
+        value1.setBloodPressure(patient.getAttributes().getBloodPressure());
+        value1.setBodyTemp(patient.getAttributes().getBodyTemp());
+        value1.setSymptoms(patient.getAttributes().getSymptoms());
+        value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
+
+        patientRepository.save(value);
+        attributeRepository.save(value1);
+        return value ;
     }
 
     @Override
