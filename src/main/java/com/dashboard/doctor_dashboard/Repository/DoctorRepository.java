@@ -29,6 +29,6 @@ import java.util.List;
     @Query(value = "select id from doctor_details d where d.id=:id",nativeQuery = true)
     Long IsIdAvailable(Long id);
 
-    @Query(value ="select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto(a.firstName,a.email,a.speciality,a.phoneNo,a.gender) from DoctorDetails a where id=:id" )
+    @Query(value ="select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto(a.firstName,a.email,a.speciality,a.phoneNo,a.gender,a.age) from DoctorDetails a where id=:id" )
     DoctorBasicDetailsDto findDoctorById(Long id);
 }

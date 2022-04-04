@@ -13,5 +13,6 @@ public class DoctorBasicDetailsDto {
     private String speciality;
     private String phoneNo;
     private String gender;
+    private Short age;
 
 }

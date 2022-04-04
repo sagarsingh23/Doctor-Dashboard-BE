@@ -19,7 +19,8 @@ public class DoctorLoginDetails {
     @Column(name="firstName",nullable = false)
     private String firstName;
     private String lastName;
-    @Column(name="emailId",nullable = false)
+    @Column(name="emailId",nullable = false,unique = true)
     private String emailId;
+    @Column(name="domain",nullable = false)
     private String domain;
 }
