@@ -7,7 +7,7 @@ import javax.validation.constraints.Pattern;
 @Data
 public class StatusDto {
 
-    @Pattern(regexp = "active|inactive|under-observation",flags = Pattern.Flag.CASE_INSENSITIVE,
+    @Pattern(regexp = "^(active|inactive)",flags = Pattern.Flag.CASE_INSENSITIVE,
     message = "select from specified status")
     private String status;
 }

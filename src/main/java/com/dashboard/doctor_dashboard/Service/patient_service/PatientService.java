@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.Service.patient_service;
 import com.dashboard.doctor_dashboard.Entity.Patient;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.PatientListDto;
+import com.dashboard.doctor_dashboard.exception.MyCustomException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface PatientService {
     public Patient addPatient(Patient patient);
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId);
-    public PatientDto getPatientById(Long id);
+    public PatientDto getPatientById(Long id) throws MyCustomException;
     public Patient updatePatient(Long id,Patient patient);
     public void deletePatientById(Long id);
     public void changePatientStatus(Long id,String status);

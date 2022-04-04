@@ -60,7 +60,7 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     //Add-On feature Refer Patient
 
 
-    @Query(value = "select d_name from doctor_details where doctor_id = (select doctor_id from patients where id =:patientId)",nativeQuery = true)
+    @Query(value = "select first_name from doctor_details where id = (select doctor_id from patients where id =:patientId)",nativeQuery = true)
     String findDoctorNameByPatientId(Long patientId);
 
     @Query(value = "select full_name from patients where id =:patientId",nativeQuery = true)
