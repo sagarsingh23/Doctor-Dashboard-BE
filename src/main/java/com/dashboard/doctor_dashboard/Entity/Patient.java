@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -67,6 +68,16 @@ public class Patient {
     private String status;
     private boolean isChanged;
     private String message;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date timestamp;
+
+    @PrePersist
+    @PreUpdate
+    public void onCreate() {
+        timestamp = new Date();
+    }
 
     @JsonManagedReference
     @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
