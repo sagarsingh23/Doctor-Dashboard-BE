@@ -13,7 +13,7 @@ import java.util.List;
 public interface PatientService {
     public Patient addPatient(Patient patient);
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId);
-    public PatientDto getPatientById(Long id) throws MyCustomException;
+    public PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException;
     public Patient updatePatient(Long id,Patient patient);
     public void deletePatientById(Long id);
     public void changePatientStatus(Long id,String status);
