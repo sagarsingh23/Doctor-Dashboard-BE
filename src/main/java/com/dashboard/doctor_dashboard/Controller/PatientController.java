@@ -24,7 +24,7 @@ public class PatientController {
     //CRUD operation for patient
 
     @PostMapping()
-    public Patient addPatient(@Valid @RequestBody Patient patient){
+    public Patient addPatient(@RequestBody Patient patient){
         return patientService.addPatient(patient);
     }
 
@@ -33,9 +33,9 @@ public class PatientController {
         return patientService.getAllPatientByDoctorId(doctorId);
     }
 
-    @GetMapping("/{id}")
-    public PatientDto getPatientDtoById(@PathVariable("id") Long id){
-        return  patientService.getPatientById(id);
+    @GetMapping("/{id}/doctor/{doctorId}")
+    public PatientDto getPatientDtoById(@PathVariable("id") Long id,@PathVariable("doctorId") Long doctorId){
+        return  patientService.getPatientById(id,doctorId);
     }
 
     @PutMapping("/{id}")
@@ -100,6 +100,8 @@ public class PatientController {
 
     @PutMapping("/{id}/doctor/{doctorId}")
     public String referPatients(@PathVariable("doctorId") Long doctorId,@PathVariable("id") Long patientId){
+
+
         return patientService.referPatients(doctorId,patientId);
     }
 

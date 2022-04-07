@@ -46,12 +46,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientDto getPatientById(Long id) throws MyCustomException {
+    public PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException {
       try{
-        Patient patient = patientRepository.findById(id).get();
+        Patient patient = patientRepository.getPatientByIdAndDoctorId(id,doctorId);
           return mapToDto(patient);
        }catch ( Exception e) {
-          throw new MyCustomException("Patient", "id", id);
+          throw new MyCustomException("Patient", "id",id);
       }
 
     }
@@ -144,6 +144,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public String referPatients(Long doctorId, Long patientId) {
+
         String docName = patientRepository.findDoctorNameByPatientId(patientId);
         String patientName = patientRepository.findPatientNameByPatientId(patientId);
 

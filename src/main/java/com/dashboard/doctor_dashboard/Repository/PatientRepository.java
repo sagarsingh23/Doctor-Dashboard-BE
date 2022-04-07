@@ -16,6 +16,10 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query(value = "select * from patients where doctor_id = :doctorId",nativeQuery = true)
     List<Patient> getAllPatientByDoctorId(@Param(value = "doctorId") Long doctorId);
 
+    @Query(value = "select * from patients where id=:id and doctor_id =:doctorId",nativeQuery = true)
+    Patient getPatientByIdAndDoctorId(Long id,Long doctorId);
+
+
     @Query(value = "update patients set status =:status where id=:patientId ",nativeQuery = true)
     @Modifying
     @Transactional
@@ -25,7 +29,7 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query(value = "select id from patients where id=:patientId ",nativeQuery = true)
     Long getId(Long patientId);
 
-    @Query(value = "select * from patients where doctor_id = :doctorId order by id desc limit 3",nativeQuery = true)
+    @Query(value = "select * from patients where doctor_id = :doctorId order by timestamp desc limit 3",nativeQuery = true)
     List<Patient> recentlyAddedPatient(Long doctorId);
 
 
@@ -67,13 +71,13 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     String findPatientNameByPatientId(Long patientId);
 
 
-    @Query(value = "update patients set doctor_id=:doctorId, is_changed=true ,message ='Dr. ' :docName ' refered ' :patientName  ' to you'  where id=:patientId",nativeQuery = true)
+    @Query(value = "update patients set doctor_id=:doctorId,timestamp=now(), is_changed=true ,message ='Dr. ' :docName ' refered ' :patientName  ' to you'  where id=:patientId",nativeQuery = true)
     @Modifying
     @Transactional
     void referPatients(Long doctorId,Long patientId,String docName,String patientName);
 
 
-    @Query(value = "select message from patients where doctor_id = :doctorId and is_changed = true",nativeQuery = true)
+    @Query(value = "select message from patients where doctor_id = :doctorId and is_changed = true order by timestamp desc",nativeQuery = true)
     ArrayList<String> getMessageForReferredPatient(Long doctorId);
 
 
