@@ -28,9 +28,13 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @GetMapping("/get-all")
-    public List<DoctorListDto> getAllDoctors(){
-        return doctorService.getAllDoctors();
+    @GetMapping("/get-all/doctor/{doctorId}")
+    public List<DoctorListDto> getAllDoctors(@PathVariable("doctorId") Long id){
+
+        List<DoctorListDto> details= doctorService.getAllDoctors(id);
+        if(details!=null)
+            return details;
+        throw new ResourceNotFoundException("doctor","id",id);
     }
 
     @GetMapping("/id/{id}")

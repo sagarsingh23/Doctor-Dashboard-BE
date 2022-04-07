@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public interface DoctorService {
     public DoctorDetails addDoctor(DoctorDetails details);
-    public List<DoctorListDto> getAllDoctors();
+    public List<DoctorListDto> getAllDoctors(Long id);
     public DoctorBasicDetailsDto getDoctorById(long id);
 //    public List<DoctorDetails> getDoctorByFirstName(String name);
 //    public List<DoctorDetails> getDoctorByLastName(String name);

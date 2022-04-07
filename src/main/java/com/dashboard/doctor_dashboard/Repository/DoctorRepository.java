@@ -23,8 +23,8 @@ import java.util.List;
     @Query(value = "select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo) from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto(a.id,a.firstName,a.email) from DoctorDetails a")
-    List<DoctorListDto> getAllDoctors();
+    @Query(value = "select new com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto(a.id,a.firstName,a.email) from DoctorDetails a where a.id!=:id")
+    List<DoctorListDto> getAllDoctors(Long id);
 
     @Query(value = "select id from doctor_details d where d.id=:id",nativeQuery = true)
     Long IsIdAvailable(Long id);

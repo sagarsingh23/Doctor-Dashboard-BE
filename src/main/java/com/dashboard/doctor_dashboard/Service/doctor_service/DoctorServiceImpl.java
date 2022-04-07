@@ -28,9 +28,12 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public List<DoctorListDto> getAllDoctors() {
-       List<DoctorListDto> details= doctorRepository.getAllDoctors();
-        return details;
+    public List<DoctorListDto> getAllDoctors(Long id) {
+
+        if(doctorRepository.IsIdAvailable(id)!=null)
+            return doctorRepository.getAllDoctors(id);
+        return null;
+
     }
 
     @Override
