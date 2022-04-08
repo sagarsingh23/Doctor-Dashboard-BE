@@ -22,6 +22,7 @@ public interface PatientService {
 
     //chart
     public  int totalNoOfPatient(Long doctorId);
+    public  int totalNoOfActivePatient(Long doctorId);
     public ArrayList<String> patientCategory(Long doctorId);
     public ArrayList<String> gender(Long doctorId);
     public ArrayList<String> activePatient(Long doctorId);

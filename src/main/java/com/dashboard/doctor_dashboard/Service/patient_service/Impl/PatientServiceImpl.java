@@ -8,7 +8,6 @@ import com.dashboard.doctor_dashboard.Repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import com.dashboard.doctor_dashboard.exception.MyCustomException;
-import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -96,6 +95,11 @@ public class PatientServiceImpl implements PatientService {
         return patientListDto;
     }
 
+    @Override
+    public void changePatientStatus(Long id, String status) {
+        patientRepository.changePatientStatus(id, status);
+    }
+
 
 
 
@@ -107,9 +111,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public void changePatientStatus(Long id, String status) {
-        patientRepository.changePatientStatus(id, status);
+    public int totalNoOfActivePatient(Long doctorId) {
+        return patientRepository.totalNoOfActivePatient(doctorId);
     }
+
 
     @Override
     public ArrayList<String> patientCategory(Long doctorId) {
@@ -177,12 +182,12 @@ public class PatientServiceImpl implements PatientService {
 
 
 
-    //convert dto to entity
-
-    private Patient mapToEntity(PatientDto patientDto){
-        Patient patient = mapper.map(patientDto,Patient.class);
-        return patient;
-    }
+//    //convert dto to entity
+//
+//    private Patient mapToEntity(PatientDto patientDto){
+//        Patient patient = mapper.map(patientDto,Patient.class);
+//        return patient;
+//    }
 
 
 }

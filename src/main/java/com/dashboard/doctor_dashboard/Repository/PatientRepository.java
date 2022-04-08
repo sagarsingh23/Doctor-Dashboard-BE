@@ -40,13 +40,17 @@ public interface PatientRepository extends JpaRepository<Patient,Long> {
     @Query(value = "Select COUNT(id) from patients where doctor_id =:doctorId",nativeQuery = true)
     int totalNoOfPatient(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select upper(category),count(category) from patients where doctor_id = :doctorId group by category",nativeQuery = true)
+    @Query(value = "Select COUNT(status) from patients where doctor_id =:doctorId and status = 'Active'",nativeQuery = true)
+    int totalNoOfActivePatient(@Param(value = "doctorId") Long doctorId);
+
+
+    @Query(value = "Select category,count(category) from patients where doctor_id = :doctorId group by category",nativeQuery = true)
     ArrayList<String> patientCategory(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select upper(gender),count(gender) from patients where doctor_id =:doctorId group by gender",nativeQuery = true)
+    @Query(value = "Select gender,count(gender) from patients where doctor_id =:doctorId group by gender",nativeQuery = true)
     ArrayList<String> gender(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select upper(status),count(status) from patients where doctor_id =:doctorId group by status",nativeQuery = true)
+    @Query(value = "Select status,count(status) from patients where doctor_id =:doctorId group by status",nativeQuery = true)
     ArrayList<String> activePatient(@Param(value = "doctorId") Long doctorId);
 
     @Query(value = "select upper(blood_group),count(blood_group) from attributes inner join patients where patients.id = attributes.id and doctor_id =:doctorId group by blood_group",nativeQuery = true)

@@ -69,6 +69,12 @@ public class PatientController {
         return patientService.totalNoOfPatient(doctorId);
     }
 
+    @GetMapping("/{doctorId}/totalActivePatient")
+    public int totalActivePatient(@PathVariable("doctorId") Long doctorId){
+        return patientService.totalNoOfActivePatient(doctorId);
+    }
+
+
     @GetMapping("/{doctorId}/category")
     public ArrayList<String> patientCategory(@PathVariable("doctorId") Long doctorId){
         return patientService.patientCategory(doctorId);
@@ -100,7 +106,6 @@ public class PatientController {
 
     @PutMapping("/{id}/doctor/{doctorId}")
     public String referPatients(@PathVariable("doctorId") Long doctorId,@PathVariable("id") Long patientId){
-
 
         return patientService.referPatients(doctorId,patientId);
     }
