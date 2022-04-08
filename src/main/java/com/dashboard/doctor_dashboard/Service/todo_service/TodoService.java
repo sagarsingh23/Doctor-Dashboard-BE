@@ -12,5 +12,5 @@ public interface TodoService {
     public Todolist getlistById(Long id);
     public List<Todolist> getAllTodoByDoctorId(Long doctorId);
     public Todolist updatelist(Long id, Todolist todolist);
-    public void deletelistById(Long id);
+    public String deletelistById(Long id);
 }

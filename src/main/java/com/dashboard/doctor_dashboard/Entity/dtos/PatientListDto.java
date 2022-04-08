@@ -13,5 +13,7 @@ public class PatientListDto {
     private String category;
     private LocalDate lastVisitedDate;
     private String mobileNo;
+    private String gender;
+    private int age;
 
 }

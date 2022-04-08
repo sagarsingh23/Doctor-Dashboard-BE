@@ -33,8 +33,8 @@ public class TodoController {
     }
     @DeleteMapping("/{id}")
     public String deleteTodo(@PathVariable("id" ) Long id){
-        todoService.deletelistById(id);
-        return "successfully deleted";
+        return todoService.deletelistById(id);
+
     }
     @PutMapping("/{id}")
     public Todolist updateTodo(@PathVariable("id") Long id,@RequestBody Todolist todolist){

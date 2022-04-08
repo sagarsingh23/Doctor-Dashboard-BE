@@ -16,9 +16,9 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
-    public  DoctorServiceImpl(){
-
-    }
+//    public  DoctorServiceImpl(){
+//
+//    }
     @Autowired
     private DoctorRepository doctorRepository;
 

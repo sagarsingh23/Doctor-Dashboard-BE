@@ -26,6 +26,7 @@ public class TodoServiceImpl implements TodoService{
     public List<Todolist> getAllTodoByDoctorId(Long doctorId) {
         return todoRepository.findByDoctorId(doctorId);
     }
+
     @Override
     public Todolist updatelist(Long id, Todolist todolist) {
         Todolist value = todoRepository.findById(id).get();
@@ -35,8 +36,8 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public void deletelistById(Long id) {
+    public String deletelistById(Long id) {
         todoRepository.deleteById(id);
-
+        return"successfully deleted";
     }
 }
