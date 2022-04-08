@@ -30,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/","/csrf",
             "/api/doctor/login",
-//            "/api/patient/changeMessage/**"
+            "/api/patient/changeMessage/**",
+            "/files/**"
+
 
     };
 
