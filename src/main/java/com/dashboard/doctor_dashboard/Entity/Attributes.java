@@ -34,7 +34,6 @@ public class Attributes {
 
     @NotEmpty
     @Size(max = 50)
-//    @Pattern(regexp = "^[\\p{L} .'-]+$",message = "symptoms should only contains characters")
     private String symptoms;
 
 
