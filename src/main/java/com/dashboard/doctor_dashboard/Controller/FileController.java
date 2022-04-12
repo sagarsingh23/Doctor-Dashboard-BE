@@ -3,8 +3,9 @@ package com.dashboard.doctor_dashboard.Controller;
 import com.dashboard.doctor_dashboard.Entity.report.FileDB;
 import com.dashboard.doctor_dashboard.Entity.report.ResponseFile;
 import com.dashboard.doctor_dashboard.Entity.report.ResponseMessage;
-import com.dashboard.doctor_dashboard.Service.patient_service.FileStorageService;
+import com.dashboard.doctor_dashboard.Service.patient_service.Impl.FileStorageService;
 import com.dashboard.doctor_dashboard.exception.ReportNotFound;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 

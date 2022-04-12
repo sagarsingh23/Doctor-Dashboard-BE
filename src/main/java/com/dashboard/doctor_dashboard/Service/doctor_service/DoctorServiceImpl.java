@@ -32,7 +32,8 @@ public class DoctorServiceImpl implements DoctorService {
 
         if(doctorRepository.IsIdAvailable(id)!=null)
             return doctorRepository.getAllDoctors(id);
-        return null;
+
+        throw new ResourceNotFoundException("doctor", "id", id);
 
     }
 
