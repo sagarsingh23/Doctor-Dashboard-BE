@@ -13,12 +13,12 @@ public class TodoServiceImpl implements TodoService{
     @Autowired
     private TodoRepository todoRepository;
     @Override
-    public Todolist addlist(Todolist todolist) {
+    public Todolist addTodo(Todolist todolist) {
         return todoRepository.save(todolist);
     }
 
     @Override
-    public Todolist getlistById(Long id) {
+    public Todolist getTodoById(Long id) {
         return todoRepository.findById(id).get();
     }
 
@@ -28,7 +28,7 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public Todolist updatelist(Long id, Todolist todolist) {
+    public Todolist updateTodo(Long id, Todolist todolist) {
         Todolist value = todoRepository.findById(id).get();
         value.setDescription(todolist.getDescription());
         value.setStatus(todolist.getStatus());
@@ -36,7 +36,7 @@ public class TodoServiceImpl implements TodoService{
     }
 
     @Override
-    public String deletelistById(Long id) {
+    public String deleteTodoById(Long id) {
         todoRepository.deleteById(id);
         return"successfully deleted";
     }

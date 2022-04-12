@@ -11,29 +11,29 @@ import java.util.List;
 
 @Service
 public interface PatientService {
-    public Patient addPatient(Patient patient);
-    public List<PatientListDto> getAllPatientByDoctorId(Long doctorId);
-    public PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException;
-    public Patient updatePatient(Long id,Patient patient);
-    public void deletePatientById(Long id);
-    public void changePatientStatus(Long id,String status);
-    public List<PatientListDto> recentlyAddedPatient(Long doctorId);
+     Patient addPatient(Patient patient);
+     List<PatientListDto> getAllPatientByDoctorId(Long doctorId);
+     PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException;
+     Patient updatePatient(Long id,Patient patient);
+     void deletePatientById(Long id);
+     void changePatientStatus(Long id,String status);
+     List<PatientListDto> recentlyAddedPatient(Long doctorId);
 
 
     //chart
-    public  int totalNoOfPatient(Long doctorId);
-    public  int totalNoOfActivePatient(Long doctorId);
-    public ArrayList<String> patientCategory(Long doctorId);
-    public ArrayList<String> gender(Long doctorId);
-    public ArrayList<String> activePatient(Long doctorId);
-    public ArrayList<String> bloodGroup(Long doctorId);
-    public ArrayList<String> ageChart(Long doctorId);
+      int totalNoOfPatient(Long doctorId);
+      int totalNoOfActivePatient(Long doctorId);
+     ArrayList<String> patientCategory(Long doctorId);
+     ArrayList<String> gender(Long doctorId);
+     ArrayList<String> activePatient(Long doctorId);
+     ArrayList<String> bloodGroup(Long doctorId);
+     ArrayList<String> ageChart(Long doctorId);
 
 
     //Add-On feature Refer Patient
 
-    public String referPatients(Long doctorId,Long patientId);
-    public ArrayList<String> getMessageForReferredPatient(Long doctorId);
-    public void changeStatus(Long doctorId);
+     String referPatients(Long doctorId,Long patientId);
+     ArrayList<String> getMessageForReferredPatient(Long doctorId);
+     void changeStatus(Long doctorId);
 
 }

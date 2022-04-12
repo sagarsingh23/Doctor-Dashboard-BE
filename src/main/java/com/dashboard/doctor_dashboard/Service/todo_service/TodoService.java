@@ -8,9 +8,9 @@ import java.util.List;
 @Service
 public interface TodoService {
 
-    public Todolist addlist(Todolist todolist );
-    public Todolist getlistById(Long id);
-    public List<Todolist> getAllTodoByDoctorId(Long doctorId);
-    public Todolist updatelist(Long id, Todolist todolist);
-    public String deletelistById(Long id);
+     Todolist addTodo(Todolist todolist );
+     Todolist getTodoById(Long id);
+     List<Todolist> getAllTodoByDoctorId(Long doctorId);
+     Todolist updateTodo(Long id, Todolist todolist);
+     String deleteTodoById(Long id);
 }

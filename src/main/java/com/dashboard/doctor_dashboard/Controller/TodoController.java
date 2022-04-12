@@ -18,7 +18,7 @@ public class TodoController {
 
     @PostMapping()
     public Todolist addTodo(@RequestBody Todolist todolist){
-        return todoService.addlist(todolist);
+        return todoService.addTodo(todolist);
     }
 
     @GetMapping("doctor/{doctorId}")
@@ -28,17 +28,17 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public Todolist getTodoById(@PathVariable("id") Long id){
-        return todoService.getlistById(id);
+        return todoService.getTodoById(id);
 
     }
     @DeleteMapping("/{id}")
     public String deleteTodo(@PathVariable("id" ) Long id){
-        return todoService.deletelistById(id);
+        return todoService.deleteTodoById(id);
 
     }
     @PutMapping("/{id}")
     public Todolist updateTodo(@PathVariable("id") Long id,@RequestBody Todolist todolist){
-        return todoService.updatelist(id,todolist);
+        return todoService.updateTodo(id,todolist);
     }
 
 }

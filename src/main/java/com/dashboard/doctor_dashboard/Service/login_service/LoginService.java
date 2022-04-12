@@ -9,7 +9,7 @@ import java.util.Map;
 @Service
 public interface LoginService {
 
-    public boolean addUser( Map<String ,Object> loginDetails);
-    public String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException;
+     boolean addUser( Map<String ,Object> loginDetails);
+     String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException;
     String loginCreator(long id,String email,String firstName);
 }
