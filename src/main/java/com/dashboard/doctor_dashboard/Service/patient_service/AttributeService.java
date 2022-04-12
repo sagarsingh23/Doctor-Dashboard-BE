@@ -4,5 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AttributeService {
-    public void changeNotes(Long id,String notes);
+    public String changeNotes(Long id,String notes);
 }

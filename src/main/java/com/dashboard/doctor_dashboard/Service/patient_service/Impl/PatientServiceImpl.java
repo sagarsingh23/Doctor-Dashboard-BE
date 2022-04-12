@@ -8,6 +8,7 @@ import com.dashboard.doctor_dashboard.Repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.patient_service.PatientService;
 import com.dashboard.doctor_dashboard.exception.MyCustomException;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -97,7 +98,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void changePatientStatus(Long id, String status) {
-        patientRepository.changePatientStatus(id, status);
+        if(patientRepository.getId(id) == id) {
+          patientRepository.changePatientStatus(id, status);
+        }
+        throw new ResourceNotFoundException("Patient", "id", id);
+
     }
 
 

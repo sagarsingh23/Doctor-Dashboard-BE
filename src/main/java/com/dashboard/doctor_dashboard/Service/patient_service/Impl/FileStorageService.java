@@ -1,8 +1,9 @@
-package com.dashboard.doctor_dashboard.Service.patient_service;
+package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 
 import com.dashboard.doctor_dashboard.Entity.report.FileDB;
 import com.dashboard.doctor_dashboard.Repository.FileDBRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
+import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
