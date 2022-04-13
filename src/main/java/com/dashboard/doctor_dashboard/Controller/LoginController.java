@@ -23,12 +23,12 @@ import java.security.GeneralSecurityException;
 public class LoginController {
 
     @Autowired
-    private LoginService login;
+    private LoginService loginService;
 
     @PostMapping(value = "api/doctor/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> loginIdToken(@RequestBody Id_Token idToken) throws GeneralSecurityException, IOException, JSONException {
         Id_Token jwt = new Id_Token();
-        jwt.setIdtoken(login.tokenVerification(idToken.getIdtoken()));
+        jwt.setIdtoken(loginService.tokenVerification(idToken.getIdtoken()));
         JSONObject jsonObject = new JSONObject();
         if (!jwt.getIdtoken().equals("ID token expired.")){
             jsonObject.put("jwt_token", jwt.getIdtoken());
