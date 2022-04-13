@@ -101,8 +101,8 @@ public class PatientServiceImpl implements PatientService {
         if(patientRepository.getId(id) == id) {
           patientRepository.changePatientStatus(id, status);
         }
+        else
         throw new ResourceNotFoundException("Patient", "id", id);
-
     }
 
 

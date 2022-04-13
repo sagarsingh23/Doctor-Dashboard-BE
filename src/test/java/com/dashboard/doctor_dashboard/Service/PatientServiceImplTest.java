@@ -330,10 +330,23 @@ class PatientServiceImplTest {
         StatusDto statusDto = new StatusDto();
         statusDto.setStatus("Active");
 
+        Mockito.when(patientRepository.getId(id)).thenReturn(id);
         patientService.changePatientStatus(id,statusDto.getStatus());
         patientService.changePatientStatus(id,statusDto.getStatus());
 
         verify(patientRepository,times(2)).changePatientStatus(id,statusDto.getStatus());
+    }
+    @Test
+    void throwErrorIfIdNotPresentInDbForStatus() {
+        Long id = 1L;
+        StatusDto statusDto = new StatusDto();
+        statusDto.setStatus("Active");
+
+        Mockito.when(patientRepository.getId(id)).thenReturn(null);
+
+        assertThrows(ResourceNotFoundException.class,() -> {
+            patientService.changePatientStatus(id,statusDto.getStatus());
+        });
     }
 
     @Test

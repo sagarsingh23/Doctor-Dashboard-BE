@@ -1,9 +1,7 @@
 package com.dashboard.doctor_dashboard.Service;
 
 import com.dashboard.doctor_dashboard.Entity.Todolist;
-import com.dashboard.doctor_dashboard.Repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.Repository.TodoRepository;
-import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorServiceImpl;
 import com.dashboard.doctor_dashboard.Service.todo_service.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,7 +49,7 @@ class TodoServiceImplTest {
 
         Mockito.doReturn(todolist).when(todoRepository).save(Mockito.any(Todolist.class));
 
-        Todolist newTodo = todoService.addlist(todolist);
+        Todolist newTodo = todoService.addTodo(todolist);
 
         assertThat(todolist).isNotNull();
         verify(todoRepository).save(Mockito.any(Todolist.class));
@@ -66,7 +64,7 @@ class TodoServiceImplTest {
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist));
 
-        Todolist newTodo = todoService.getlistById(id);
+        Todolist newTodo = todoService.getTodoById(id);
         System.out.println(newTodo);
 
         assertThat(newTodo).isNotNull();
@@ -98,8 +96,8 @@ class TodoServiceImplTest {
         Todolist todolist = new Todolist(1L,"hello",true,null);
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist));
-        todoService.updatelist(id,todolist);
-        todoService.updatelist(id,todolist);
+        todoService.updateTodo(id,todolist);
+        todoService.updateTodo(id,todolist);
 
         verify(todoRepository,times(2)).findById(id);
 
@@ -109,8 +107,8 @@ class TodoServiceImplTest {
     void deletelistById() {
         final Long id =1L;
 
-        todoService.deletelistById(id);
-        todoService.deletelistById(id);
+        todoService.deleteTodoById(id);
+        todoService.deleteTodoById(id);
 
         verify(todoRepository,times(2)).deleteById(id);
     }

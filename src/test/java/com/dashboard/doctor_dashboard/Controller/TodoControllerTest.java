@@ -41,7 +41,7 @@ class TodoControllerTest {
     @Test
     void addTodo() {
         Todolist todolist = new Todolist(1L,"hello",true,null);
-        Mockito.when(todoService.addlist(Mockito.any(Todolist.class))).thenReturn(todolist);
+        Mockito.when(todoService.addTodo(Mockito.any(Todolist.class))).thenReturn(todolist);
         Todolist newTodo = todoController.addTodo(todolist);
         assertEquals(todolist.getDescription(),newTodo.getDescription());
     }
@@ -66,7 +66,7 @@ class TodoControllerTest {
     @Test
     void getTodoById() {
         Todolist todolist = new Todolist(1L,"hello",true,null);
-        Mockito.when(todoService.getlistById(Mockito.any(Long.class))).thenReturn(todolist);
+        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(todolist);
         Todolist newTodo = todoController.getTodoById(1L);
         assertEquals(todolist.getDescription(),newTodo.getDescription());
     }
@@ -75,7 +75,7 @@ class TodoControllerTest {
     void deleteTodo() {
        Todolist todolist = new Todolist(1L,"hello",true,null);
 
-       Mockito.when(todoService.deletelistById(Mockito.any(Long.class))).thenReturn("Deleted");
+       Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn("Deleted");
 
        String newString = todoController.deleteTodo(1L);
        assertEquals("Deleted",newString);
@@ -85,7 +85,7 @@ class TodoControllerTest {
     void updateTodo() {
         Todolist todolist = new Todolist(1L,"hello",true,null);
 
-        Mockito.when(todoService.updatelist(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(todolist);
+        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(todolist);
 
         Todolist newTodoList = todoController.updateTodo(1L,todolist);
 
