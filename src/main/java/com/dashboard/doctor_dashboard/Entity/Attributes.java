@@ -10,9 +10,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
+
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(
         name = "attributes"
@@ -42,5 +41,54 @@ public class Attributes {
     @JoinColumn(name = "id")
     private Patient patient;
 
+
+    public Long getAID() {
+        return aID;
+    }
+
+    public void setAID(Long aID) {
+        this.aID = aID;
+    }
+
+    public Long getBloodPressure() {
+        return bloodPressure;
+    }
+
+    public void setBloodPressure(Long bloodPressure) {
+        this.bloodPressure = bloodPressure;
+    }
+
+    public String getBloodGroup() {
+        return bloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
+    }
+
+    public Long getGlucoseLevel() {
+        return glucoseLevel;
+    }
+
+    public void setGlucoseLevel(Long glucoseLevel) {
+        this.glucoseLevel = glucoseLevel;
+    }
+
+    public Double getBodyTemp() {
+        return bodyTemp;
+    }
+
+    public void setBodyTemp(Double bodyTemp) {
+        this.bodyTemp = bodyTemp;
+    }
+
+
+    public String getSymptoms() {
+        return symptoms;
+    }
+
+    public void setSymptoms(String symptoms) {
+        this.symptoms = symptoms;
+    }
 
 }
