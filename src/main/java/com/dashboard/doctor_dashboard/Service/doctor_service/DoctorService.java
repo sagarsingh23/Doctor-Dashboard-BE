@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.Entity.dtos.DoctorSpecialityDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
