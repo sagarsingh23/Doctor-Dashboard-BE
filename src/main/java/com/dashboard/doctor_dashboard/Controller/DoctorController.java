@@ -55,7 +55,7 @@ public class DoctorController {
         }
         DoctorFormDto doctorFormDto=doctorService.updateDoctor(details,id);
         if(doctorFormDto!=null)
-            return new ResponseEntity(doctorFormDto, HttpStatus.CREATED);
+            return new ResponseEntity(doctorFormDto, HttpStatus.OK);
         throw new APIException(HttpStatus.BAD_REQUEST,"id mismatch");
     }
 
