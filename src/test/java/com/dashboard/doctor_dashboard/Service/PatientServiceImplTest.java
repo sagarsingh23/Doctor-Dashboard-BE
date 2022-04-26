@@ -64,6 +64,7 @@ class PatientServiceImplTest {
     @Test
     void addPatient() {
         Patient patient = new Patient();
+        patient.onCreate();
         patient.setAge(21);
         patient.setCategory("orthology");
         patient.setEmailId("sagarssn23@gmail.com");
@@ -261,6 +262,81 @@ class PatientServiceImplTest {
     }
 
     @Test
+    void checkIfIdNotPresentInDBForUpdatePatient() {
+        final Long id = 1L;
+        Attributes attribute = new Attributes();
+        attribute.setBloodGroup("B+");
+        attribute.setBloodPressure(120L);
+        attribute.setBodyTemp(90D);
+        attribute.setSymptoms("fever,cough");
+        attribute.setAID(1L);
+        attribute.setGlucoseLevel(95L);
+
+
+
+        Patient patient = new Patient();
+        patient.setAge(21);
+        patient.setCategory("orthology");
+        patient.setEmailId("sagarssn23@gmail.com");
+        patient.setFullName("Sagar Singh Negi");
+        patient.setMobileNo("900011112");
+        patient.setPID(id);
+        patient.setGender("male");
+        patient.setLastVisitedDate(null);
+        patient.setStatus("Active");
+        patient.setAttributes(attribute);
+        patient.setDoctorDetails(null);
+
+        Mockito.when(patientRepository.findById(id)).thenReturn(Optional.empty());
+        Mockito.when(attributeRepository.findById(id)).thenReturn(Optional.empty());
+
+
+        assertThrows(ResourceNotFoundException.class,() -> {
+            patientService.updatePatient(id,patient);
+        });
+
+
+    }
+
+    @Test
+    void checkIfIdNotPresentInDBUpdatePatient() {
+        final Long id = 1L;
+        Attributes attribute = new Attributes();
+        attribute.setBloodGroup("B+");
+        attribute.setBloodPressure(120L);
+        attribute.setBodyTemp(90D);
+        attribute.setSymptoms("fever,cough");
+        attribute.setAID(1L);
+        attribute.setGlucoseLevel(95L);
+
+
+
+        Patient patient = new Patient();
+        patient.setAge(21);
+        patient.setCategory("orthology");
+        patient.setEmailId("sagarssn23@gmail.com");
+        patient.setFullName("Sagar Singh Negi");
+        patient.setMobileNo("900011112");
+        patient.setPID(id);
+        patient.setGender("male");
+        patient.setLastVisitedDate(null);
+        patient.setStatus("Active");
+        patient.setAttributes(attribute);
+        patient.setDoctorDetails(null);
+
+        Mockito.when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
+        Mockito.when(attributeRepository.findById(id)).thenReturn(Optional.empty());
+
+
+        assertThrows(ResourceNotFoundException.class,() -> {
+            patientService.updatePatient(id,patient);
+        });
+
+
+    }
+
+
+    @Test
     void deletePatientById() {
         Long id = 1L;
 
@@ -348,6 +424,20 @@ class PatientServiceImplTest {
             patientService.changePatientStatus(id,statusDto.getStatus());
         });
     }
+    @Test
+    void throwErrorIfIdMisMatchForStatus() {
+        Long id = 1L;
+        Long newId = 5L;
+        StatusDto statusDto = new StatusDto();
+        statusDto.setStatus("Active");
+
+        Mockito.when(patientRepository.getId(id)).thenReturn(newId);
+
+        assertThrows(ResourceNotFoundException.class,() -> {
+            patientService.changePatientStatus(id,statusDto.getStatus());
+        });
+    }
+
 
     @Test
     void totalNoOfPatient() {
@@ -358,7 +448,6 @@ class PatientServiceImplTest {
 
         int newCount = patientService.totalNoOfPatient(doctorId);
 
-        assertThat(newCount).isNotNull();
         assertEquals(newCount,count);
 
     }
@@ -372,7 +461,7 @@ class PatientServiceImplTest {
 
         int newCount = patientService.totalNoOfActivePatient(doctorId);
 
-        assertThat(newCount).isNotNull();
+
         assertEquals(newCount,count);
 
     }

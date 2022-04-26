@@ -72,6 +72,18 @@ class TodoServiceImplTest {
     }
 
     @Test
+    void checkIfIdNotPresentInDBForGetListById() {
+        final Long id = 1L;
+        Todolist todolist = new Todolist(id,"hello",true,null);
+
+        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
+
+        Todolist newTodo = todoService.getTodoById(id);
+
+        assertThat(newTodo).isNull();
+    }
+
+    @Test
     void getAllTodoByDoctorId() {
 
         final Long id = 1L;
@@ -101,6 +113,19 @@ class TodoServiceImplTest {
 
         verify(todoRepository,times(2)).findById(id);
 
+    }
+
+
+    @Test
+    void checkIfIdNotPresentInDBForUpdateList() {
+        final Long id = 1L;
+        Todolist todolist = new Todolist(id,"hello",true,null);
+
+        Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
+
+        Todolist newTodo = todoService.updateTodo(id,todolist);
+
+        assertThat(newTodo).isNull();
     }
 
     @Test

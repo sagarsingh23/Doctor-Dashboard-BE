@@ -45,6 +45,11 @@ class DoctorServiceImplTest {
 
     @Test
     void testAddDoctor() {
+        DoctorDetails newDoctor = new DoctorDetails();
+        newDoctor.setId(1L);
+        newDoctor.setFirstName("Sagar");
+        newDoctor.setLastName("Negi");
+        newDoctor.setEmail("sagarssn23@gmail.com");
         DoctorDetails doctorDetails = new DoctorDetails(1L,"Sagar","Singh", (short) 21,
                 "sagarssn23@gmail.com","orthology",
                 null,"male",null,null);
@@ -73,7 +78,6 @@ class DoctorServiceImplTest {
         assertEquals(list.size(),newList.size());
         assertEquals(doctorListDto1.getName(),newList.get(0).getName());
         assertEquals(doctorListDto2.getName(),newList.get(1).getName());
-
     }
 
     @Test

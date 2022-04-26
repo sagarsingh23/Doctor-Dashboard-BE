@@ -127,7 +127,7 @@ class DoctorControllerTest {
 
         ResponseEntity<DoctorFormDto> newDoctorDetails = doctorController.updateDoctorDetails(1,doctorFormDto,result,webRequest);
         System.out.println(newDoctorDetails);
-        assertEquals(201,newDoctorDetails.getStatusCodeValue());
+        assertEquals(200,newDoctorDetails.getStatusCodeValue());
         assertEquals(doctorFormDto.getId(),newDoctorDetails.getBody().getId());
         assertEquals(doctorFormDto.getSpeciality(),newDoctorDetails.getBody().getSpeciality());
     }

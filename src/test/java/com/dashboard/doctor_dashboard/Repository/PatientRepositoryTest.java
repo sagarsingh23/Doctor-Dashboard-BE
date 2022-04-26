@@ -185,7 +185,7 @@ class PatientRepositoryTest {
 
         Mockito.when(patientRepository.totalNoOfPatient(doctorId)).thenReturn(count);
 
-        assertThat(patientRepository.totalNoOfPatient(doctorId)).isNotNull();
+
         assertEquals(patientRepository.totalNoOfPatient(doctorId),count);
 
     }
@@ -197,7 +197,6 @@ class PatientRepositoryTest {
 
         Mockito.when(patientRepository.totalNoOfActivePatient(doctorId)).thenReturn(count);
 
-        assertThat(patientRepository.totalNoOfActivePatient(doctorId)).isNotNull();
         assertEquals(patientRepository.totalNoOfActivePatient(doctorId),count);
 
     }

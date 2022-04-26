@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.Service;
 
 import com.dashboard.doctor_dashboard.Controller.DoctorController;
 import com.dashboard.doctor_dashboard.Entity.dtos.NotesDto;
+import com.dashboard.doctor_dashboard.Entity.dtos.StatusDto;
 import com.dashboard.doctor_dashboard.Repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
@@ -61,7 +62,7 @@ class AttributeServiceImplTest {
     }
 
     @Test
-    void throwErrorWhenIdMisMatchForChangeNotes() {
+    void throwErrorWhenIdNotPresentForChangeNotes() {
         final Long id =1L;
         NotesDto notesDto = new NotesDto();
         notesDto.setNotes("Note1");
@@ -72,4 +73,20 @@ class AttributeServiceImplTest {
             attributeService.changeNotes(id,notesDto.getNotes());
         });
     }
+
+    @Test
+    void throwErrorIfIdMisMatchForChangeNotes() {
+        final Long id =1L;
+        final Long newId = 2L;
+        NotesDto notesDto = new NotesDto();
+        notesDto.setNotes("Note1");
+
+        Mockito.when(patientRepository.getId(id)).thenReturn(newId);
+
+        assertThrows(ResourceNotFoundException.class,() ->{
+            attributeService.changeNotes(id,notesDto.getNotes());
+        });
+    }
+
+
 }

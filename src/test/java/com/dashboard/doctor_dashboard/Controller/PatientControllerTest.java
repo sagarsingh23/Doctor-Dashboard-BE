@@ -279,7 +279,6 @@ class PatientControllerTest {
 
         int newCount = patientController.totalPatient(doctorId);
 
-        assertThat(newCount).isNotNull();
         assertEquals(newCount,count);
 
     }
@@ -293,7 +292,6 @@ class PatientControllerTest {
 
         int newCount = patientController.totalActivePatient(doctorId);
 
-        assertThat(newCount).isNotNull();
         assertEquals(newCount,Active);
     }
 
