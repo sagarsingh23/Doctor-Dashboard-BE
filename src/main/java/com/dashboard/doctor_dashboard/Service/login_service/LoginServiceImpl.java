@@ -29,17 +29,18 @@ public class LoginServiceImpl implements LoginService {
     private boolean flag;
     private long id;
 
+    private String[] fields={"given_name","family_name","hd","email"};
 
     public boolean addUser( Map<String ,Object> loginDetails){
          System.out.println("email="+loginDetails.get("email"));
 
-         DoctorLoginDetails doctorLoginDetails=loginRepo.findByEmailId(loginDetails.get("email").toString());
+         DoctorLoginDetails doctorLoginDetails=loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
          if(doctorLoginDetails==null){
               DoctorLoginDetails newDoctor = new DoctorLoginDetails();
-             newDoctor.setFirstName(loginDetails.get("given_name").toString());
-             newDoctor.setLastName(loginDetails.get("family_name").toString());
-             newDoctor.setDomain(loginDetails.get("hd").toString());
-             newDoctor.setEmailId(loginDetails.get("email").toString());
+             newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
+             newDoctor.setLastName(loginDetails.get(fields[1]).toString());
+             newDoctor.setDomain(loginDetails.get(fields[2]).toString());
+             newDoctor.setEmailId(loginDetails.get(fields[3]).toString());
              loginRepo.save(newDoctor);
              System.out.println("User added");
              flag=true;
@@ -69,7 +70,7 @@ public class LoginServiceImpl implements LoginService {
             String firstName=payload.get("given_name").toString();
             String lastName=payload.get("family_name").toString();
 
-            boolean flag=addUser(payload);
+            flag=addUser(payload);
             id= (long) loginRepo.getId(email);
             if(flag==true){
                 DoctorDetails newDoctor = new DoctorDetails();
