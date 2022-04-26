@@ -1,15 +1,12 @@
 package com.dashboard.doctor_dashboard.Entity.dtos;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class DoctorFormDto {
 
@@ -24,4 +21,23 @@ public class DoctorFormDto {
     @Pattern(regexp = "^([0-9]{10})",message = "number should be of 10 digits")
     private String phoneNo;
 
+    public long getId() {
+        return id;
+    }
+
+    public Short getAge() {
+        return age;
+    }
+
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
 }
