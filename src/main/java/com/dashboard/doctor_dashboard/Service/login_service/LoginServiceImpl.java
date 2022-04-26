@@ -54,9 +54,14 @@ public class LoginServiceImpl implements LoginService {
      //Token verification
     public String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-                .setAudience(Arrays.asList("66297814659-gkj68lfu116ai19tb6e2rfacqt9bja0s.apps.googleusercontent.com","866430808019-d5872q91thgcf3k52afir72g1autpjpn.apps.googleusercontent.com"))
+                .setAudience(Arrays.asList("66297814659-gkj68lfu116ai19tb6e2rfacqt9bja0s.apps.googleusercontent.com", "866430808019-d5872q91thgcf3k52afir72g1autpjpn.apps.googleusercontent.com"))
                 .build();
         GoogleIdToken idToken = verifier.verify(idTokenString);
+        return takingInfoFromToken(idToken);
+    }
+
+        public String takingInfoFromToken(GoogleIdToken idToken){
+
         if (idToken != null) {
             Payload payload = idToken.getPayload();
             String email=payload.getEmail();
@@ -67,7 +72,6 @@ public class LoginServiceImpl implements LoginService {
             boolean flag=addUser(payload);
             id= (long) loginRepo.getId(email);
             if(flag==true){
-
                 DoctorDetails newDoctor = new DoctorDetails();
                 newDoctor.setId(id);
                 newDoctor.setFirstName(firstName);
@@ -79,8 +83,7 @@ public class LoginServiceImpl implements LoginService {
             String token=loginCreator(id,email,firstName);
             System.out.println("token="+token);
             return token;
-        }
-        else {
+        } else {
             System.out.println("Invalid ID token.");
         }
         return "ID token expired.";
