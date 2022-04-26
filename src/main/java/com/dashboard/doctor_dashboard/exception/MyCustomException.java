@@ -12,15 +12,4 @@ public class MyCustomException extends RuntimeException {
         this.fieldValue = fieldValue;
     }
 
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public long getFieldValue() {
-        return fieldValue;
-    }
 }
