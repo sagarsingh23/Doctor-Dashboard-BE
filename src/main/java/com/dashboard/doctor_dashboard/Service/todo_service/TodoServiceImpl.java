@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TodoServiceImpl implements TodoService{
@@ -19,7 +20,11 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public Todolist getTodoById(Long id) {
-        return todoRepository.findById(id).get();
+        Optional<Todolist> value =  todoRepository.findById(id);
+        if(value.isPresent()) {
+            return value.get();
+        }
+        return null;
     }
 
     @Override
@@ -29,10 +34,14 @@ public class TodoServiceImpl implements TodoService{
 
     @Override
     public Todolist updateTodo(Long id, Todolist todolist) {
-        Todolist value = todoRepository.findById(id).get();
-        value.setDescription(todolist.getDescription());
-        value.setStatus(todolist.getStatus());
-        return todoRepository.save(value);
+        Optional<Todolist> value1 =  todoRepository.findById(id);
+        if(value1.isPresent()) {
+            Todolist value = value1.get();
+            value.setDescription(todolist.getDescription());
+            value.setStatus(todolist.getStatus());
+            return todoRepository.save(value);
+        }
+        return null;
     }
 
     @Override

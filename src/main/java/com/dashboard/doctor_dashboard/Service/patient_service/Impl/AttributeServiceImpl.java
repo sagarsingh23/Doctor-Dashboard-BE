@@ -19,7 +19,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public String changeNotes(Long id, String notes) {
-        if(patientRepository.getId(id).equals(id)) {
+        if(patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
             attributeRepository.changeNotes(id, notes);
             return "Notes updated!!!";
         }

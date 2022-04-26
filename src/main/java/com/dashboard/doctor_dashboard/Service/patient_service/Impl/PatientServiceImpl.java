@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +26,8 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+
+    public static final String PATIENT = "Patient";
 
 
     @Autowired
@@ -39,19 +42,18 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
         List<Patient> patient =  patientRepository.getAllPatientByDoctorId(doctorId);
-        List<PatientListDto> patientListDto = patient.stream()
+        return patient.stream()
                 .map(value -> mapToDto2(value)).collect(Collectors.toList());
 
-        return patientListDto;
     }
 
     @Override
     public PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException {
       try{
-        Patient patient = patientRepository.getPatientByIdAndDoctorId(id,doctorId);
+        var patient = patientRepository.getPatientByIdAndDoctorId(id,doctorId);
           return mapToDto(patient);
        }catch ( Exception e) {
-          throw new MyCustomException("Patient", "id",id);
+          throw new MyCustomException(PATIENT, "id",id);
       }
 
     }
@@ -59,26 +61,36 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public Patient updatePatient(Long id, Patient patient) {
 
-        Patient value = patientRepository.findById(id).get();
-        Attributes value1 =attributeRepository.findById(id).get();
+        Optional<Patient> patients = patientRepository.findById(id);
+        Optional<Attributes> attributes = attributeRepository.findById(id);
 
-        value.setFullName(patient.getFullName());
-        value.setAge(patient.getAge());
-        value.setCategory(patient.getCategory());
-        value.setEmailId(patient.getEmailId());
-        value.setGender(patient.getGender());
-        value.setLastVisitedDate(patient.getLastVisitedDate());
-        value.setMobileNo(patient.getMobileNo());
+        if(patients.isPresent() && attributes.isPresent()) {
 
-        value1.setBloodGroup(patient.getAttributes().getBloodGroup());
-        value1.setBloodPressure(patient.getAttributes().getBloodPressure());
-        value1.setBodyTemp(patient.getAttributes().getBodyTemp());
-        value1.setSymptoms(patient.getAttributes().getSymptoms());
-        value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
+            var value = patients.get();
+            var value1 = attributes.get();
 
-        patientRepository.save(value);
-        attributeRepository.save(value1);
-        return value ;
+
+            value.setFullName(patient.getFullName());
+            value.setAge(patient.getAge());
+            value.setCategory(patient.getCategory());
+            value.setEmailId(patient.getEmailId());
+            value.setGender(patient.getGender());
+            value.setLastVisitedDate(patient.getLastVisitedDate());
+            value.setMobileNo(patient.getMobileNo());
+
+            value1.setBloodGroup(patient.getAttributes().getBloodGroup());
+            value1.setBloodPressure(patient.getAttributes().getBloodPressure());
+            value1.setBodyTemp(patient.getAttributes().getBodyTemp());
+            value1.setSymptoms(patient.getAttributes().getSymptoms());
+            value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
+
+            patientRepository.save(value);
+            attributeRepository.save(value1);
+            return value;
+        }
+        else {
+            throw new ResourceNotFoundException(PATIENT, "id", id);
+        }
     }
 
     @Override
@@ -90,19 +102,19 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
         List<Patient> patient =  patientRepository.recentlyAddedPatient(doctorId);
-        List<PatientListDto> patientListDto = patient.stream()
+        return patient.stream()
                 .map(value -> mapToDto2(value)).collect(Collectors.toList());
 
-        return patientListDto;
     }
 
     @Override
     public void changePatientStatus(Long id, String status) {
-        if(patientRepository.getId(id) == id) {
+        if(patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
           patientRepository.changePatientStatus(id, status);
         }
-        else
-        throw new ResourceNotFoundException("Patient", "id", id);
+        else {
+            throw new ResourceNotFoundException(PATIENT, "id", id);
+        }
     }
 
 
@@ -176,23 +188,14 @@ public class PatientServiceImpl implements PatientService {
 
     // convert entity to dto
     private PatientDto mapToDto(Patient patient){
-        PatientDto patientDto = mapper.map(patient,PatientDto.class);
-        return patientDto;
+        return  mapper.map(patient,PatientDto.class);
     }
 
     private PatientListDto mapToDto2(Patient patient){
-        PatientListDto patientListDto = mapper.map(patient,PatientListDto.class);
-        return patientListDto;
+        return mapper.map(patient,PatientListDto.class);
+
     }
 
-
-
-//    //convert dto to entity
-//
-//    private Patient mapToEntity(PatientDto patientDto){
-//        Patient patient = mapper.map(patientDto,Patient.class);
-//        return patient;
-//    }
 
 
 }
