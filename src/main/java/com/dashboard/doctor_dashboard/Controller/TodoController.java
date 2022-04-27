@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.Controller;
 
 import com.dashboard.doctor_dashboard.Entity.Todolist;
-
 import com.dashboard.doctor_dashboard.Service.todo_service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,28 +16,30 @@ public class TodoController {
     private TodoService todoService;
 
     @PostMapping()
-    public Todolist addTodo(@RequestBody Todolist todolist){
+    public Todolist addTodo(@RequestBody Todolist todolist) {
         return todoService.addTodo(todolist);
     }
 
     @GetMapping("doctor/{doctorId}")
-    public List<Todolist> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId){
+    public List<Todolist> getAllTodoByDoctorId(@PathVariable("doctorId") Long doctorId) {
         return todoService.getAllTodoByDoctorId(doctorId);
     }
 
     @GetMapping("/{id}")
-    public Todolist getTodoById(@PathVariable("id") Long id){
+    public Todolist getTodoById(@PathVariable("id") Long id) {
         return todoService.getTodoById(id);
 
     }
+
     @DeleteMapping("/{id}")
-    public String deleteTodo(@PathVariable("id" ) Long id){
+    public String deleteTodo(@PathVariable("id") Long id) {
         return todoService.deleteTodoById(id);
 
     }
+
     @PutMapping("/{id}")
-    public Todolist updateTodo(@PathVariable("id") Long id,@RequestBody Todolist todolist){
-        return todoService.updateTodo(id,todolist);
+    public Todolist updateTodo(@PathVariable("id") Long id, @RequestBody Todolist todolist) {
+        return todoService.updateTodo(id, todolist);
     }
 
 }

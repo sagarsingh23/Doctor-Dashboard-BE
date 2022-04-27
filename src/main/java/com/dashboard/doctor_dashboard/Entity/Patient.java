@@ -2,8 +2,6 @@ package com.dashboard.doctor_dashboard.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -24,8 +22,8 @@ public class Patient {
     private Long pID;
 
     @NotEmpty
-    @Size(min = 3,max = 100,message = "Name field should contain Atleast 3 character")
-    @Pattern(regexp = "^[\\p{L} .'-]+$",message = "full name should only contain characters")
+    @Size(min = 3, max = 100, message = "Name field should contain Atleast 3 character")
+    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "full name should only contain characters")
     private String fullName;
 
 
@@ -53,12 +51,12 @@ public class Patient {
     @NotEmpty
     @Pattern(regexp = "^(General|Gastrology|Neurology|Orthology|Cardiology)",
             flags = Pattern.Flag.CASE_INSENSITIVE,
-            message ="Category Should be Amongst these choices:" +
+            message = "Category Should be Amongst these choices:" +
                     "General,Gastrology,Neurology,Orthology,Cardiology")
     private String category;
 
     @NotEmpty
-    @Size(min = 10,max = 10,message = "phone Number should Contains only 10 digits")
+    @Size(min = 10, max = 10, message = "phone Number should Contains only 10 digits")
     @Pattern(regexp = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$")
     private String mobileNo;
 
@@ -78,7 +76,7 @@ public class Patient {
     }
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Attributes attributes;
 
 
@@ -155,8 +153,6 @@ public class Patient {
     public void setStatus(String status) {
         this.status = status;
     }
-
-
 
 
     public Attributes getAttributes() {

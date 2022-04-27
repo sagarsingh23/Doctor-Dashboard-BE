@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.Service.doctor_service;
 
 
+import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
-
-import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
-//    public  DoctorServiceImpl(){
+    //    public  DoctorServiceImpl(){
 //
 //    }
     @Autowired
@@ -23,13 +22,13 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDetails addDoctor(DoctorDetails details) {
-       return doctorRepository.save(details);
+        return doctorRepository.save(details);
     }
 
     @Override
     public List<DoctorListDto> getAllDoctors(Long id) {
 
-        if(doctorRepository.IsIdAvailable(id)!=null)
+        if (doctorRepository.IsIdAvailable(id) != null)
             return doctorRepository.getAllDoctors(id);
 
         throw new ResourceNotFoundException("doctor", "id", id);
@@ -38,7 +37,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorBasicDetailsDto getDoctorById(long id) {
-        if(doctorRepository.IsIdAvailable(id)!=null)
+        if (doctorRepository.IsIdAvailable(id) != null)
             return doctorRepository.findDoctorById(id);
         return null;
     }
@@ -74,7 +73,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorFormDto updateDoctor(DoctorFormDto details, long id) {
-        if(doctorRepository.IsIdAvailable(id)!=null) {
+        if (doctorRepository.IsIdAvailable(id) != null) {
             if (details.getId() == id) {
                 doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), id);
                 return doctorRepository.getDoctorById(id);

@@ -22,37 +22,36 @@ import java.util.Map;
 @Service
 public class LoginServiceImpl implements LoginService {
     @Autowired
-    private LoginRepo loginRepo ;
+    private LoginRepo loginRepo;
 
     @Autowired
     private DoctorService doctorService;
     private boolean flag;
     private long id;
 
-    private String[] fields={"given_name","family_name","hd","email"};
+    private String[] fields = {"given_name", "family_name", "hd", "email"};
 
-    public boolean addUser( Map<String ,Object> loginDetails){
-         System.out.println("email="+loginDetails.get("email"));
+    public boolean addUser(Map<String, Object> loginDetails) {
+        System.out.println("email=" + loginDetails.get("email"));
 
-         DoctorLoginDetails doctorLoginDetails=loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
-         if(doctorLoginDetails==null){
-              DoctorLoginDetails newDoctor = new DoctorLoginDetails();
-             newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
-             newDoctor.setLastName(loginDetails.get(fields[1]).toString());
-             newDoctor.setDomain(loginDetails.get(fields[2]).toString());
-             newDoctor.setEmailId(loginDetails.get(fields[3]).toString());
-             loginRepo.save(newDoctor);
-             System.out.println("User added");
-             flag=true;
-         }
-         else {
-             System.out.println("Existing user");
-             flag=false;
-         }
-         return flag;
-     }
+        DoctorLoginDetails doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
+        if (doctorLoginDetails == null) {
+            DoctorLoginDetails newDoctor = new DoctorLoginDetails();
+            newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
+            newDoctor.setLastName(loginDetails.get(fields[1]).toString());
+            newDoctor.setDomain(loginDetails.get(fields[2]).toString());
+            newDoctor.setEmailId(loginDetails.get(fields[3]).toString());
+            loginRepo.save(newDoctor);
+            System.out.println("User added");
+            flag = true;
+        } else {
+            System.out.println("Existing user");
+            flag = false;
+        }
+        return flag;
+    }
 
-     //Token verification
+    //Token verification
     public String tokenVerification(String idTokenString) throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Arrays.asList("66297814659-gkj68lfu116ai19tb6e2rfacqt9bja0s.apps.googleusercontent.com", "866430808019-d5872q91thgcf3k52afir72g1autpjpn.apps.googleusercontent.com"))
@@ -61,18 +60,18 @@ public class LoginServiceImpl implements LoginService {
         return takingInfoFromToken(idToken);
     }
 
-        public String takingInfoFromToken(GoogleIdToken idToken){
+    public String takingInfoFromToken(GoogleIdToken idToken) {
 
         if (idToken != null) {
             Payload payload = idToken.getPayload();
-            String email=payload.getEmail();
-            System.out.println("email="+email);
-            String firstName=payload.get("given_name").toString();
-            String lastName=payload.get("family_name").toString();
+            String email = payload.getEmail();
+            System.out.println("email=" + email);
+            String firstName = payload.get("given_name").toString();
+            String lastName = payload.get("family_name").toString();
 
-            flag=addUser(payload);
-            id= (long) loginRepo.getId(email);
-            if(flag==true){
+            flag = addUser(payload);
+            id = (long) loginRepo.getId(email);
+            if (flag == true) {
                 DoctorDetails newDoctor = new DoctorDetails();
                 newDoctor.setId(id);
                 newDoctor.setFirstName(firstName);
@@ -81,8 +80,8 @@ public class LoginServiceImpl implements LoginService {
                 doctorService.addDoctor(newDoctor);
                 System.out.println(newDoctor);
             }
-            String token=loginCreator(id,email,firstName);
-            System.out.println("token="+token);
+            String token = loginCreator(id, email, firstName);
+            System.out.println("token=" + token);
             return token;
         } else {
             System.out.println("Invalid ID token.");
@@ -92,9 +91,10 @@ public class LoginServiceImpl implements LoginService {
 
     @Autowired
     JwtService jwtService;
+
     @Override
-    public String loginCreator(long id,String email,String firstName) {
-        Login login=new Login();
+    public String loginCreator(long id, String email, String firstName) {
+        Login login = new Login();
         login.setId(id);
         login.setEmail(email);
         login.setUsername(firstName);

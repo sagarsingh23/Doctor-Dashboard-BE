@@ -28,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/webjars/**",
-            "/","/csrf",
+            "/", "/csrf",
             "/api/doctor/login",
             "/api/patient/changeMessage/**",
             "/files/**"
@@ -38,8 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public Filter jwtAuthenticationFilter(){
-        return  new JwtAuthenticationFilter();
+    public Filter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 
     @Autowired
@@ -79,8 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
 

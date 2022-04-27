@@ -17,6 +17,7 @@ public class FileDB {
 
     @Column(unique = true)
     private Long patientId;
+
     public FileDB() {
     }
 
@@ -47,18 +48,23 @@ public class FileDB {
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public String getType() {
         return type;
     }
+
     public void setType(String type) {
         this.type = type;
     }
+
     public byte[] getDataReport() {
         return dataReport;
     }
+
     public void setDataReport(byte[] dataReport) {
         this.dataReport = dataReport;
     }

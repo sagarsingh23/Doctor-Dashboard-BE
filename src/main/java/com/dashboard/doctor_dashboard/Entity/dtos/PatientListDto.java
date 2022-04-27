@@ -1,9 +1,6 @@
 package com.dashboard.doctor_dashboard.Entity.dtos;
 
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
-
 
 
 public class PatientListDto {

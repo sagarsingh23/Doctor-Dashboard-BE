@@ -24,8 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         DoctorLoginDetails user = loginRepo.findByFirstNameOrEmailId(usernameOrEmail, usernameOrEmail)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or email:" + usernameOrEmail));
-        return new org.springframework.security.core.userdetails.User(user.getEmailId(),user.getFirstName(),
-                 new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(user.getEmailId(), user.getFirstName(),
+                new ArrayList<>());
 
     }
 //        public Collection<? extends GrantedAuthority> getAuthorities () {

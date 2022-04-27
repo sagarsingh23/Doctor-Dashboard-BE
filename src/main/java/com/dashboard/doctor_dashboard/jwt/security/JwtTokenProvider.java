@@ -1,10 +1,8 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.jwt.Entity.DoctorClaims;
-
 import com.dashboard.doctor_dashboard.exception.APIException;
+import com.dashboard.doctor_dashboard.jwt.Entity.DoctorClaims;
 import io.jsonwebtoken.*;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -26,7 +24,7 @@ public class JwtTokenProvider {
     private int jwtExpirationInMs;
 
     // generate token
-    public String generateToken(Authentication authentication, DoctorClaims doctorClaims){
+    public String generateToken(Authentication authentication, DoctorClaims doctorClaims) {
         String email = authentication.getName();
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
@@ -35,14 +33,14 @@ public class JwtTokenProvider {
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .claim("DoctorDetails",doctorClaims)
+                .claim("DoctorDetails", doctorClaims)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
         return token;
     }
 
     // get username from the token
-    public String getUsernameFromJWT(String token){
+    public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
@@ -52,11 +50,11 @@ public class JwtTokenProvider {
     }
 
     // validate JWT token
-    public boolean validateToken(String token){
-        try{
+    public boolean validateToken(String token) {
+        try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        }catch (SignatureException ex){
+        } catch (SignatureException ex) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Invalid JWT signature");
         } catch (MalformedJwtException ex) {
             throw new APIException(HttpStatus.BAD_REQUEST, "Invalid JWT token");

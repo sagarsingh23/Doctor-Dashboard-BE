@@ -3,7 +3,6 @@ package com.dashboard.doctor_dashboard.Controller;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.Entity.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.Entity.DoctorDetails;
 import com.dashboard.doctor_dashboard.Service.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.exception.APIException;
 import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,38 +27,38 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("/get-all/doctor/{doctorId}")
-    public List<DoctorListDto> getAllDoctors(@PathVariable("doctorId") Long id){
+    public List<DoctorListDto> getAllDoctors(@PathVariable("doctorId") Long id) {
 
-        List<DoctorListDto> details= doctorService.getAllDoctors(id);
-        if(details!=null)
+        List<DoctorListDto> details = doctorService.getAllDoctors(id);
+        if (details != null)
             return details;
-        throw new ResourceNotFoundException("doctor","id",id);
+        throw new ResourceNotFoundException("doctor", "id", id);
     }
 
     @GetMapping("/id/{id}")
-    public DoctorBasicDetailsDto getDoctorById(@PathVariable("id") long id){
-        if(doctorService.getDoctorById(id)!=null)
+    public DoctorBasicDetailsDto getDoctorById(@PathVariable("id") long id) {
+        if (doctorService.getDoctorById(id) != null)
             return doctorService.getDoctorById(id);
-        throw new ResourceNotFoundException("doctor","id",id);
+        throw new ResourceNotFoundException("doctor", "id", id);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, WebRequest webRequest){
+    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, WebRequest webRequest) {
 
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(fieldError -> fieldError.getDefaultMessage())
                     .collect(Collectors.toList());
             throw new ValidationsException(errors);
         }
-        DoctorFormDto doctorFormDto=doctorService.updateDoctor(details,id);
-        if(doctorFormDto!=null)
+        DoctorFormDto doctorFormDto = doctorService.updateDoctor(details, id);
+        if (doctorFormDto != null)
             return new ResponseEntity(doctorFormDto, HttpStatus.OK);
-        throw new APIException(HttpStatus.BAD_REQUEST,"id mismatch");
+        throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDoctor(@PathVariable("id") int id){
+    public String deleteDoctor(@PathVariable("id") int id) {
         return doctorService.deleteDoctor(id);
     }
 

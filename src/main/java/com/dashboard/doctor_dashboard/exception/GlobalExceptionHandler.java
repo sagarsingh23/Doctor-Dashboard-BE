@@ -1,16 +1,11 @@
 package com.dashboard.doctor_dashboard.exception;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.web.bind.MethodArgumentNotValidException;
-
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
-import java.util.Date;
 
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
@@ -66,18 +61,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MyCustomException.class)
     @ResponseBody
-    public ResponseEntity<String> handleMyCustomException (MyCustomException e){
+    public ResponseEntity<String> handleMyCustomException(MyCustomException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ReportNotFound.class)
     @ResponseBody
-    public ResponseEntity<String> handleReportNotFoundException (ReportNotFound e){
+    public ResponseEntity<String> handleReportNotFoundException(ReportNotFound e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ErrorDetails> validation ( final ConstraintViolationException ex, WebRequest webRequest){
+    public ResponseEntity<ErrorDetails> validation(final ConstraintViolationException ex, WebRequest webRequest) {
 
         List newList = ex.getConstraintViolations().stream().map(list -> list.getMessageTemplate()).collect(Collectors.toList());
 

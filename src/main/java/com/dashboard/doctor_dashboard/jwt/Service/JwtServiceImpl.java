@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.jwt.Entity.DoctorClaims;
 import com.dashboard.doctor_dashboard.jwt.Entity.Login;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,10 +21,9 @@ public class JwtServiceImpl implements JwtService {
     private JwtTokenProvider jwtTokenProvider;
 
 
-
-    public String authenticateUser( Login login){
+    public String authenticateUser(Login login) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                login.getEmail(),login.getUsername()));
+                login.getEmail(), login.getUsername()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -38,11 +36,10 @@ public class JwtServiceImpl implements JwtService {
         doctorClaims.setDoctorId(login.getId());
 
 
-        String token = jwtTokenProvider.generateToken(authentication,doctorClaims);
+        String token = jwtTokenProvider.generateToken(authentication, doctorClaims);
 
         return new AuthenticationResponse(token).getAccessToken();
     }
-
 
 
 }

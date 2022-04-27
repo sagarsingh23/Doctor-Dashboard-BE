@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.Entity.dtos;
 
 
-
 public class NotesDto {
     private String notes;
 

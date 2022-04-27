@@ -9,9 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TodoRepository extends JpaRepository<Todolist,Long> {
+public interface TodoRepository extends JpaRepository<Todolist, Long> {
 
-    @Query(value = "select * from todolist where doctor_id = :doctorId",nativeQuery = true)
+    @Query(value = "select * from todolist where doctor_id = :doctorId", nativeQuery = true)
     public List<Todolist> findByDoctorId(@Param(value = "doctorId") long doctorId);
 
 }

@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 public class PatientDto extends PatientListDto {
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "patient",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Attributes attributes;
 
 

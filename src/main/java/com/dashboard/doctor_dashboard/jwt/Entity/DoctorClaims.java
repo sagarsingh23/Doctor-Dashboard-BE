@@ -13,11 +13,9 @@ public class DoctorClaims {
     public String doctorEmail;
 
 
-
     public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
     }
-
 
 
     public void setDoctorName(String doctorName) {
@@ -28,7 +26,6 @@ public class DoctorClaims {
     public void setDoctorEmail(String doctorEmail) {
         this.doctorEmail = doctorEmail;
     }
-
 
 
     @Override

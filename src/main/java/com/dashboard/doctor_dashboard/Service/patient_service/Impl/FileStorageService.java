@@ -3,7 +3,6 @@ package com.dashboard.doctor_dashboard.Service.patient_service.Impl;
 import com.dashboard.doctor_dashboard.Entity.report.FileDB;
 import com.dashboard.doctor_dashboard.Repository.FileDBRepository;
 import com.dashboard.doctor_dashboard.Repository.PatientRepository;
-import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -21,15 +20,14 @@ public class FileStorageService {
     @Autowired
     private PatientRepository patientRepository;
 
-    public FileDB store(MultipartFile file,Long id) throws IOException {
+    public FileDB store(MultipartFile file, Long id) throws IOException {
 
-        Long temp =patientRepository.getId(id);
-        if(temp == null)
-        {
+        Long temp = patientRepository.getId(id);
+        if (temp == null) {
             return null;
         }
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes(),id);
+        FileDB FileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
         return fileDBRepository.save(FileDB);
     }
 
@@ -39,8 +37,7 @@ public class FileStorageService {
     }
 
 
-    public Stream<FileDB> getAllFiles()
-    {
+    public Stream<FileDB> getAllFiles() {
         return fileDBRepository.findAll().stream();
     }
 

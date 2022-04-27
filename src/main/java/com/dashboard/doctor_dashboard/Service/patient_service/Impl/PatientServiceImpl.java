@@ -41,20 +41,20 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
-        List<Patient> patient =  patientRepository.getAllPatientByDoctorId(doctorId);
+        List<Patient> patient = patientRepository.getAllPatientByDoctorId(doctorId);
         return patient.stream()
                 .map(value -> mapToDto2(value)).collect(Collectors.toList());
 
     }
 
     @Override
-    public PatientDto getPatientById(Long id,Long doctorId) throws MyCustomException {
-      try{
-        var patient = patientRepository.getPatientByIdAndDoctorId(id,doctorId);
-          return mapToDto(patient);
-       }catch ( Exception e) {
-          throw new MyCustomException(PATIENT, "id",id);
-      }
+    public PatientDto getPatientById(Long id, Long doctorId) throws MyCustomException {
+        try {
+            var patient = patientRepository.getPatientByIdAndDoctorId(id, doctorId);
+            return mapToDto(patient);
+        } catch (Exception e) {
+            throw new MyCustomException(PATIENT, "id", id);
+        }
 
     }
 
@@ -64,7 +64,7 @@ public class PatientServiceImpl implements PatientService {
         Optional<Patient> patients = patientRepository.findById(id);
         Optional<Attributes> attributes = attributeRepository.findById(id);
 
-        if(patients.isPresent() && attributes.isPresent()) {
+        if (patients.isPresent() && attributes.isPresent()) {
 
             var value = patients.get();
             var value1 = attributes.get();
@@ -87,8 +87,7 @@ public class PatientServiceImpl implements PatientService {
             patientRepository.save(value);
             attributeRepository.save(value1);
             return value;
-        }
-        else {
+        } else {
             throw new ResourceNotFoundException(PATIENT, "id", id);
         }
     }
@@ -101,7 +100,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
-        List<Patient> patient =  patientRepository.recentlyAddedPatient(doctorId);
+        List<Patient> patient = patientRepository.recentlyAddedPatient(doctorId);
         return patient.stream()
                 .map(value -> mapToDto2(value)).collect(Collectors.toList());
 
@@ -109,15 +108,12 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public void changePatientStatus(Long id, String status) {
-        if(patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
-          patientRepository.changePatientStatus(id, status);
-        }
-        else {
+        if (patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
+            patientRepository.changePatientStatus(id, status);
+        } else {
             throw new ResourceNotFoundException(PATIENT, "id", id);
         }
     }
-
-
 
 
     //DashBoard Chart
@@ -150,15 +146,13 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public ArrayList<String> bloodGroup(Long doctorId) {
-        return  patientRepository.bloodGroup(doctorId);
+        return patientRepository.bloodGroup(doctorId);
     }
 
     @Override
     public ArrayList<String> ageChart(Long doctorId) {
         return patientRepository.ageChart(doctorId);
     }
-
-
 
 
     //Add-On feature Refer Patient
@@ -170,7 +164,7 @@ public class PatientServiceImpl implements PatientService {
         String docName = patientRepository.findDoctorNameByPatientId(patientId);
         String patientName = patientRepository.findPatientNameByPatientId(patientId);
 
-        patientRepository.referPatients(doctorId,patientId,docName,patientName);
+        patientRepository.referPatients(doctorId, patientId, docName, patientName);
         return "SuccessFull";
     }
 
@@ -185,17 +179,15 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
-
     // convert entity to dto
-    private PatientDto mapToDto(Patient patient){
-        return  mapper.map(patient,PatientDto.class);
+    private PatientDto mapToDto(Patient patient) {
+        return mapper.map(patient, PatientDto.class);
     }
 
-    private PatientListDto mapToDto2(Patient patient){
-        return mapper.map(patient,PatientListDto.class);
+    private PatientListDto mapToDto2(Patient patient) {
+        return mapper.map(patient, PatientListDto.class);
 
     }
-
 
 
 }
