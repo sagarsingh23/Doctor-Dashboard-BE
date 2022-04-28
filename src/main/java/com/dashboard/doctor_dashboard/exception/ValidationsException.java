@@ -7,7 +7,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public class ValidationsException extends RuntimeException {
-    private List<String> messages;
+    private final List<String>  messages;
 
     public List<String> getMessages() {
         return messages;

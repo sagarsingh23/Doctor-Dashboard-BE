@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 import com.dashboard.doctor_dashboard.exception.APIException;
-import com.dashboard.doctor_dashboard.jwt.Entity.DoctorClaims;
+import com.dashboard.doctor_dashboard.jwt.entity.DoctorClaims;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,14 +29,14 @@ public class JwtTokenProvider {
         Date currentDate = new Date();
         Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
 
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
                 .claim("DoctorDetails", doctorClaims)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
-        return token;
+
     }
 
     // get username from the token

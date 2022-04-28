@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDetails> validation(final ConstraintViolationException ex, WebRequest webRequest) {
 
-        List newList = ex.getConstraintViolations().stream().map(list -> list.getMessageTemplate()).collect(Collectors.toList());
+        List<String> newList = ex.getConstraintViolations().stream().map(list -> list.getMessageTemplate()).collect(Collectors.toList());
 
         ErrorDetails errorDetails = new ErrorDetails(new Date(), newList.toString(), webRequest.getDescription(false));
 
