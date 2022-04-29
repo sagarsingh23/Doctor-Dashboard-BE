@@ -43,7 +43,7 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
         List<Patient> patient = patientRepository.getAllPatientByDoctorId(doctorId);
         return patient.stream()
-                .map(value -> mapToDto2(value)).collect(Collectors.toList());
+                .map(this::mapToDto2).collect(Collectors.toList());
 
     }
 
@@ -102,7 +102,7 @@ public class PatientServiceImpl implements PatientService {
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
         List<Patient> patient = patientRepository.recentlyAddedPatient(doctorId);
         return patient.stream()
-                .map(value -> mapToDto2(value)).collect(Collectors.toList());
+                .map(this::mapToDto2).collect(Collectors.toList());
 
     }
 

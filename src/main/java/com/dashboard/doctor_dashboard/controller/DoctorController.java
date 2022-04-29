@@ -8,6 +8,7 @@ import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exception.ValidationsException;
 import com.dashboard.doctor_dashboard.service.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,7 @@ public class DoctorController {
 
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
-                    .map(fieldError -> fieldError.getDefaultMessage())
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             throw new ValidationsException(errors);
         }

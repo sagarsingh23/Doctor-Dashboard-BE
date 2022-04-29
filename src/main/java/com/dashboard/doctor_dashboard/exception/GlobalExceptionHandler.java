@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorDetails> validation(final ConstraintViolationException ex, WebRequest webRequest) {
 
-        List<String> newList = ex.getConstraintViolations().stream().map(list -> list.getMessageTemplate()).collect(Collectors.toList());
+        List<String> newList = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
 
         ErrorDetails errorDetails = new ErrorDetails(new Date(), newList.toString(), webRequest.getDescription(false));
 
