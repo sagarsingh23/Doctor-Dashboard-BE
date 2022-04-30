@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Date;
 
+@SuppressWarnings({"squid:S5843","squid:S5869"})
 @NoArgsConstructor
 @Entity
 @Table(
@@ -28,7 +29,7 @@ public class Patient {
 
 
     @Email(message = "Email is not valid",
-            regexp = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])",
+            regexp = "^[A-Za-z0-9._]{3,}@[A_Za-z0-9]{3,}[.]{1}[A-Za-z0-9.]{2,6}$",
             flags = Pattern.Flag.CASE_INSENSITIVE)                               //NOSONAR
     @NotEmpty
     private String emailId;
@@ -57,7 +58,6 @@ public class Patient {
 
     @NotEmpty
     @Size(min = 10, max = 10, message = "phone Number should Contains only 10 digits")
-    @Pattern(regexp = "^\\s*(?:\\+?(\\d{1,3}))?[-. (]*(\\d{3})[-. )]*(\\d{3})[-. ]*(\\d{4})(?: *x(\\d+))?\\s*$")
     private String mobileNo;
 
 
