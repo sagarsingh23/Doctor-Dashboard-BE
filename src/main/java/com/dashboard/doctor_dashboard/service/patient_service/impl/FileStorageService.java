@@ -26,9 +26,13 @@ public class FileStorageService {
         if (temp == null) {
             return null;
         }
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
-        return fileDBRepository.save(fileDB);
+        String value = file.getOriginalFilename();
+        if(value != null) {
+            String fileName = StringUtils.cleanPath(value);
+            FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
+            return fileDBRepository.save(fileDB);
+        }
+        return null;
     }
 
 

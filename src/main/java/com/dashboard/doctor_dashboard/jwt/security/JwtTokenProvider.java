@@ -13,11 +13,6 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-//    @Bean
-//    public DoctorClaims doctorClaims(){
-//        return new DoctorClaims();
-//    }
-
     @Value("${app.jwt-secret}")
     private String jwtSecret;
     @Value("${app.jwt-expiration-milliseconds}")
