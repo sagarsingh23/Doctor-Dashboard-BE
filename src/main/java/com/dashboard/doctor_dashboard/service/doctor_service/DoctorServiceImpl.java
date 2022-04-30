@@ -14,9 +14,7 @@ import java.util.List;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
-    //    public  DoctorServiceImpl(){
-//
-//    }
+
     @Autowired
     private DoctorRepository doctorRepository;
 
@@ -41,35 +39,6 @@ public class DoctorServiceImpl implements DoctorService {
             return doctorRepository.findDoctorById(id);
         return null;
     }
-
-//    @Override
-//    public List<DoctorDetails>  getDoctorByFirstName(String name) {
-//        return doctorRepository.findByFirstName(name);
-//    }
-//    @Override
-//    public List<DoctorDetails>  getDoctorByLastName(String name) {
-//        return doctorRepository.findByLastName(name);
-//    }
-//
-//    @Override
-//    public List<DoctorDetails>  getDoctorByAge(short age) {
-//        return doctorRepository.findByAge(age);
-//    }
-//
-//    @Override
-//    public DoctorDetails getDoctorByEmail(String email) {
-//        return doctorRepository.findByEmail(email);
-//    }
-
-//    @Override
-//    public DoctorSpecialityDto getDoctorBySpeciality(long id) {
-//
-//        DoctorSpecialityDto doctorSpecialityDto =new DoctorSpecialityDto();
-//        String speciality=doctorRepository.findBySpeciality(id);
-//        System.out.println(speciality);
-//                doctorSpecialityDto.setSpeciality(speciality);
-//        return doctorSpecialityDto;
-//    }
 
     @Override
     public DoctorFormDto updateDoctor(DoctorFormDto details, long id) {

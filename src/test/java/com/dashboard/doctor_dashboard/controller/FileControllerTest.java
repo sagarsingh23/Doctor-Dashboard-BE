@@ -158,7 +158,7 @@ class FileControllerTest {
         System.out.println(newFile.getStatusCodeValue());
 
         assertThat(newFile).isNotNull();
-       assertEquals(newFile.getStatusCodeValue(),200);
+       assertEquals(200,newFile.getStatusCodeValue());
 
     }
 

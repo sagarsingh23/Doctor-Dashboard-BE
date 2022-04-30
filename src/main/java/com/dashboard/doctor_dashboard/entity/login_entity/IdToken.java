@@ -1,13 +1,13 @@
 package com.dashboard.doctor_dashboard.entity.login_entity;
 
 public class IdToken {
-    private String idtoken;
+    private String token;
 
     public String getIdtoken() {
-        return idtoken;
+        return token;
     }
 
-    public void setIdtoken(String idtoken) {
-        this.idtoken = idtoken;
+    public void setIdtoken(String token) {
+        this.token = token;
     }
 }
