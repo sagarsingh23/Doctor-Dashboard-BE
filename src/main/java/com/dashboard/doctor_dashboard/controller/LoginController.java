@@ -27,9 +27,9 @@ public class LoginController {
 
     @PostMapping(value = "api/doctor/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> loginIdToken(@RequestBody IdToken idToken) throws GeneralSecurityException, IOException, JSONException {
-        IdToken jwt = new IdToken();
+        var jwt = new IdToken();
         jwt.setIdtoken(loginService.tokenVerification(idToken.getIdtoken()));
-        JSONObject jsonObject = new JSONObject();
+        var jsonObject = new JSONObject();
         if (!jwt.getIdtoken().equals("ID token expired.")) {
             jsonObject.put("jwt_token", jwt.getIdtoken());
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);

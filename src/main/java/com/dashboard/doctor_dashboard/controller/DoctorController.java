@@ -53,7 +53,7 @@ public class DoctorController {
                     .collect(Collectors.toList());
             throw new ValidationsException(errors);
         }
-        DoctorFormDto doctorFormDto = doctorService.updateDoctor(details, id);
+        var doctorFormDto = doctorService.updateDoctor(details, id);
         if (doctorFormDto != null)
             return new ResponseEntity<>(doctorFormDto, HttpStatus.OK);
         throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");

@@ -21,8 +21,8 @@ public class JwtTokenProvider {
     // generate token
     public String generateToken(Authentication authentication, DoctorClaims doctorClaims) {
         String email = authentication.getName();
-        Date currentDate = new Date();
-        Date expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
+        var currentDate = new Date();
+        var expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
                 .setSubject(email)
@@ -36,7 +36,7 @@ public class JwtTokenProvider {
 
     // get username from the token
     public String getUsernameFromJWT(String token) {
-        Claims claims = Jwts.parser()
+        var claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();

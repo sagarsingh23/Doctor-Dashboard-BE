@@ -28,8 +28,8 @@ public class FileStorageService {
         }
         String value = file.getOriginalFilename();
         if(value != null) {
-            String fileName = StringUtils.cleanPath(value);
-            FileDB fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
+            var fileName = StringUtils.cleanPath(value);
+            var fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
             return fileDBRepository.save(fileDB);
         }
         return null;

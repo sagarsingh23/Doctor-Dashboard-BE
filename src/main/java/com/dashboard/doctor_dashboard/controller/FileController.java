@@ -1,6 +1,5 @@
 package com.dashboard.doctor_dashboard.controller;
 
-import com.dashboard.doctor_dashboard.entity.report.FileDB;
 import com.dashboard.doctor_dashboard.entity.report.ResponseFile;
 import com.dashboard.doctor_dashboard.entity.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.exception.ReportNotFound;
@@ -27,9 +26,9 @@ public class FileController {
     @ResponseBody
     @PostMapping("/api/patient/upload/{id}")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) {
-        String message = "";
+        var message = "";
         try {
-            FileDB fileDB = storageService.store(file, id);
+            var fileDB = storageService.store(file, id);
             if (fileDB == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Patient ID not Found:" + id));
             }
@@ -44,7 +43,7 @@ public class FileController {
     @GetMapping("/files")
     public ResponseEntity<List<ResponseFile>> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
+            var fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/files/")
                     .path(String.valueOf(dbFile.getPatientId()))
@@ -61,7 +60,7 @@ public class FileController {
     @GetMapping("/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id) throws ReportNotFound {
         try {
-            FileDB fileDB = storageService.getFile(id);
+            var fileDB = storageService.getFile(id);
             return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                     .body(fileDB.getDataReport());

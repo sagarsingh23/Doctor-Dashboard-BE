@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleResourceNotFoundException(ResourceNotFoundException exception,
                                                                         WebRequest webRequest) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+        var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(APIException.class)
     public ResponseEntity<ErrorDetails> handleAPIException(APIException exception,
                                                            WebRequest webRequest) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+        var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorDetails> handleGlobalException(Exception exception,
                                                               WebRequest webRequest) {
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+        var errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
                 webRequest.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationsException.class)
     public ResponseEntity<ValidationsSchema> processException(final ValidationsException ex, WebRequest request) {
 
-        ValidationsSchema errorDetails = new ValidationsSchema(new Date(), ex.getMessages(), request.getDescription(false));
+        var errorDetails = new ValidationsSchema(new Date(), ex.getMessages(), request.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 
@@ -77,7 +77,7 @@ public class GlobalExceptionHandler {
 
         List<String> newList = ex.getConstraintViolations().stream().map(ConstraintViolation::getMessageTemplate).collect(Collectors.toList());
 
-        ErrorDetails errorDetails = new ErrorDetails(new Date(), newList.toString(), webRequest.getDescription(false));
+        var errorDetails = new ErrorDetails(new Date(), newList.toString(), webRequest.getDescription(false));
 
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
 

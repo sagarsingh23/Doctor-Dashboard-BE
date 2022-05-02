@@ -413,9 +413,9 @@ class PatientServiceImplTest {
         statusDto.setStatus("Active");
 
         Mockito.when(patientRepository.getId(id)).thenReturn(null);
-
+        String status=statusDto.getStatus();
         assertThrows(ResourceNotFoundException.class,() -> {
-            patientService.changePatientStatus(id,statusDto.getStatus());
+            patientService.changePatientStatus(id,status);
         });
     }
     @Test
@@ -426,9 +426,10 @@ class PatientServiceImplTest {
         statusDto.setStatus("Active");
 
         Mockito.when(patientRepository.getId(id)).thenReturn(newId);
+        String status=statusDto.getStatus();
 
         assertThrows(ResourceNotFoundException.class,() -> {
-            patientService.changePatientStatus(id,statusDto.getStatus());
+            patientService.changePatientStatus(id,status);
         });
     }
 

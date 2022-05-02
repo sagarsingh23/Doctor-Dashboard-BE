@@ -65,8 +65,10 @@ class AttributeServiceImplTest {
 
         Mockito.when(patientRepository.getId(id)).thenReturn(null);
 
+        String notes=notesDto.getNotes();
         assertThrows(ResourceNotFoundException.class,() ->{
-            attributeService.changeNotes(id,notesDto.getNotes());
+
+            attributeService.changeNotes(id,notes);
         });
     }
 
@@ -78,9 +80,9 @@ class AttributeServiceImplTest {
         notesDto.setNotes("Note1");
 
         Mockito.when(patientRepository.getId(id)).thenReturn(newId);
-
+        String notes=notesDto.getNotes();
         assertThrows(ResourceNotFoundException.class,() ->{
-            attributeService.changeNotes(id,notesDto.getNotes());
+            attributeService.changeNotes(id,notes);
         });
     }
 

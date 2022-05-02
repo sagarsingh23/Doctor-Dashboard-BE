@@ -4,7 +4,6 @@ package com.dashboard.doctor_dashboard.jwt.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -37,9 +36,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // get username from token
             String username = tokenProvider.getUsernameFromJWT(token);
             // load user associated with token
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+            var userDetails = customUserDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+            var authenticationToken = new UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.getAuthorities()
             );
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

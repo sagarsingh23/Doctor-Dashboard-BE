@@ -7,7 +7,6 @@ import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.service.doctor_service.DoctorService;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -37,9 +36,9 @@ public class LoginServiceImpl implements LoginService {
     public boolean addUser(Map<String, Object> loginDetails) {
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
 
-        DoctorLoginDetails doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
+        var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
         if (doctorLoginDetails == null) {
-            DoctorLoginDetails newDoctor = new DoctorLoginDetails();
+            var newDoctor = new DoctorLoginDetails();
             newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
             newDoctor.setLastName(loginDetails.get(fields[1]).toString());
             newDoctor.setDomain(loginDetails.get(fields[2]).toString());
@@ -66,16 +65,16 @@ public class LoginServiceImpl implements LoginService {
     public String takingInfoFromToken(GoogleIdToken idToken) {
 
         if (idToken != null) {
-            Payload payload = idToken.getPayload();
+            var payload = idToken.getPayload();
             String email = payload.getEmail();
             logger.log(Level.INFO,"email={0}" ,email);
-            String firstName = payload.get("given_name").toString();
-            String lastName = payload.get("family_name").toString();
+            var firstName = payload.get("given_name").toString();
+            var lastName = payload.get("family_name").toString();
 
             flag = addUser(payload);
             long id = (long) loginRepo.getId(email);
             if (flag) {
-                DoctorDetails newDoctor = new DoctorDetails();
+                var newDoctor = new DoctorDetails();
                 newDoctor.setId(id);
                 newDoctor.setFirstName(firstName);
                 newDoctor.setLastName(lastName);
@@ -97,7 +96,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String loginCreator(long id, String email, String firstName) {
-        Login login = new Login();
+        var login = new Login();
         login.setId(id);
         login.setEmail(email);
         login.setUsername(firstName);
