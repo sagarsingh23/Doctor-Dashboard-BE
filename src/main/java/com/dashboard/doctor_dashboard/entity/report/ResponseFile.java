@@ -1,10 +1,13 @@
 package com.dashboard.doctor_dashboard.entity.report;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class ResponseFile {
-    public final String name;
-    public final String url;
-    public final String type;
-    public final long size;
+    private  String name;
+    private  String url;
+    private  String type;
+    private  long size;
 
     public ResponseFile(String name, String url, String type, long size) {
         this.name = name;

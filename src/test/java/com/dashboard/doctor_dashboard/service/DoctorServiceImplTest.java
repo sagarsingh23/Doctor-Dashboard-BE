@@ -77,7 +77,11 @@ class DoctorServiceImplTest {
 
         assertEquals(list.size(),newList.size());
         assertEquals(doctorListDto1.getName(),newList.get(0).getName());
+        assertEquals(doctorListDto1.getEmail(),newList.get(0).getEmail());
+        assertEquals(doctorListDto1.getId(),newList.get(0).getId());
         assertEquals(doctorListDto2.getName(),newList.get(1).getName());
+        assertEquals(doctorListDto2.getEmail(),newList.get(1).getEmail());
+        assertEquals(doctorListDto2.getId(),newList.get(1).getId());
     }
 
     @Test

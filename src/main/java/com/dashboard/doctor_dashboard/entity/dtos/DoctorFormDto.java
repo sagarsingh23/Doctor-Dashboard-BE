@@ -2,12 +2,14 @@ package com.dashboard.doctor_dashboard.entity.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class DoctorFormDto {
 

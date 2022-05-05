@@ -13,6 +13,7 @@ import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.meanbean.test.BeanTester;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -179,7 +180,7 @@ class PatientServiceImplTest {
 
         assertThat(newPatient).isNotNull();
         assertEquals(newPatient.getPID(),patient.getPID());
-        assertEquals(newPatient.getFullName(),patient.getFullName());
+
     }
 
 

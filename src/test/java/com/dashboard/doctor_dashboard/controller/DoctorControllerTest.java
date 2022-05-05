@@ -96,6 +96,11 @@ class DoctorControllerTest {
 
         assertEquals(doctorDetails.getFirstName(),newDetails.getFirstName());
         assertEquals(doctorDetails.getEmail(),newDetails.getEmail());
+        assertEquals(doctorDetails.getSpeciality(),newDetails.getSpeciality());
+        assertEquals(doctorDetails.getGender(),newDetails.getGender());
+        assertEquals(doctorDetails.getPhoneNo(),newDetails.getPhoneNo());
+        assertEquals(doctorDetails.getAge(),newDetails.getAge());
+
     }
 
     @Test

@@ -102,8 +102,7 @@ class PatientControllerTest {
         assertEquals(newList.size(),list.size());
         assertEquals(newList.get(0).getPID(),patient1.getPID());
         assertEquals(newList.get(1).getPID(),patient2.getPID());
-
-
+        assertEquals(newList.get(1).getCategory(),patient2.getCategory());
 
     }
 

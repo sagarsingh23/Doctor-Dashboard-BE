@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -65,7 +66,8 @@ public class Patient {
     private boolean isChanged;
     private String message;
 
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
+//    @CreatedDate
     @Column(nullable = false)
     private Date timestamp;
 
