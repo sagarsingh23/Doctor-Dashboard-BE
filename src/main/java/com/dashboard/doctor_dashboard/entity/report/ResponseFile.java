@@ -1,10 +1,10 @@
 package com.dashboard.doctor_dashboard.entity.report;
 
 public class ResponseFile {
-    private final String name;
-    private final String url;
-    private final String type;
-    private final long size;
+    public final String name;
+    public final String url;
+    public final String type;
+    public final long size;
 
     public ResponseFile(String name, String url, String type, long size) {
         this.name = name;
