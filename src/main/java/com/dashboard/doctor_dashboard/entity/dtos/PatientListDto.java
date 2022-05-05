@@ -29,6 +29,34 @@ public class PatientListDto {
         return fullName;
     }
 
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public LocalDate getLastVisitedDate() {
+        return lastVisitedDate;
+    }
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }

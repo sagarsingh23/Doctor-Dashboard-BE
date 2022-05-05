@@ -1,6 +1,9 @@
 package com.dashboard.doctor_dashboard.entity.dtos;
 
 
+import lombok.Getter;
+
+@Getter
 public class NotesDto {
     private String notes;
 

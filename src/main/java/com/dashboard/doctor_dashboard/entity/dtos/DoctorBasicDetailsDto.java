@@ -21,4 +21,19 @@ public class DoctorBasicDetailsDto {
         return email;
     }
 
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public String getPhoneNo() {
+        return phoneNo;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public Short getAge() {
+        return age;
+    }
 }
