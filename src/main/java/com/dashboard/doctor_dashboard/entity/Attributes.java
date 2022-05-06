@@ -80,6 +80,9 @@ public class Attributes {
         this.bodyTemp = bodyTemp;
     }
 
+    public String getNotes() {
+        return notes;
+    }
 
     public String getSymptoms() {
         return symptoms;
@@ -89,4 +92,7 @@ public class Attributes {
         this.symptoms = symptoms;
     }
 
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }

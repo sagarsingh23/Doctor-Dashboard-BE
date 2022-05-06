@@ -156,6 +156,15 @@ class PatientControllerTest {
         assertThat(newPatient).isNotNull();
         assertEquals(newPatient.getPID(),patient.getPID());
         assertEquals(newPatient.getFullName(),patient.getFullName());
+        assertEquals(newPatient.getCategory(),patient.getCategory());
+        assertEquals(newPatient.getGender(),patient.getGender());
+        assertEquals(newPatient.getStatus(),patient.getStatus());
+        assertEquals(newPatient.getLastVisitedDate(),patient.getLastVisitedDate());
+        assertEquals(newPatient.getEmailId(),patient.getEmailId());
+        assertEquals(newPatient.getMobileNo(),patient.getMobileNo());
+        assertEquals(newPatient.getAge(),patient.getAge());
+
+
 
 
 

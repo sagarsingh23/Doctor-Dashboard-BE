@@ -79,6 +79,27 @@ class FileStorageServiceTest {
     }
 
     @Test
+    void CheckIfFileNameIsPresentOrNot() throws IOException {
+
+        final Long id = 1L;
+        FileDB fileDB = new FileDB();
+        fileDB.setDataReport(null);
+        fileDB.setId(id);
+        fileDB.setType(".png");
+        fileDB.setName("file1");
+        fileDB.setPatientId(id);
+
+        MultipartFile file = mock(MultipartFile.class);
+
+        Mockito.when(patientRepository.getId(id)).thenReturn(id);
+        Mockito.when(file.getOriginalFilename()).thenReturn(null);
+
+        FileDB newFile = fileStorageService.store(file,id);
+
+        assertThat(newFile).isNull();
+    }
+
+    @Test
     void ThrowErrorWhenPatientIdNotPresentInDb() throws IOException {
 
 

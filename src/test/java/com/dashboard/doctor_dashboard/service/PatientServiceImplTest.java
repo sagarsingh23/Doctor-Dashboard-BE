@@ -230,6 +230,8 @@ class PatientServiceImplTest {
         attribute.setSymptoms("fever,cough");
         attribute.setAID(1L);
         attribute.setGlucoseLevel(95L);
+        attribute.setNotes("fast recovery..");
+
 
 
 
@@ -253,6 +255,7 @@ class PatientServiceImplTest {
         assertThat(newPatient).isNotNull();
         assertEquals(newPatient.getPID(),patient.getPID());
         assertEquals(newPatient.getAttributes().getAID(),patient.getAttributes().getAID());
+        assertEquals(newPatient.getAttributes().getNotes(),patient.getAttributes().getNotes());
 
     }
 

@@ -51,6 +51,7 @@ class LoginserviceTest {
 
         Mockito.when(loginRepo.findByEmailId(doctorLoginDetails.getEmailId())).thenReturn(null);
         Mockito.when(loginRepo.save(doctorLoginDetails)).thenReturn(doctorLoginDetails);
+        System.out.println(doctorLoginDetails.getFirstName());
 
         Boolean f=loginService.addUser(docDetails);
         assertEquals(true,f);
