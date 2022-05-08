@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @NoArgsConstructor
 @Getter
@@ -18,6 +19,18 @@ public class PatientListDto {
     private String mobileNo;
     private String gender;
     private int age;
+
+    public PatientListDto(Long pID, String fullName, String emailId, String status, String category, LocalDate lastVisitedDate, String mobileNo, String gender, int age) {
+        this.pID = pID;
+        this.fullName = fullName;
+        this.emailId = emailId;
+        this.status = status;
+        this.category = category;
+        this.lastVisitedDate = lastVisitedDate;
+        this.mobileNo = mobileNo;
+        this.gender = gender;
+        this.age = age;
+    }
 
 
     public void setPID(Long pID) {
@@ -40,8 +53,9 @@ public class PatientListDto {
         return category;
     }
 
-    public LocalDate getLastVisitedDate() {
-        return lastVisitedDate;
+    public String getLastVisitedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return lastVisitedDate.format(formatter);
     }
 
     public String getMobileNo() {

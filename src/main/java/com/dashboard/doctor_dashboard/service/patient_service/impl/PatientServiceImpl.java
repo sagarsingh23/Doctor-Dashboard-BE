@@ -13,9 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,14 +36,16 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Patient addPatient(Patient patient) {
-        return patientRepository.save(patient);
+         return patientRepository.save(patient);
+
     }
 
     @Override
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
-        List<Patient> patient = patientRepository.getAllPatientByDoctorId(doctorId);
-        return patient.stream()
-                .map(this::mapToDto2).collect(Collectors.toList());
+        List<Patient> patients = patientRepository.getAllPatientByDoctorId(doctorId);
+
+
+        return mapToDto2(patients);
 
     }
 
@@ -51,6 +53,7 @@ public class PatientServiceImpl implements PatientService {
     public PatientDto getPatientById(Long id, Long doctorId) throws MyCustomException {
         try {
             var patient = patientRepository.getPatientByIdAndDoctorId(id, doctorId);
+
             return mapToDto(patient);
         } catch (Exception e) {
             throw new MyCustomException(PATIENT, "id", id);
@@ -69,13 +72,13 @@ public class PatientServiceImpl implements PatientService {
             var value = patients.get();
             var value1 = attributes.get();
 
-
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             value.setFullName(patient.getFullName());
             value.setAge(patient.getAge());
             value.setCategory(patient.getCategory());
             value.setEmailId(patient.getEmailId());
             value.setGender(patient.getGender());
-            value.setLastVisitedDate(patient.getLastVisitedDate());
+            value.setLastVisitedDate(LocalDate.parse(patient.getLastVisitedDate(),formatter));
             value.setMobileNo(patient.getMobileNo());
 
             value1.setBloodGroup(patient.getAttributes().getBloodGroup());
@@ -101,8 +104,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
         List<Patient> patient = patientRepository.recentlyAddedPatient(doctorId);
-        return patient.stream()
-                .map(this::mapToDto2).collect(Collectors.toList());
+        return mapToDto2(patient);
 
     }
 
@@ -181,13 +183,20 @@ public class PatientServiceImpl implements PatientService {
 
     // convert entity to dto
     private PatientDto mapToDto(Patient patient) {
-        return mapper.map(patient, PatientDto.class);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        PatientDto patientDto=new PatientDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge(),patient.getAttributes());
+        return patientDto;
+//        return mapper.map(patient, PatientDto.class);
     }
 
-    private PatientListDto mapToDto2(Patient patient) {
-        return mapper.map(patient, PatientListDto.class);
+    private List<PatientListDto> mapToDto2(List<Patient> patients) {
+        List<PatientListDto> patientListDtos=new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        for (Patient patient:patients) {
+            patientListDtos.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
+        }
 
+        return patientListDtos;
     }
-
 
 }
