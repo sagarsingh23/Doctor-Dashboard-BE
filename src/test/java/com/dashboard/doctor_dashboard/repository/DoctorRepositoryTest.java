@@ -89,8 +89,8 @@ class DoctorRepositoryTest {
     void testGetAllDoctors() {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","orthology");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","orthology");
         list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 
         Mockito.when(doctorRepository.getAllDoctors(id)).thenReturn(list);

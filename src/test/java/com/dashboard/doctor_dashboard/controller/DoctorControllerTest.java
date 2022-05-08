@@ -53,8 +53,8 @@ class DoctorControllerTest {
     void getAllDoctors() {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","orthology");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","orthology");
         list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 
         Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(list);
@@ -65,14 +65,15 @@ class DoctorControllerTest {
         assertEquals(list.size(),newList.size());
         assertEquals(doctorListDto1.getName(),newList.get(0).getName());
         assertEquals(doctorListDto2.getName(),newList.get(1).getName());
+        assertEquals(doctorListDto1.getSpeciality(),newList.get(0).getSpeciality());
     }
 
     @Test
     void throwErrorIfIdNotPresentDbForAllDoctor() {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","orthology");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","orthology");
         list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 
         Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);

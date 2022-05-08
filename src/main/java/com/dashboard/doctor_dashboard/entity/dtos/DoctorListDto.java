@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoctorListDto {
     private long id;
-
     private String name;
     private String email;
+    private String speciality;
 
     public long getId() {
         return id;
@@ -35,5 +35,13 @@ public class DoctorListDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getSpeciality() {
+        return speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        this.speciality = speciality;
     }
 }

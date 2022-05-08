@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -38,7 +39,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Query(value = "Select COUNT(id) from patients where doctor_id =:doctorId", nativeQuery = true)
     int totalNoOfPatient(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "Select COUNT(status) from patients where doctor_id =:doctorId and status = 'Active'", nativeQuery = true)
+    @Query(value = "select count(id) from patients where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
     int totalNoOfActivePatient(@Param(value = "doctorId") Long doctorId);
 
 
@@ -85,5 +86,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Modifying
     @Transactional
     void changeStatus(Long doctorId);
+
+    @Query(value = "Select timestamp from patients where doctor_id =:doctorId", nativeQuery = true)
+    ArrayList<Date> activeDate(@Param(value = "doctorId") Long doctorId);
+
 
 }

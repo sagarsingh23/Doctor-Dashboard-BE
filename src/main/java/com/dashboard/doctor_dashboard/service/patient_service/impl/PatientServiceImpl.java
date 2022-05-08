@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -142,11 +142,6 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public ArrayList<String> activePatient(Long doctorId) {
-        return patientRepository.activePatient(doctorId);
-    }
-
-    @Override
     public ArrayList<String> bloodGroup(Long doctorId) {
         return patientRepository.bloodGroup(doctorId);
     }
@@ -199,4 +194,65 @@ public class PatientServiceImpl implements PatientService {
         return patientListDtos;
     }
 
+
+    @Override
+    public ArrayList<String> activePatient(Long doctorId) {
+        int length = LocalDate.now().lengthOfMonth();
+        System.out.println(LocalDate.now().getDayOfMonth());
+        ArrayList<String> newList = new ArrayList<>();
+        String year= String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        String month= String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1);
+
+        String firstWeek="1-7";
+        String secondWeek="8-14";
+        String thirdWeek="15-21";
+        String fourthWeek="22-28";
+        String lastWeek="29-"+length;
+        int firstWeekCount=0;
+        int secondWeekCount=0;
+        int thirdWeekCount=0;
+        int fourthWeekCount=0;
+        int lastWeekCount=0;
+
+
+        ArrayList<Date> a = patientRepository.activeDate(doctorId);
+
+        System.out.println(a.size());
+        ArrayList<LocalDate> b =new ArrayList<>();
+        for (Date date2:a) {
+            b.add(date2.toInstant().atZone(ZoneId.systemDefault())
+                    .toLocalDate());
+        }
+        System.out.println("dadte=> "+b);
+
+        for (int i=0;i<b.size();i++)
+        {
+            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
+                 firstWeekCount++;
+                 //System.out.println("ff= "+ firstWeekCount);
+               }
+            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
+                secondWeekCount++;
+               }
+            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
+                thirdWeekCount++;
+               }
+            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
+                fourthWeekCount++;
+               }
+            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+length)) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
+                lastWeekCount++;
+               }
+        }
+
+        newList.add(firstWeek+","+firstWeekCount);
+        newList.add(secondWeek+","+secondWeekCount);
+        newList.add(thirdWeek+","+thirdWeekCount);
+        newList.add(fourthWeek+","+fourthWeekCount);
+        newList.add(lastWeek+","+lastWeekCount);
+
+        System.out.println("weekly count= "+ newList);
+
+        return newList;
+    }
 }
