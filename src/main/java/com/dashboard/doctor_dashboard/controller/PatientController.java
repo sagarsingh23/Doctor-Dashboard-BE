@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -86,7 +85,7 @@ public class PatientController {
     }
 
     @GetMapping("/{doctorId}/activePatient")
-    public ArrayList<String> activePatient(@PathVariable("doctorId") Long doctorId) {
+    public List<String> activePatient(@PathVariable("doctorId") Long doctorId) {
         return patientService.activePatient(doctorId);
     }
 
