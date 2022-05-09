@@ -128,8 +128,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public int totalNoOfActivePatient(Long doctorId) {
-        return patientRepository.totalNoOfActivePatient(doctorId);
+    public int totalNoOfPatientAddedThisWeek(Long doctorId) {
+        return patientRepository.totalNoOfPatientAddedThisWeek(doctorId);
     }
 
 
@@ -185,20 +185,20 @@ public class PatientServiceImpl implements PatientService {
     }
 
     private List<PatientListDto> mapToDto2(List<Patient> patients) {
-        List<PatientListDto> patientListDtos=new ArrayList<>();
+        List<PatientListDto> patientListDto=new ArrayList<>();
         var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         for (Patient patient:patients) {
-            patientListDtos.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
+            patientListDto.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
         }
 
-        return patientListDtos;
+        return patientListDto;
     }
 
 
     @SuppressWarnings("squid:S3776")
     @Override
-    public ArrayList<String> activePatient(Long doctorId) {
-        int length = LocalDate.now().lengthOfMonth();
+    public ArrayList<String> weeklyPatientCountChart(Long doctorId) {
+        int lengthOfMonth = LocalDate.now().lengthOfMonth();
 
         ArrayList<String> newList = new ArrayList<>();
         var year= String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
@@ -208,7 +208,7 @@ public class PatientServiceImpl implements PatientService {
         var secondWeek="8-14";
         var thirdWeek="15-21";
         var fourthWeek="22-28";
-        var lastWeek="29-"+length;
+        var lastWeek="29-"+lengthOfMonth;
         var firstWeekCount=0;
         var secondWeekCount=0;
         var thirdWeekCount=0;
@@ -216,30 +216,30 @@ public class PatientServiceImpl implements PatientService {
         var lastWeekCount=0;
 
 
-        ArrayList<Date> a = patientRepository.activeDate(doctorId);
+        ArrayList<Date> dateList = patientRepository.getAllDatesByDoctorId(doctorId);
 
-        ArrayList<LocalDate> b =new ArrayList<>();
-        for (Date date2:a) {
-            b.add(date2.toInstant().atZone(ZoneId.systemDefault())
+        ArrayList<LocalDate> localDateList =new ArrayList<>();
+        for (Date date:dateList) {
+            localDateList.add(date.toInstant().atZone(ZoneId.systemDefault())
                     .toLocalDate());
         }
 
-        for (var i=0;i<b.size();i++)
+        for (var i=0;i<localDateList.size();i++)
         {
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
                  firstWeekCount++;
 
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
                 secondWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
                 thirdWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
                 fourthWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+length)) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
                 lastWeekCount++;
                }
         }

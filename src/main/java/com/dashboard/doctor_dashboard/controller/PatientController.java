@@ -69,8 +69,8 @@ public class PatientController {
     }
 
     @GetMapping("/{doctorId}/totalActivePatient")
-    public int totalActivePatient(@PathVariable("doctorId") Long doctorId) {
-        return patientService.totalNoOfActivePatient(doctorId);
+    public int totalNoOfPatientAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+        return patientService.totalNoOfPatientAddedThisWeek(doctorId);
     }
 
 
@@ -85,8 +85,8 @@ public class PatientController {
     }
 
     @GetMapping("/{doctorId}/activePatient")
-    public List<String> activePatient(@PathVariable("doctorId") Long doctorId) {
-        return patientService.activePatient(doctorId);
+    public List<String> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
+        return patientService.weeklyPatientCountChart(doctorId);
     }
 
     @GetMapping("/{doctorId}/bloodGroup")

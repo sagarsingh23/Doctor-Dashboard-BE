@@ -188,13 +188,13 @@ class PatientRepositoryTest {
     }
 
     @Test
-    void totalNoOfActivePatient() {
+    void totalNoOfPatientAddedThisWeek() {
         final Long doctorId =1L;
         int count = 10;
 
-        Mockito.when(patientRepository.totalNoOfActivePatient(doctorId)).thenReturn(count);
+        Mockito.when(patientRepository.totalNoOfPatientAddedThisWeek(doctorId)).thenReturn(count);
 
-        assertEquals(patientRepository.totalNoOfActivePatient(doctorId),count);
+        assertEquals(patientRepository.totalNoOfPatientAddedThisWeek(doctorId),count);
 
     }
 

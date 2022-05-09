@@ -40,7 +40,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     int totalNoOfPatient(@Param(value = "doctorId") Long doctorId);
 
     @Query(value = "select count(id) from patients where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
-    int totalNoOfActivePatient(@Param(value = "doctorId") Long doctorId);
+    int totalNoOfPatientAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
 
     @Query(value = "Select category,count(category) from patients where doctor_id = :doctorId group by category", nativeQuery = true)
@@ -88,7 +88,7 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     void changeStatus(Long doctorId);
 
     @Query(value = "Select timestamp from patients where doctor_id =:doctorId", nativeQuery = true)
-    ArrayList<Date> activeDate(@Param(value = "doctorId") Long doctorId);
+    ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
 
 
 }

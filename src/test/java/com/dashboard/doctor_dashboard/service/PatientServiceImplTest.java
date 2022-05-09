@@ -410,13 +410,13 @@ class PatientServiceImplTest {
     }
 
     @Test
-    void totalNoOfActivePatient() {
+    void totalNoOfPatientAddedThisWeek() {
         final Long doctorId =1L;
         int count = 10;
 
-        Mockito.when(patientRepository.totalNoOfActivePatient(doctorId)).thenReturn(count);
+        Mockito.when(patientRepository.totalNoOfPatientAddedThisWeek(doctorId)).thenReturn(count);
 
-        int newCount = patientService.totalNoOfActivePatient(doctorId);
+        int newCount = patientService.totalNoOfPatientAddedThisWeek(doctorId);
 
 
         assertEquals(newCount,count);
@@ -469,9 +469,9 @@ class PatientServiceImplTest {
 
         list.addAll(Arrays.asList(date,date1));
 
-        Mockito.when(patientRepository.activeDate(doctorId)).thenReturn(list);
+        Mockito.when(patientRepository.getAllDatesByDoctorId(doctorId)).thenReturn(list);
 
-        ArrayList<String> newList = patientService.activePatient(doctorId);
+        ArrayList<String> newList = patientService.weeklyPatientCountChart(doctorId);
         System.out.println(newList);
         assertThat(newList).isNotNull();
     }

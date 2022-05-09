@@ -293,13 +293,13 @@ class PatientControllerTest {
     }
 
     @Test
-    void totalActivePatient() {
+    void totalNoOfPatientAddedThisWeek() {
         final Long doctorId =1L;
         int Active = 5;
 
-        Mockito.when(patientService.totalNoOfActivePatient(doctorId)).thenReturn(Active);
+        Mockito.when(patientService.totalNoOfPatientAddedThisWeek(doctorId)).thenReturn(Active);
 
-        int newCount = patientController.totalActivePatient(doctorId);
+        int newCount = patientController.totalNoOfPatientAddedThisWeek(doctorId);
 
         assertEquals(newCount,Active);
     }
@@ -351,9 +351,9 @@ class PatientControllerTest {
         String string2 = "Inactive";
         list.addAll(Arrays.asList(string1,string2));
 
-        Mockito.when(patientService.activePatient(doctorId)).thenReturn(list);
+        Mockito.when(patientService.weeklyPatientCountChart(doctorId)).thenReturn(list);
 
-        List<String> newList = patientController.activePatient(doctorId);
+        List<String> newList = patientController.weeklyPatientCountChart(doctorId);
 
         assertThat(newList).isNotNull();
         assertEquals(newList.size(),list.size());
