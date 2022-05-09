@@ -28,6 +28,8 @@ public class PatientServiceImpl implements PatientService {
     private AttributeRepository attributeRepository;
 
     public static final String PATIENT = "Patient";
+    public static final String DATE_FORMAT = "dd-MM-yyyy";
+
 
 
     @Autowired
@@ -72,7 +74,7 @@ public class PatientServiceImpl implements PatientService {
             var value = patients.get();
             var value1 = attributes.get();
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
             value.setFullName(patient.getFullName());
             value.setAge(patient.getAge());
             value.setCategory(patient.getCategory());
@@ -126,8 +128,8 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public int totalNoOfActivePatient(Long doctorId) {
-        return patientRepository.totalNoOfActivePatient(doctorId);
+    public int totalNoOfPatientAddedThisWeek(Long doctorId) {
+        return patientRepository.totalNoOfPatientAddedThisWeek(doctorId);
     }
 
 
@@ -178,69 +180,66 @@ public class PatientServiceImpl implements PatientService {
 
     // convert entity to dto
     private PatientDto mapToDto(Patient patient) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        PatientDto patientDto=new PatientDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge(),patient.getAttributes());
-        return patientDto;
-//        return mapper.map(patient, PatientDto.class);
+        var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+        return new PatientDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge(),patient.getAttributes());
     }
 
     private List<PatientListDto> mapToDto2(List<Patient> patients) {
-        List<PatientListDto> patientListDtos=new ArrayList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        List<PatientListDto> patientListDto=new ArrayList<>();
+        var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
         for (Patient patient:patients) {
-            patientListDtos.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
+            patientListDto.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
         }
 
-        return patientListDtos;
+        return patientListDto;
     }
 
 
+    @SuppressWarnings("squid:S3776")
     @Override
-    public ArrayList<String> activePatient(Long doctorId) {
-        int length = LocalDate.now().lengthOfMonth();
-        System.out.println(LocalDate.now().getDayOfMonth());
+    public ArrayList<String> weeklyPatientCountChart(Long doctorId) {
+        int lengthOfMonth = LocalDate.now().lengthOfMonth();
+
         ArrayList<String> newList = new ArrayList<>();
-        String year= String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        String month= String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1);
+        var year= String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
+        var month= String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1);
 
-        String firstWeek="1-7";
-        String secondWeek="8-14";
-        String thirdWeek="15-21";
-        String fourthWeek="22-28";
-        String lastWeek="29-"+length;
-        int firstWeekCount=0;
-        int secondWeekCount=0;
-        int thirdWeekCount=0;
-        int fourthWeekCount=0;
-        int lastWeekCount=0;
+        var firstWeek="1-7";
+        var secondWeek="8-14";
+        var thirdWeek="15-21";
+        var fourthWeek="22-28";
+        var lastWeek="29-"+lengthOfMonth;
+        var firstWeekCount=0;
+        var secondWeekCount=0;
+        var thirdWeekCount=0;
+        var fourthWeekCount=0;
+        var lastWeekCount=0;
 
 
-        ArrayList<Date> a = patientRepository.activeDate(doctorId);
+        ArrayList<Date> dateList = patientRepository.getAllDatesByDoctorId(doctorId);
 
-        System.out.println(a.size());
-        ArrayList<LocalDate> b =new ArrayList<>();
-        for (Date date2:a) {
-            b.add(date2.toInstant().atZone(ZoneId.systemDefault())
+        ArrayList<LocalDate> localDateList =new ArrayList<>();
+        for (Date date:dateList) {
+            localDateList.add(date.toInstant().atZone(ZoneId.systemDefault())
                     .toLocalDate());
         }
-        System.out.println("dadte=> "+b);
 
-        for (int i=0;i<b.size();i++)
+        for (var i=0;i<localDateList.size();i++)
         {
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
                  firstWeekCount++;
-                 //System.out.println("ff= "+ firstWeekCount);
+
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
                 secondWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
                 thirdWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
                 fourthWeekCount++;
                }
-            if(b.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && b.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+length)) || b.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
                 lastWeekCount++;
                }
         }
@@ -250,8 +249,6 @@ public class PatientServiceImpl implements PatientService {
         newList.add(thirdWeek+","+thirdWeekCount);
         newList.add(fourthWeek+","+fourthWeekCount);
         newList.add(lastWeek+","+lastWeekCount);
-
-        System.out.println("weekly count= "+ newList);
 
         return newList;
     }

@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -138,6 +139,7 @@ class PatientControllerTest {
     @Test
     void updatePatient() {
        final Long id = 1L;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setCategory("orthology");
@@ -160,7 +162,7 @@ class PatientControllerTest {
         assertEquals(newPatient.getCategory(),patient.getCategory());
         assertEquals(newPatient.getGender(),patient.getGender());
         assertEquals(newPatient.getStatus(),patient.getStatus());
-        assertEquals(newPatient.getLastVisitedDate(),patient.getLastVisitedDate());
+        assertEquals(LocalDate.parse(newPatient.getLastVisitedDate(),formatter), LocalDate.parse(patient.getLastVisitedDate(),formatter));
         assertEquals(newPatient.getEmailId(),patient.getEmailId());
         assertEquals(newPatient.getMobileNo(),patient.getMobileNo());
         assertEquals(newPatient.getAge(),patient.getAge());
@@ -291,13 +293,13 @@ class PatientControllerTest {
     }
 
     @Test
-    void totalActivePatient() {
+    void totalNoOfPatientAddedThisWeek() {
         final Long doctorId =1L;
         int Active = 5;
 
-        Mockito.when(patientService.totalNoOfActivePatient(doctorId)).thenReturn(Active);
+        Mockito.when(patientService.totalNoOfPatientAddedThisWeek(doctorId)).thenReturn(Active);
 
-        int newCount = patientController.totalActivePatient(doctorId);
+        int newCount = patientController.totalNoOfPatientAddedThisWeek(doctorId);
 
         assertEquals(newCount,Active);
     }
@@ -349,9 +351,9 @@ class PatientControllerTest {
         String string2 = "Inactive";
         list.addAll(Arrays.asList(string1,string2));
 
-        Mockito.when(patientService.activePatient(doctorId)).thenReturn(list);
+        Mockito.when(patientService.weeklyPatientCountChart(doctorId)).thenReturn(list);
 
-        List<String> newList = patientController.activePatient(doctorId);
+        List<String> newList = patientController.weeklyPatientCountChart(doctorId);
 
         assertThat(newList).isNotNull();
         assertEquals(newList.size(),list.size());

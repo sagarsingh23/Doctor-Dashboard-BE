@@ -113,7 +113,7 @@ public class Patient {
     }
 
     public String getLastVisitedDate() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return lastVisitedDate.format(formatter);
     }
 

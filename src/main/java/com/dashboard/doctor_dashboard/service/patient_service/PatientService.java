@@ -29,13 +29,13 @@ public interface PatientService {
     //chart
     int totalNoOfPatient(Long doctorId);
 
-    int totalNoOfActivePatient(Long doctorId);
+    int totalNoOfPatientAddedThisWeek(Long doctorId);
 
     ArrayList<String> patientCategory(Long doctorId);
 
     ArrayList<String> gender(Long doctorId);
 
-    ArrayList<String> activePatient(Long doctorId);
+    ArrayList<String> weeklyPatientCountChart(Long doctorId);
 
     ArrayList<String> bloodGroup(Long doctorId);
 
