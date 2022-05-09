@@ -13,6 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -137,6 +139,7 @@ class PatientControllerTest {
     @Test
     void updatePatient() {
        final Long id = 1L;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setCategory("orthology");
@@ -145,7 +148,7 @@ class PatientControllerTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);
@@ -159,7 +162,7 @@ class PatientControllerTest {
         assertEquals(newPatient.getCategory(),patient.getCategory());
         assertEquals(newPatient.getGender(),patient.getGender());
         assertEquals(newPatient.getStatus(),patient.getStatus());
-        assertEquals(newPatient.getLastVisitedDate(),patient.getLastVisitedDate());
+        assertEquals(LocalDate.parse(newPatient.getLastVisitedDate(),formatter), LocalDate.parse(patient.getLastVisitedDate(),formatter));
         assertEquals(newPatient.getEmailId(),patient.getEmailId());
         assertEquals(newPatient.getMobileNo(),patient.getMobileNo());
         assertEquals(newPatient.getAge(),patient.getAge());

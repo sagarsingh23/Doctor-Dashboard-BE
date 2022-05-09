@@ -13,17 +13,15 @@ import com.dashboard.doctor_dashboard.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.meanbean.test.BeanTester;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,8 +92,8 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(1L);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
-        patient.setStatus("Active");
+        patient.setLastVisitedDate(LocalDate.now());
+        patient.setStatus("InActive");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);
 
@@ -107,7 +105,7 @@ class PatientServiceImplTest {
         newpatient.setMobileNo("900011112");
         newpatient.setPID(1L);
         newpatient.setGender("male");
-        newpatient.setLastVisitedDate(null);
+        newpatient.setLastVisitedDate(LocalDate.now());
         newpatient.setStatus("Active");
         newpatient.setAttributes(null);
         newpatient.setDoctorDetails(null);
@@ -123,11 +121,11 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(1L);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
+        patient1.getLastVisitedDate();
 
         Mockito.when(patientRepository.getAllPatientByDoctorId(doctorId)).thenReturn(patientList);
-        Mockito.when(mapper.map(patientList,PatientListDto.class)).thenReturn(patient1);
 
         List<PatientListDto> newList = patientService.getAllPatientByDoctorId(doctorId);
         assertThat(newList).isNotNull();
@@ -135,7 +133,7 @@ class PatientServiceImplTest {
     }
 
     @Test
-    void checkIfIdAvailableForGetPatientById() {
+    void GetPatientById() {
         final Long id = 1L;
         final Long doctorId = 1L;
 
@@ -147,7 +145,7 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(id);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
         patient1.setAttributes(null);
 
@@ -168,21 +166,20 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(attribute);
         patient.setDoctorDetails(null);
 
         Mockito.when(patientRepository.getPatientByIdAndDoctorId(id,doctorId)).thenReturn(patient);
-        Mockito.when(mapper.map(patient,PatientDto.class)).thenReturn(patient1);
+//        Mockito.when(mapper.map(patient,PatientDto.class)).thenReturn(patient1);
 
         PatientDto newPatient = patientService.getPatientById(id,doctorId);
 
         assertThat(newPatient).isNotNull();
         assertEquals(newPatient.getPID(),patient.getPID());
-
+        assertEquals(newPatient.getFullName(),patient.getFullName());
     }
-
 
     @Test
     void throwErrorIfIdNotAvailable(){
@@ -243,7 +240,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(attribute);
         patient.setDoctorDetails(null);
@@ -297,44 +294,6 @@ class PatientServiceImplTest {
     }
 
     @Test
-    void checkIfIdNotPresentInDBUpdatePatient() {
-        final Long id = 1L;
-        Attributes attribute = new Attributes();
-        attribute.setBloodGroup("B+");
-        attribute.setBloodPressure(120L);
-        attribute.setBodyTemp(90D);
-        attribute.setSymptoms("fever,cough");
-        attribute.setAID(1L);
-        attribute.setGlucoseLevel(95L);
-
-
-
-        Patient patient = new Patient();
-        patient.setAge(21);
-        patient.setCategory("orthology");
-        patient.setEmailId("sagarssn23@gmail.com");
-        patient.setFullName("Sagar Singh Negi");
-        patient.setMobileNo("900011112");
-        patient.setPID(id);
-        patient.setGender("male");
-        patient.setLastVisitedDate(null);
-        patient.setStatus("Active");
-        patient.setAttributes(attribute);
-        patient.setDoctorDetails(null);
-
-        Mockito.when(patientRepository.findById(id)).thenReturn(Optional.of(patient));
-        Mockito.when(attributeRepository.findById(id)).thenReturn(Optional.empty());
-
-
-        assertThrows(ResourceNotFoundException.class,() -> {
-            patientService.updatePatient(id,patient);
-        });
-
-
-    }
-
-
-    @Test
     void deletePatientById() {
         Long id = 1L;
 
@@ -357,7 +316,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(1L);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);
@@ -370,7 +329,7 @@ class PatientServiceImplTest {
         newpatient.setMobileNo("900011112");
         newpatient.setPID(1L);
         newpatient.setGender("male");
-        newpatient.setLastVisitedDate(null);
+        newpatient.setLastVisitedDate(LocalDate.now());
         newpatient.setStatus("Active");
         newpatient.setAttributes(null);
         newpatient.setDoctorDetails(null);
@@ -386,11 +345,10 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(1L);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
 
         Mockito.when(patientRepository.recentlyAddedPatient(doctorId)).thenReturn(patientList);
-        Mockito.when(mapper.map(patientList,PatientListDto.class)).thenReturn(patient1);
 
         List<PatientListDto> newList = patientService.recentlyAddedPatient(doctorId);
         assertThat(newList).isNotNull();
@@ -504,20 +462,18 @@ class PatientServiceImplTest {
 
     @Test
     void activePatient() {
-//        final Long doctorId = 1L;
-//        ArrayList<String> list = new ArrayList<>();
-//
-//        String string1 = "Active";
-//        String string2 = "Inactive";
-//        list.addAll(Arrays.asList(string1,string2));
-//
-//        Mockito.when(patientRepository.activePatient(doctorId)).thenReturn(list);
-//
-//        ArrayList<String> newList = patientService.activePatient(doctorId);
-//
-//        assertThat(newList).isNotNull();
-//        assertEquals(newList.size(),list.size());
-//        assertEquals(newList,list);
+        final Long doctorId = 1L;
+        ArrayList<Date> list = new ArrayList<>();
+        Date date = new Date();
+        Date date1 = new Date();
+
+        list.addAll(Arrays.asList(date,date1));
+
+        Mockito.when(patientRepository.activeDate(doctorId)).thenReturn(list);
+
+        ArrayList<String> newList = patientService.activePatient(doctorId);
+        System.out.println(newList);
+        assertThat(newList).isNotNull();
     }
 
     @Test
