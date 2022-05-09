@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -145,7 +146,7 @@ class PatientControllerTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);

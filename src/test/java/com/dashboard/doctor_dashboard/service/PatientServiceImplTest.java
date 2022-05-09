@@ -20,6 +20,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,7 +95,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(1L);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);
@@ -107,7 +108,7 @@ class PatientServiceImplTest {
         newpatient.setMobileNo("900011112");
         newpatient.setPID(1L);
         newpatient.setGender("male");
-        newpatient.setLastVisitedDate(null);
+        newpatient.setLastVisitedDate(LocalDate.now());
         newpatient.setStatus("Active");
         newpatient.setAttributes(null);
         newpatient.setDoctorDetails(null);
@@ -123,7 +124,7 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(1L);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
 
         Mockito.when(patientRepository.getAllPatientByDoctorId(doctorId)).thenReturn(patientList);
@@ -147,7 +148,7 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(id);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
         patient1.setAttributes(null);
 
@@ -168,7 +169,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(attribute);
         patient.setDoctorDetails(null);
@@ -243,7 +244,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(id);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(attribute);
         patient.setDoctorDetails(null);
@@ -357,7 +358,7 @@ class PatientServiceImplTest {
         patient.setMobileNo("900011112");
         patient.setPID(1L);
         patient.setGender("male");
-        patient.setLastVisitedDate(null);
+        patient.setLastVisitedDate(LocalDate.now());
         patient.setStatus("Active");
         patient.setAttributes(null);
         patient.setDoctorDetails(null);
@@ -370,7 +371,7 @@ class PatientServiceImplTest {
         newpatient.setMobileNo("900011112");
         newpatient.setPID(1L);
         newpatient.setGender("male");
-        newpatient.setLastVisitedDate(null);
+        newpatient.setLastVisitedDate(LocalDate.now());
         newpatient.setStatus("Active");
         newpatient.setAttributes(null);
         newpatient.setDoctorDetails(null);
@@ -386,7 +387,7 @@ class PatientServiceImplTest {
         patient1.setMobileNo("900011112");
         patient1.setPID(1L);
         patient1.setGender("male");
-        patient1.setLastVisitedDate(null);
+        patient1.setLastVisitedDate(LocalDate.now());
         patient1.setStatus("Active");
 
         Mockito.when(patientRepository.recentlyAddedPatient(doctorId)).thenReturn(patientList);
