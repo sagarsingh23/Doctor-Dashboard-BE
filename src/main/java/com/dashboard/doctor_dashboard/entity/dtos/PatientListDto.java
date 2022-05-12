@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 
 @NoArgsConstructor
 @Getter
@@ -43,9 +43,8 @@ public class PatientListDto {
         return category;
     }
 
-    public String getLastVisitedDate() {
-        var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return lastVisitedDate.format(formatter);
+    public LocalDate getLastVisitedDate() {
+        return lastVisitedDate;
     }
 
     public String getMobileNo() {

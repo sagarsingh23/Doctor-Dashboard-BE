@@ -1,14 +1,12 @@
 package com.dashboard.doctor_dashboard.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @SuppressWarnings({"squid:S5843","squid:S5869"})
@@ -112,9 +110,8 @@ public class Patient {
         this.emailId = emailId;
     }
 
-    public String getLastVisitedDate() {
-        var formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return lastVisitedDate.format(formatter);
+    public LocalDate getLastVisitedDate() {
+        return lastVisitedDate;
     }
 
     public void setLastVisitedDate(LocalDate lastVisitedDate) {
