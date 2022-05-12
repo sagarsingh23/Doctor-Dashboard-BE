@@ -30,7 +30,7 @@ public class Attributes {
     private String notes;
 
     @NotEmpty
-    @Size(max = 50)
+    @Size(max = 100)
     private String symptoms;
 
 
