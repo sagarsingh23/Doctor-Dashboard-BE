@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class PatientServiceImpl implements PatientService {
@@ -28,7 +29,6 @@ public class PatientServiceImpl implements PatientService {
     private AttributeRepository attributeRepository;
 
     public static final String PATIENT = "Patient";
-    public static final String DATE_FORMAT = "dd-MM-yyyy";
 
 
 
@@ -44,10 +44,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientListDto> getAllPatientByDoctorId(Long doctorId) {
-        List<Patient> patients = patientRepository.getAllPatientByDoctorId(doctorId);
+        List<Patient> patient = patientRepository.getAllPatientByDoctorId(doctorId);
+        return patient.stream()
+                .map(this::mapToDto2).collect(Collectors.toList());
 
-
-        return mapToDto2(patients);
 
     }
 
@@ -74,13 +74,12 @@ public class PatientServiceImpl implements PatientService {
             var value = patients.get();
             var value1 = attributes.get();
 
-            var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
             value.setFullName(patient.getFullName());
             value.setAge(patient.getAge());
             value.setCategory(patient.getCategory());
             value.setEmailId(patient.getEmailId());
             value.setGender(patient.getGender());
-            value.setLastVisitedDate(LocalDate.parse(patient.getLastVisitedDate(),formatter));
+            value.setLastVisitedDate(patient.getLastVisitedDate());
             value.setMobileNo(patient.getMobileNo());
 
             value1.setBloodGroup(patient.getAttributes().getBloodGroup());
@@ -105,8 +104,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public List<PatientListDto> recentlyAddedPatient(Long doctorId) {
+
         List<Patient> patient = patientRepository.recentlyAddedPatient(doctorId);
-        return mapToDto2(patient);
+        return patient.stream()
+                .map(this::mapToDto2).collect(Collectors.toList());
+
 
     }
 
@@ -180,18 +182,12 @@ public class PatientServiceImpl implements PatientService {
 
     // convert entity to dto
     private PatientDto mapToDto(Patient patient) {
-        var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-        return new PatientDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge(),patient.getAttributes());
+        return mapper.map(patient, PatientDto.class);
     }
 
-    private List<PatientListDto> mapToDto2(List<Patient> patients) {
-        List<PatientListDto> patientListDto=new ArrayList<>();
-        var formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
-        for (Patient patient:patients) {
-            patientListDto.add(new PatientListDto(patient.getPID(),patient.getFullName(),patient.getEmailId(),patient.getStatus(),patient.getCategory(),LocalDate.parse(patient.getLastVisitedDate(),formatter),patient.getMobileNo(),patient.getGender(),patient.getAge()));
-        }
+    private PatientListDto mapToDto2(Patient patient) {
+        return mapper.map(patient, PatientListDto.class);
 
-        return patientListDto;
     }
 
 
