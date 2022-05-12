@@ -177,7 +177,7 @@ class PatientServiceImplTest {
         patient.setDoctorDetails(null);
 
         Mockito.when(patientRepository.getPatientByIdAndDoctorId(id,doctorId)).thenReturn(patient);
-//        Mockito.when(mapper.map(patient,PatientDto.class)).thenReturn(patient1);
+        Mockito.when(mapper.map(patient,PatientDto.class)).thenReturn(patient1);
 
         PatientDto newPatient = patientService.getPatientById(id,doctorId);
 
