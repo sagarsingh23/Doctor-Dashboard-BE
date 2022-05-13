@@ -5,7 +5,6 @@ import com.dashboard.doctor_dashboard.entity.Attributes;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
