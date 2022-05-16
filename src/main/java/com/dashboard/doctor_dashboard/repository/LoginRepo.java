@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entity.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entity.Attributes;
-import com.dashboard.doctor_dashboard.entity.Patient;
+import com.dashboard.doctor_dashboard.entities.Attributes;
+import com.dashboard.doctor_dashboard.entities.Patient;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

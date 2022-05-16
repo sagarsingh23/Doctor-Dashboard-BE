@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.exception.APIException;
-import com.dashboard.doctor_dashboard.jwt.entity.DoctorClaims;
+import com.dashboard.doctor_dashboard.exceptions.APIException;
+import com.dashboard.doctor_dashboard.jwt.entities.DoctorClaims;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;

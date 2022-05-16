@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entity.Todolist;
+import com.dashboard.doctor_dashboard.entities.Todolist;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

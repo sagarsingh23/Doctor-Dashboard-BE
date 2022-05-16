@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 
-import com.dashboard.doctor_dashboard.entity.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.jwt.service;
 
-import com.dashboard.doctor_dashboard.jwt.entity.AuthenticationResponse;
-import com.dashboard.doctor_dashboard.jwt.entity.DoctorClaims;
-import com.dashboard.doctor_dashboard.jwt.entity.Login;
+import com.dashboard.doctor_dashboard.jwt.entities.AuthenticationResponse;
+import com.dashboard.doctor_dashboard.jwt.entities.DoctorClaims;
+import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

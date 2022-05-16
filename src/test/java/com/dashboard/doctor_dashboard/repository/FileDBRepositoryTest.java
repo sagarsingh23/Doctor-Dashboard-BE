@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entity.report.FileDB;
+import com.dashboard.doctor_dashboard.entities.report.FileDB;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

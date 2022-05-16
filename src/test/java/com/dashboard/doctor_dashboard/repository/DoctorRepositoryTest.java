@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entity.dtos.DoctorBasicDetailsDto;
-import com.dashboard.doctor_dashboard.entity.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entity.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
+import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
