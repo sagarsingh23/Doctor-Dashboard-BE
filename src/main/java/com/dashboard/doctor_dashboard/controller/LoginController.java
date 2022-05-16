@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controller;
 
 
-import com.dashboard.doctor_dashboard.entity.login_entity.IdToken;
+import com.dashboard.doctor_dashboard.entity.login_entity.JwtToken;
 import com.dashboard.doctor_dashboard.exception.GoogleLoginException;
 import com.dashboard.doctor_dashboard.service.login_service.LoginService;
 import org.codehaus.jettison.json.JSONException;
@@ -26,8 +26,9 @@ public class LoginController {
     private LoginService loginService;
 
     @PostMapping(value = "api/doctor/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> loginIdToken(@RequestBody IdToken idToken) throws GeneralSecurityException, IOException, JSONException {
-        var jwt = new IdToken();
+    public ResponseEntity<String> tokenAuthentication(@RequestBody JwtToken idToken) throws GeneralSecurityException, IOException, JSONException {
+        //authToken
+        var jwt = new JwtToken();
         jwt.setIdtoken(loginService.tokenVerification(idToken.getIdtoken()));
         var jsonObject = new JSONObject();
         if (!jwt.getIdtoken().equals("ID token expired.")) {

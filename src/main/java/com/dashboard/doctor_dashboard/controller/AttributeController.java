@@ -16,7 +16,7 @@ public class AttributeController {
 
 
     @PutMapping("/changeNotes/{id}")
-    public String changeNotes(@PathVariable("id") Long id, @RequestBody NotesDto notes) {
+    public String updateNotes(@PathVariable("id") Long id, @RequestBody NotesDto notes) { //updateNotes
         attributeService.changeNotes(id, notes.getNotes());
         return "Notes updated!!!";
     }

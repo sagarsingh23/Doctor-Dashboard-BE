@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controller;
 
-import com.dashboard.doctor_dashboard.entity.login_entity.IdToken;
+import com.dashboard.doctor_dashboard.entity.login_entity.JwtToken;
 import com.dashboard.doctor_dashboard.exception.GoogleLoginException;
 import com.dashboard.doctor_dashboard.service.login_service.LoginService;
 import org.codehaus.jettison.json.JSONException;
@@ -40,13 +40,13 @@ class LoginControllerTest {
     }
 
     @Test
-    void loginIdToken() throws GeneralSecurityException, IOException, JSONException {
+    void loginJwtToken() throws GeneralSecurityException, IOException, JSONException {
         String token = "abcdefghijklmnopqrstuvwxyz";
-        IdToken idToken = new IdToken();
+        JwtToken idToken = new JwtToken();
         idToken.setIdtoken(token);
         Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(token);
 
-        ResponseEntity<String> newMessage = loginController.loginIdToken(idToken);
+        ResponseEntity<String> newMessage = loginController.tokenAuthentication(idToken);
         System.out.println(newMessage.getBody().getClass());
         assertThat(newMessage).isNotNull();
         assertEquals(200,newMessage.getStatusCodeValue());;
@@ -57,12 +57,12 @@ class LoginControllerTest {
     @Test
     void ThrowErrorIfTokenExpired() throws GeneralSecurityException, IOException, JSONException {
         String token = "ID token expired.";
-        IdToken idToken = new IdToken();
+        JwtToken idToken = new JwtToken();
         idToken.setIdtoken(token);
         Mockito.when(loginService.tokenVerification(idToken.getIdtoken())).thenReturn(token);
 
         assertThrows(GoogleLoginException.class, ()->{
-            loginController.loginIdToken(idToken);
+            loginController.tokenAuthentication(idToken);
         });
 
     }

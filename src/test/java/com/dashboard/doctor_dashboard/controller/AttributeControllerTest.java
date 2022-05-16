@@ -42,7 +42,7 @@ class AttributeControllerTest {
         Mockito.when(attributeService.changeNotes(Mockito.any(Long.class),
                 Mockito.any(String.class))).thenReturn(value);
 
-        String newNote = attributeController.changeNotes(1L,notesDto);
+        String newNote = attributeController.updateNotes(1L,notesDto);
 
         assertEquals(value,newNote);
 

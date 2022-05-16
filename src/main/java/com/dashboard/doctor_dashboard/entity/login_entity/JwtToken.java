@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.entity.login_entity;
 
-public class IdToken {
+public class JwtToken {//Auth
     private String token;
 
     public String getIdtoken() {

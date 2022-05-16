@@ -98,7 +98,11 @@ public class PatientController {
     public List<String> ageChart(@PathVariable("doctorId") Long doctorId) {
         return patientService.ageChart(doctorId);
     }
+    //{
+//        bloodGroup:{},
+//        ageChart:{},
 
+//    }
 
     //Add-On feature Refer Patient
 
