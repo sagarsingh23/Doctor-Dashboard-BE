@@ -23,7 +23,7 @@ public class DoctorDetails {
     @Column(name = "last_name")
     private String lastName;
     @Column(name = "age")
-    @Range(min = 24, max = 100, message = "enter age between 24-100")
+    @Range(min = 24, max = 100, message = "Enter age between 24-100")
     private Short age;
     @Column(name = "email", nullable = false, unique = true)
     private String email;
