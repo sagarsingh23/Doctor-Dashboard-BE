@@ -2,12 +2,12 @@ package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,34 +18,50 @@ public class DoctorServiceImpl implements DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
 
+    GenericMessage genericMessage = new GenericMessage();
+
+
     @Override
     public DoctorDetails addDoctor(DoctorDetails details) {
         return doctorRepository.save(details);
     }
 
     @Override
-    public List<DoctorListDto> getAllDoctors(Long id) {
+    public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
 
-        if (doctorRepository.isIdAvailable(id) != null)
-            return doctorRepository.getAllDoctors(id);
+
+        if (doctorRepository.isIdAvailable(id) != null) {
+            List<DoctorListDto> list = doctorRepository.getAllDoctors(id);
+            genericMessage.setData(list);
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        }
+
 
         throw new ResourceNotFoundException("doctor", "id", id);
 
     }
 
     @Override
-    public DoctorBasicDetailsDto getDoctorById(long id) {
-        if (doctorRepository.isIdAvailable(id) != null)
-            return doctorRepository.findDoctorById(id);
+    public ResponseEntity<GenericMessage> getDoctorById(long id) {
+
+        if (doctorRepository.isIdAvailable(id) != null) {
+            genericMessage.setData(doctorRepository.findDoctorById(id));
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        }
+
         return null;
     }
 
     @Override
-    public DoctorFormDto updateDoctor(DoctorFormDto details, long id) {
+    public ResponseEntity<GenericMessage> updateDoctor(DoctorFormDto details, long id) {
         if (doctorRepository.isIdAvailable(id) != null) {
             if (details.getId() == id) {
                 doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), id);
-                return doctorRepository.getDoctorById(id);
+                genericMessage.setData(doctorRepository.getDoctorById(id));
+                genericMessage.setStatus(Constants.SUCCESS);
+                return new ResponseEntity<>(genericMessage,HttpStatus.OK);
             }
             return null;
         }
@@ -53,8 +69,10 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public String deleteDoctor(long id) {
+    public ResponseEntity<GenericMessage> deleteDoctor(long id) {
         doctorRepository.deleteById(id);
-        return "Successfully deleted";
+        genericMessage.setData("Successfully deleted");
+        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 }

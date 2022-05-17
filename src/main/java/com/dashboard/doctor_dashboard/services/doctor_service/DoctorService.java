@@ -4,6 +4,8 @@ import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,11 +14,11 @@ import java.util.List;
 public interface DoctorService {
     DoctorDetails addDoctor(DoctorDetails details);
 
-    List<DoctorListDto> getAllDoctors(Long id);
+    ResponseEntity<GenericMessage> getAllDoctors(Long id);
 
-    DoctorBasicDetailsDto getDoctorById(long id);
+    ResponseEntity<GenericMessage> getDoctorById(long id);
 
-    DoctorFormDto updateDoctor(DoctorFormDto details, long id);
+    ResponseEntity<GenericMessage> updateDoctor(DoctorFormDto details, long id);
 
-    String deleteDoctor(long id);
+    ResponseEntity<GenericMessage> deleteDoctor(long id);
 }
