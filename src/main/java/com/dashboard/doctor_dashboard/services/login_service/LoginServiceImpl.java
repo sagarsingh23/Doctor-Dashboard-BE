@@ -71,18 +71,18 @@ public class LoginServiceImpl implements LoginService {
             var firstName = payload.get("given_name").toString();
             var lastName = payload.get("family_name").toString();
 
-            flag = addUser(payload);
-            long id = (long) loginRepo.getId(email);
-            if (flag) {
-                var newDoctor = new DoctorDetails();
-                newDoctor.setId(id);
-                newDoctor.setFirstName(firstName);
-                newDoctor.setLastName(lastName);
-                newDoctor.setEmail(email);
-                doctorService.addDoctor(newDoctor);
-                logger.log(Level.INFO,"doctor details {0}",newDoctor);
-
-            }
+            addUser(payload);
+            long id = loginRepo.getId(email);
+//            if (flag) {
+//                var newDoctor = new DoctorDetails();
+//                newDoctor.setId(id);
+//                newDoctor.setFirstName(firstName);
+//                newDoctor.setLastName(lastName);
+//                newDoctor.setEmail(email);
+//                doctorService.addDoctor(newDoctor);
+//                logger.log(Level.INFO,"doctor details {0}",newDoctor);
+//
+//            }
             return loginCreator(id, email, firstName);
 
         } else {
@@ -101,6 +101,12 @@ public class LoginServiceImpl implements LoginService {
         login.setEmail(email);
         login.setUsername(firstName);
         return jwtService.authenticateUser(login);
+    }
+
+    @Override
+    public String deleteDoctorById(long id) {
+        loginRepo.deleteById(id);
+        return "Successfully deleted";
     }
 
 

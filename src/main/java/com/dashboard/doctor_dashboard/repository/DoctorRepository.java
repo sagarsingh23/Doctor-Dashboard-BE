@@ -20,16 +20,21 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Transactional
     @Modifying
     void updateDoctorDb(Short age, String speciality, String gender, String phoneNo, long id);
-
+    //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo) from DoctorDetails a where id=:id")
+//@Query(value = "select com.dashboard.doctor_dashboard.entity.dtos.Doctora.id,a.age,a.speciality,a.gender,a.phoneNo from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);
-
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(a.id,a.firstName,a.email,a.speciality) from DoctorDetails a where a.id!=:id")
+    //
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.firstName,ld.emailId,dd.speciality) from DoctorDetails dd inner join DoctorLoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
-
+    //
     @Query(value = "select id from doctor_details d where d.id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
-
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(a.firstName,a.email,a.speciality,a.phoneNo,a.gender,a.age) from DoctorDetails a where id=:id")
+    //
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.firstName,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join DoctorLoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
+    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
+    @Transactional
+    @Modifying
+    void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId);
 }

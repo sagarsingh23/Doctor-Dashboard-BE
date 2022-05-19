@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.entities.login_entity;
 
 
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -22,7 +23,10 @@ public class DoctorLoginDetails {
     private String emailId;
     @Column(name = "domain", nullable = false)
     private String domain;
-    
+
+
+    @OneToOne(mappedBy = "doctorLoginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private DoctorDetails doctorDetails;
     public String getFirstName() {
         return firstName;
     }

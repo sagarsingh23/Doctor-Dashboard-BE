@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -36,5 +33,9 @@ public class LoginController {
             return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
         }
         throw new GoogleLoginException(jwt.getIdtoken());
+    }
+    @DeleteMapping(value = "api/doctor/login/delete/{id}")
+    public String deleteDoctorById(@PathVariable("id") long id ){
+        return loginService.deleteDoctorById(id);
     }
 }

@@ -1,8 +1,9 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-
+@Getter
 public class APIException extends RuntimeException {
 
     public final HttpStatus status;

@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,11 +30,12 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("/get-all/doctor/{doctorId}")
-    public List<DoctorListDto> getAllDoctors(@PathVariable("doctorId") Long id) {
+    public ResponseEntity<List<DoctorListDto>> getAllDoctors(@PathVariable("doctorId") Long id) {
 
         List<DoctorListDto> details = doctorService.getAllDoctors(id);
         if (details != null)
-            return details;
+//            return details;
+            return new ResponseEntity<>(details,HttpStatus.OK);
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
@@ -44,16 +46,28 @@ public class DoctorController {
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, WebRequest webRequest) {
-
+    @PostMapping("/add-doctor-details/{id}")
+    public ResponseEntity<DoctorFormDto> addDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.toList());
             throw new ValidationsException(errors);
         }
-        var doctorFormDto = doctorService.updateDoctor(details, id);
+        var doctorFormDto = doctorService.addDoctorDetails(details,id,request);
+        if (doctorFormDto != null)
+            return new ResponseEntity<>(doctorFormDto, HttpStatus.OK);
+        throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
+    }
+    @PutMapping("/update/{id}")
+    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, HttpServletRequest request) {
+        if (bindingResult.hasErrors()) {
+            List<String> errors = bindingResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+            throw new ValidationsException(errors);
+        }
+        var doctorFormDto = doctorService.updateDoctor(details,id,request);
         if (doctorFormDto != null)
             return new ResponseEntity<>(doctorFormDto, HttpStatus.OK);
         throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
