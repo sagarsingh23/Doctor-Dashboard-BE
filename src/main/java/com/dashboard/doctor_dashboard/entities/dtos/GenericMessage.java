@@ -6,5 +6,4 @@ import lombok.Data;
 public class GenericMessage {
     private String status;
     private Object data;
-    //private boolean status;
 }

@@ -1,5 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.ErrorMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.report.ResponseFile;
 import com.dashboard.doctor_dashboard.entities.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
@@ -22,26 +25,33 @@ public class FileController {
     @Autowired
     private FileStorageService storageService;
 
+    GenericMessage genericMessage = new GenericMessage();
 
     @ResponseBody
     @PostMapping("/api/patient/upload/{id}")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) {
+    public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) {
         var message = "";
         try {
             var fileDB = storageService.store(file, id);
             if (fileDB == null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Patient ID not Found:" + id));
+                genericMessage.setData(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage("Patient ID not Found:" + id)));
+                genericMessage.setStatus(Constants.FAIL);
+                return new ResponseEntity<>(genericMessage,HttpStatus.BAD_REQUEST);
             }
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+             genericMessage.setData(ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message)));
+             genericMessage.setStatus(Constants.SUCCESS);
+             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         } catch (Exception e) {
             message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+            genericMessage.setData(ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message)));
+            genericMessage.setStatus(Constants.FAIL);
+            return new ResponseEntity<>(genericMessage,HttpStatus.EXPECTATION_FAILED);
         }
     }
 
     @GetMapping("/files")
-    public ResponseEntity<List<ResponseFile>> getListFiles() {
+    public ResponseEntity<GenericMessage> getListFiles() {
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
             var fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
@@ -54,7 +64,9 @@ public class FileController {
                     dbFile.getType(),
                     dbFile.getDataReport().length);
         }).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(files);
+        genericMessage.setData(ResponseEntity.status(HttpStatus.OK).body(files));
+        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
     @GetMapping("/files/{id}")
