@@ -1,15 +1,14 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.StatusDto;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -23,39 +22,37 @@ public class PatientController {
     //CRUD operation for patient
 
     @PostMapping()
-    public Patient addPatient(@RequestBody Patient patient) {
+    public ResponseEntity<GenericMessage> addPatient(@RequestBody Patient patient) {
         return patientService.addPatient(patient);
     }
 
     @GetMapping("/doctor/{doctorId}")
-    public List<PatientListDto> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId) {
         return patientService.getAllPatientByDoctorId(doctorId);
     }
 
     @GetMapping("/{id}/doctor/{doctorId}")
-    public PatientDto getPatientDtoById(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> getPatientDtoById(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
         return patientService.getPatientById(id, doctorId);
     }
 
     @PutMapping("/{id}")
-    public Patient updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
+    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
         return patientService.updatePatient(id, patient);
     }
 
     @DeleteMapping("/{id}")
-    public String deletePatientById(@PathVariable("id") Long id) {
-        patientService.deletePatientById(id);
-        return "Successfully Deleted";
+    public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
+        return patientService.deletePatientById(id);
     }
 
     @PutMapping("/changeStatus/{id}")
-    public String changePatientStatus(@PathVariable("id") Long id, @Valid @RequestBody StatusDto status) {
-        patientService.changePatientStatus(id, status.getStatus());
-        return "Status Updated!!!";
+    public ResponseEntity<GenericMessage> changePatientStatus(@PathVariable("id") Long id, @Valid @RequestBody StatusDto status) {
+        return patientService.changePatientStatus(id, status.getStatus());
     }
 
     @GetMapping("/recentAdded/doctor/{doctorId}")
-    public List<PatientListDto> recentlyAddedPatient(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> recentlyAddedPatient(@PathVariable("doctorId") Long doctorId) {
         return patientService.recentlyAddedPatient(doctorId);
     }
 
@@ -64,38 +61,38 @@ public class PatientController {
 
 
     @GetMapping("/{doctorId}/totalPatient")
-    public int totalPatient(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> totalPatient(@PathVariable("doctorId") Long doctorId) {
         return patientService.totalNoOfPatient(doctorId);
     }
 
     @GetMapping("/{doctorId}/totalActivePatient")
-    public int totalNoOfPatientAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> totalNoOfPatientAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
         return patientService.totalNoOfPatientAddedThisWeek(doctorId);
     }
 
 
     @GetMapping("/{doctorId}/category")
-    public List<String> patientCategory(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> patientCategory(@PathVariable("doctorId") Long doctorId) {
         return patientService.patientCategory(doctorId);
     }
 
     @GetMapping("/{doctorId}/gender")
-    public List<String> gender(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
         return patientService.gender(doctorId);
     }
 
     @GetMapping("/{doctorId}/activePatient")
-    public List<String> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
         return patientService.weeklyPatientCountChart(doctorId);
     }
 
     @GetMapping("/{doctorId}/bloodGroup")
-    public List<String> bloodGroup(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
         return patientService.bloodGroup(doctorId);
     }
 
     @GetMapping("/{doctorId}/ageChart")
-    public List<String> ageChart(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> ageChart(@PathVariable("doctorId") Long doctorId) {
         return patientService.ageChart(doctorId);
     }
     //{
@@ -107,20 +104,19 @@ public class PatientController {
     //Add-On feature Refer Patient
 
     @PutMapping("/{id}/doctor/{doctorId}")
-    public String referPatients(@PathVariable("doctorId") Long doctorId, @PathVariable("id") Long patientId) {
+    public ResponseEntity<GenericMessage> referPatients(@PathVariable("doctorId") Long doctorId, @PathVariable("id") Long patientId) {
 
         return patientService.referPatients(doctorId, patientId);
     }
 
     @GetMapping("/message/{doctorId}")
-    public List<String> getMessageForReferredPatient(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> getMessageForReferredPatient(@PathVariable("doctorId") Long doctorId) {
         return patientService.getMessageForReferredPatient(doctorId);
     }
 
     @PutMapping("/changeMessage/{doctorId}")
-    public String changeStatus(@PathVariable("doctorId") Long doctorId) {
-        patientService.changeStatus(doctorId);
-        return "All Messages have been deleted!!!";
+    public ResponseEntity<GenericMessage> changeStatus(@PathVariable("doctorId") Long doctorId) {
+        return patientService.changeStatus(doctorId);
     }
 
 }

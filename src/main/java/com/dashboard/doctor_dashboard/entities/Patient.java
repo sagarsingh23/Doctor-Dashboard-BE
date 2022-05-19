@@ -24,8 +24,8 @@ public class Patient {
     private Long pID;
 
     @NotEmpty
-    @Size(min = 3, max = 100, message = "Name field should contain Atleast 3 character")
-    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "full name should only contain characters")
+    @Size(min = 3, max = 100, message = "Name field should contain At least 3 character")
+    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "Full Name should only contain characters")
     private String fullName;
 
 
@@ -37,7 +37,7 @@ public class Patient {
 
 
     @NotNull
-    @PastOrPresent
+    @PastOrPresent(message = "Date should be past or present only ")
     private LocalDate lastVisitedDate;
 
     @NotEmpty
@@ -47,7 +47,7 @@ public class Patient {
     private String gender;
 
 
-    @Positive(message = "age can't be null or less than equal to 0")
+    @Positive(message = "Age can't be null or less than equal to 0")
     private int age;
 
     @NotEmpty
@@ -58,7 +58,7 @@ public class Patient {
     private String category;
 
     @NotEmpty
-    @Size(min = 10, max = 10, message = "phone Number should Contains only 10 digits")
+    @Size(min = 10, max = 10, message = "Phone Number should Contains only 10 digits")
     private String mobileNo;
 
 

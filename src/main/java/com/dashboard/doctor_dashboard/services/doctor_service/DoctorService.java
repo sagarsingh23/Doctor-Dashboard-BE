@@ -4,6 +4,8 @@ import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,12 +15,16 @@ import java.util.List;
 public interface DoctorService {
     DoctorDetails addDoctor(DoctorDetails details);
 
-    List<DoctorListDto> getAllDoctors(Long id);
+    ResponseEntity<GenericMessage> getAllDoctors(Long id);
 
-    DoctorBasicDetailsDto getDoctorById(long id);
+    ResponseEntity<GenericMessage> getDoctorById(long id);
 
-    DoctorFormDto updateDoctor(DoctorFormDto details, long id, HttpServletRequest request);
-    DoctorFormDto addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
+//<<<<<<< HEAD
+    ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request);
+    ResponseEntity<GenericMessage>  addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request);
+//=======
+//    ResponseEntity<GenericMessage> updateDoctor(DoctorFormDto details, long id);
+//>>>>>>> 71f06e33a9ec991c695a56bd29b24f86ef4c2418
 
-    String deleteDoctor(long id);
+    ResponseEntity<GenericMessage> deleteDoctor(long id);
 }

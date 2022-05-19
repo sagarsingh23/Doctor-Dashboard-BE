@@ -1,11 +1,14 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,40 +17,54 @@ public class TodoServiceImpl implements TodoService {
     @Autowired
     private TodoRepository todoRepository;
 
+    GenericMessage genericMessage = new GenericMessage();
+
+
     @Override
-    public Todolist addTodo(Todolist todolist) {
-        return todoRepository.save(todolist);
+    public ResponseEntity<GenericMessage> addTodo(Todolist todolist) {
+        genericMessage.setData(todoRepository.save(todolist));
+        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
     @Override
-    public Todolist getTodoById(Long id) {
+    public ResponseEntity<GenericMessage> getTodoById(Long id) {
         Optional<Todolist> value = todoRepository.findById(id);
         if (value.isPresent()) {
-            return value.get();
+            genericMessage.setData(value.get());
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
         }
         return null;
     }
 
     @Override
-    public List<Todolist> getAllTodoByDoctorId(Long doctorId) {
-        return todoRepository.findByDoctorId(doctorId);
+    public ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId) {
+        genericMessage.setData(todoRepository.findByDoctorId(doctorId));
+        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
 
     @Override
-    public Todolist updateTodo(Long id, Todolist todolist) {
+    public ResponseEntity<GenericMessage> updateTodo(Long id, Todolist todolist) {
         Optional<Todolist> value1 = todoRepository.findById(id);
         if (value1.isPresent()) {
             Todolist value = value1.get();
             value.setDescription(todolist.getDescription());
             value.setStatus(todolist.getStatus());
-            return todoRepository.save(value);
+            genericMessage.setData(todoRepository.save(value));
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
         }
         return null;
     }
 
     @Override
-    public String deleteTodoById(Long id) {
+    public ResponseEntity<GenericMessage> deleteTodoById(Long id) {
         todoRepository.deleteById(id);
-        return "successfully deleted";
+        genericMessage.setData("successfully deleted");
+        genericMessage.setStatus(Constants.SUCCESS);
+        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+
     }
 }

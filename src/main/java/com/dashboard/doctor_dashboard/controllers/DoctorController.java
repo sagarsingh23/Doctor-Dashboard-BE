@@ -3,6 +3,7 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
@@ -30,24 +31,25 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("/get-all/doctor/{doctorId}")
-    public ResponseEntity<List<DoctorListDto>> getAllDoctors(@PathVariable("doctorId") Long id) {
+//    public ResponseEntity<List<DoctorListDto>> getAllDoctors(@PathVariable("doctorId") Long id) {
+    public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id) {
 
-        List<DoctorListDto> details = doctorService.getAllDoctors(id);
+        ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
-//            return details;
-            return new ResponseEntity<>(details,HttpStatus.OK);
+            return details;
+//            return new ResponseEntity<>(details,HttpStatus.OK);
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
     @GetMapping("/id/{id}")
-    public DoctorBasicDetailsDto getDoctorById(@PathVariable("id") long id) {
+    public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("id") long id) {
         if (doctorService.getDoctorById(id) != null)
             return doctorService.getDoctorById(id);
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
     @PostMapping("/add-doctor-details/{id}")
-    public ResponseEntity<DoctorFormDto> addDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, HttpServletRequest request){
+    public ResponseEntity<GenericMessage>  addDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -56,11 +58,13 @@ public class DoctorController {
         }
         var doctorFormDto = doctorService.addDoctorDetails(details,id,request);
         if (doctorFormDto != null)
-            return new ResponseEntity<>(doctorFormDto, HttpStatus.OK);
+            return doctorFormDto;
         throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<DoctorFormDto> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request)  {
+//    public ResponseEntity<GenericMessage> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request) {
+
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
@@ -69,12 +73,12 @@ public class DoctorController {
         }
         var doctorFormDto = doctorService.updateDoctor(details,id,request);
         if (doctorFormDto != null)
-            return new ResponseEntity<>(doctorFormDto, HttpStatus.OK);
+            return doctorFormDto;
         throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
     }
 
     @DeleteMapping("/{id}")
-    public String deleteDoctor(@PathVariable("id") int id) {
+    public ResponseEntity<GenericMessage> deleteDoctor(@PathVariable("id") int id) {
         return doctorService.deleteDoctor(id);
     }
 
