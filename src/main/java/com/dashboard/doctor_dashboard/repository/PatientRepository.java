@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,6 +21,10 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query(value = "select * from patients where id=:id and doctor_id =:doctorId", nativeQuery = true)
     Patient getPatientByIdAndDoctorId(Long id, Long doctorId);
+
+    @Query(value = "select * from patients where login_id=:loginId", nativeQuery = true)
+    Patient getPatientByLoginId(Long loginId);
+
 
 
     @Query(value = "update patients set status =:status where id=:patientId ", nativeQuery = true)
@@ -89,6 +95,12 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
 
     @Query(value = "Select timestamp from patients where doctor_id =:doctorId", nativeQuery = true)
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
+
+
+    @Query(value = "insert into patients (age,mobile_no,alternate_mobile_no,timestamp,gender,address,blood_group,login_id) values(:age,:mobileNo,:alternateMobileNo,now(),:gender,:address,:bloodGroup,:loginId)",nativeQuery = true)
+    @Transactional
+    @Modifying
+    void insertIntoPatient(int age,String mobileNo,String alternateMobileNo,String gender,String address,String bloodGroup,Long loginId);
 
 
 }

@@ -27,14 +27,23 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.firstName,ld.emailId,dd.speciality) from DoctorDetails dd inner join DoctorLoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
+
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.firstName,ld.emailId,dd.speciality) from DoctorDetails dd inner join DoctorLoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
+    List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
+
     //
     @Query(value = "select id from doctor_details d where d.id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
+
+    @Query(value = "select distinct(speciality) from doctor_details d where d.speciality=:speciality", nativeQuery = true)
+    String isSpecialityAvailable(String speciality);
+
     //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.firstName,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join DoctorLoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
-    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
+
+    @Query(value = "insert into doctor_details (age,gender,login_id,phone_no,speciality) values(:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
     @Transactional
     @Modifying
-    void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId);
+    void insertARowIntoTheTable(Short age,String speciality,String phoneNo,String gender,Long loginId);
 }

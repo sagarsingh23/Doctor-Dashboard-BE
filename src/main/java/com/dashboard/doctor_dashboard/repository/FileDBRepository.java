@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FileDBRepository extends JpaRepository<FileDB, Long> {
-    FileDB findByPatientId(Long id);
+    FileDB findByAppointmentId(Long id);
 }
