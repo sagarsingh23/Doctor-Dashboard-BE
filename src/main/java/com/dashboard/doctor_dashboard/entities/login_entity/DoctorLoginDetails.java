@@ -1,7 +1,10 @@
 package com.dashboard.doctor_dashboard.entities.login_entity;
 
 
+import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +30,14 @@ public class DoctorLoginDetails {
 
     @OneToOne(mappedBy = "doctorLoginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DoctorDetails doctorDetails;
+
+
+    @JsonManagedReference
+    @OneToOne(mappedBy = "doctorLoginDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Patient patient;
+
+
+
     public String getFirstName() {
         return firstName;
     }

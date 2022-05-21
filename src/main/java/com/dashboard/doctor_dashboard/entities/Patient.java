@@ -1,14 +1,18 @@
 package com.dashboard.doctor_dashboard.entities;
 
+import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 
 @SuppressWarnings({"squid:S5843","squid:S5869"})
 @NoArgsConstructor
@@ -24,23 +28,6 @@ public class Patient {
     private Long pID;
 
     @NotEmpty
-    @Size(min = 3, max = 100, message = "Name field should contain At least 3 character")
-    @Pattern(regexp = "^[\\p{L} .'-]+$", message = "Full Name should only contain characters")
-    private String fullName;
-
-
-    @Email(message = "Email is not valid",
-            regexp = "^[A-Za-z0-9._]{3,}@[A_Za-z0-9]{3,}[.]{1}[A-Za-z0-9.]{2,6}$",
-            flags = Pattern.Flag.CASE_INSENSITIVE)                               //NOSONAR
-    @NotEmpty
-    private String emailId;
-
-
-    @NotNull
-    @PastOrPresent(message = "Date should be past or present only ")
-    private LocalDate lastVisitedDate;
-
-    @NotEmpty
     @Pattern(regexp = "^(Male|Female|Others)",
             flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Enter Correct Gender!!")
@@ -51,24 +38,23 @@ public class Patient {
     private int age;
 
     @NotEmpty
-    @Pattern(regexp = "^(General|Gastrology|Neurology|Orthology|Cardiology)",
-            flags = Pattern.Flag.CASE_INSENSITIVE,
-            message = "Category Should be Amongst these choices:" +
-                    "General,Gastrology,Neurology,Orthology,Cardiology")
-    private String category;
-
-    @NotEmpty
     @Size(min = 10, max = 10, message = "Phone Number should Contains only 10 digits")
     private String mobileNo;
 
 
-    private String status;
-    private boolean isChanged;
-    private String message;
+    @NotEmpty
+    @Pattern(regexp = "^(O-|O[+]|A-|B-|A[+]|AB-|B[+]|AB[+])", flags = Pattern.Flag.CASE_INSENSITIVE)
+    private String bloodGroup;
+
+    private String address;
+
+    private String alternateMobileNo;
+
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
+
 
     @PrePersist
     @PreUpdate
@@ -76,15 +62,16 @@ public class Patient {
         timestamp = new Date();
     }
 
+
     @JsonManagedReference
-    @OneToOne(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Attributes attributes;
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+    private List<Appointment> appointments;
 
 
-    @ManyToOne()
-    @JsonBackReference
-    @JoinColumn(name = "doctor_id")
-    private DoctorDetails doctorDetails;
+    @JsonBackReference()
+    @OneToOne()
+    @JoinColumn(name = "login_id",unique = true)
+    private DoctorLoginDetails doctorLoginDetails;
 
 
     public Long getPID() {
@@ -93,30 +80,6 @@ public class Patient {
 
     public void setPID(Long pID) {
         this.pID = pID;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
-    public LocalDate getLastVisitedDate() {
-        return lastVisitedDate;
-    }
-
-    public void setLastVisitedDate(LocalDate lastVisitedDate) {
-        this.lastVisitedDate = lastVisitedDate;
     }
 
     public String getGender() {
@@ -135,14 +98,6 @@ public class Patient {
         this.age = age;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
     public String getMobileNo() {
         return mobileNo;
     }
@@ -151,23 +106,28 @@ public class Patient {
         this.mobileNo = mobileNo;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getBloodGroup() {
+        return bloodGroup;
     }
 
-    public String getStatus() {
-        return status;
+    public void setBloodGroup(String bloodGroup) {
+        this.bloodGroup = bloodGroup;
     }
 
-    public Attributes getAttributes() {
-        return attributes;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAttributes(Attributes attributes) {
-        this.attributes = attributes;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setDoctorDetails(DoctorDetails doctorDetails) {
-        this.doctorDetails = doctorDetails;
+    public String getAlternateMobileNo() {
+        return alternateMobileNo;
     }
+
+    public void setAlternateMobileNo(String alternateMobileNo) {
+        this.alternateMobileNo = alternateMobileNo;
+    }
+
 }

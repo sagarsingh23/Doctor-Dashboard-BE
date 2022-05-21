@@ -4,10 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
 
 @NoArgsConstructor
 @Entity
@@ -20,24 +16,15 @@ public class Attributes {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aID;
     private Long bloodPressure;
-
-    @NotEmpty
-    @Pattern(regexp = "^(O-|O[+]|A-|B-|A[+]|AB-|B[+]|AB[+])", flags = Pattern.Flag.CASE_INSENSITIVE)
-    private String bloodGroup;
-
     private Long glucoseLevel;
     private Double bodyTemp;
-    private String notes;
-
-    @NotEmpty
-    @Size(max = 100)
-    private String symptoms;
+    private String prescription;
 
 
     @JsonBackReference
     @OneToOne()
-    @JoinColumn(name = "id")
-    private Patient patient;
+    @JoinColumn(name = "appointment_id")
+    private Appointment appointment;
 
 
     public Long getAID() {
@@ -56,13 +43,6 @@ public class Attributes {
         this.bloodPressure = bloodPressure;
     }
 
-    public String getBloodGroup() {
-        return bloodGroup;
-    }
-
-    public void setBloodGroup(String bloodGroup) {
-        this.bloodGroup = bloodGroup;
-    }
 
     public Long getGlucoseLevel() {
         return glucoseLevel;
@@ -80,19 +60,13 @@ public class Attributes {
         this.bodyTemp = bodyTemp;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getPrescription() {
+        return prescription;
     }
 
-    public String getSymptoms() {
-        return symptoms;
+    public void setPrescription(String prescription) {
+        this.prescription = prescription;
     }
 
-    public void setSymptoms(String symptoms) {
-        this.symptoms = symptoms;
-    }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
 }

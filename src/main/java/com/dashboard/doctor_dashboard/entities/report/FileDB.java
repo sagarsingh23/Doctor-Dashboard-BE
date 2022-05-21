@@ -16,25 +16,25 @@ public class FileDB {
     private byte[] dataReport;
 
     @Column(unique = true)
-    private Long patientId;
+    private Long appointmentId;
 
     public FileDB() {
     }
 
-
-    public FileDB(String name, String type, byte[] dataReport, Long patientId) {
+    public FileDB(String name, String type, byte[] dataReport, Long appointmentId) {
         this.name = name;
         this.type = type;
         this.dataReport = dataReport;
-        this.patientId = patientId;
+        this.appointmentId = appointmentId;
     }
 
-    public Long getPatientId() {
-        return patientId;
+
+    public Long getAppointmentId() {
+        return appointmentId;
     }
 
-    public void setPatientId(Long patientId) {
-        this.patientId = patientId;
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
     }
 
     public Long getId() {
