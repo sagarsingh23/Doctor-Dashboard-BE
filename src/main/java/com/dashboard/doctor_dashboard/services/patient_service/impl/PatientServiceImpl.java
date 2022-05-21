@@ -2,13 +2,11 @@ package com.dashboard.doctor_dashboard.services.patient_service.impl;
 
 import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.MyCustomException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
+import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.modelmapper.ModelMapper;
@@ -31,6 +29,10 @@ public class PatientServiceImpl implements PatientService {
     @Autowired
     private AttributeRepository attributeRepository;
 
+    @Autowired
+    private LoginRepo loginRepo;
+
+
     GenericMessage genericMessage = new GenericMessage();
 
     public static final String PATIENT = "Patient";
@@ -43,11 +45,20 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public ResponseEntity<GenericMessage> addPatient(Patient patient) {
-        genericMessage.setData(patientRepository.save(patient));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+    public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient,Long loginId) {
 
+        Long temp = loginRepo.isIdAvailable(loginId);
+        if(temp != null){
+            patientRepository.
+                    insertIntoPatient(patient.getAge(),patient.getMobileNo(),patient.getAlternateMobileNo(),
+                            patient.getGender(), patient.getAddress(), patient.getBloodGroup(),loginId);
+            var patientDetails = patientRepository.getPatientByLoginId(loginId);
+            genericMessage.setData(mapToDto(patientDetails));
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+        }else {
+            throw new ResourceNotFoundException("Login Details", "id", loginId);
+        }
     }
 
     @Override
@@ -65,7 +76,7 @@ public class PatientServiceImpl implements PatientService {
     public ResponseEntity<GenericMessage> getPatientById(Long id, Long doctorId) throws MyCustomException {
         try {
             var patient = patientRepository.getPatientByIdAndDoctorId(id, doctorId);
-            genericMessage.setData(mapToDto(patient));
+           // genericMessage.setData(mapToDto(patient));
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
 
@@ -86,19 +97,19 @@ public class PatientServiceImpl implements PatientService {
             var value = patients.get();
             var value1 = attributes.get();
 
-            value.setFullName(patient.getFullName());
-            value.setAge(patient.getAge());
-            value.setCategory(patient.getCategory());
-            value.setEmailId(patient.getEmailId());
-            value.setGender(patient.getGender());
-            value.setLastVisitedDate(patient.getLastVisitedDate());
-            value.setMobileNo(patient.getMobileNo());
-
-            value1.setBloodGroup(patient.getAttributes().getBloodGroup());
-            value1.setBloodPressure(patient.getAttributes().getBloodPressure());
-            value1.setBodyTemp(patient.getAttributes().getBodyTemp());
-            value1.setSymptoms(patient.getAttributes().getSymptoms());
-            value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
+//            value.setFullName(patient.getFullName());
+//            value.setAge(patient.getAge());
+//            value.setCategory(patient.getCategory());
+//            value.setEmailId(patient.getEmailId());
+//            value.setGender(patient.getGender());
+//            value.setLastVisitedDate(patient.getLastVisitedDate());
+//            value.setMobileNo(patient.getMobileNo());
+//
+//            value1.setBloodGroup(patient.getAttributes().getBloodGroup());
+//            value1.setBloodPressure(patient.getAttributes().getBloodPressure());
+//            value1.setBodyTemp(patient.getAttributes().getBodyTemp());
+//            value1.setSymptoms(patient.getAttributes().getSymptoms());
+//            value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
 
             patientRepository.save(value);
             attributeRepository.save(value1);
@@ -230,8 +241,8 @@ public class PatientServiceImpl implements PatientService {
 
 
     // convert entity to dto
-    private PatientDto mapToDto(Patient patient) {
-        return mapper.map(patient, PatientDto.class);
+    private PatientEntityDto mapToDto(Patient patient) {
+        return mapper.map(patient, PatientEntityDto.class);
     }
 
     private PatientListDto mapToDto2(Patient patient) {
@@ -299,4 +310,31 @@ public class PatientServiceImpl implements PatientService {
         genericMessage.setStatus(Constants.SUCCESS);
         return new ResponseEntity<>(genericMessage, HttpStatus.OK);
     }
+
+
+    @Override
+    public ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientEntityDto patient) {
+
+        Optional<Patient> patients = patientRepository.findById(id);
+        if (patients.isPresent()) {
+
+            var value = patients.get();
+            value.setAddress(patient.getAddress());
+            value.setAlternateMobileNo(patient.getAlternateMobileNo());
+            value.setAge(patient.getAge());
+            value.setGender(patient.getGender());
+            value.setBloodGroup(patient.getBloodGroup());
+            value.setMobileNo(patient.getMobileNo());
+
+            patientRepository.save(value);
+
+            genericMessage.setData(mapper.map(value,PatientEntityDto.class));
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+
+        } else {
+            throw new ResourceNotFoundException(PATIENT, "id", id);
+        }
+    }
+
 }

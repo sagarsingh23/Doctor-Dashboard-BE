@@ -27,4 +27,7 @@ public interface DoctorService {
 //>>>>>>> 71f06e33a9ec991c695a56bd29b24f86ef4c2418
 
     ResponseEntity<GenericMessage> deleteDoctor(long id);
+
+    ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality);
+
 }

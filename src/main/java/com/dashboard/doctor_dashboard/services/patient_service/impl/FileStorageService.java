@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.services.patient_service.impl;
 
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,12 @@ public class FileStorageService {
     @Autowired
     private PatientRepository patientRepository;
 
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
     public FileDB store(MultipartFile file, Long id) throws IOException {
 
-        Long temp = patientRepository.getId(id);
+        Long temp = appointmentRepository.getId(id);
         if (temp == null) {
             return null;
         }
@@ -37,7 +41,7 @@ public class FileStorageService {
 
 
     public FileDB getFile(Long id) {
-        return fileDBRepository.findByPatientId(id);
+        return fileDBRepository.findByAppointmentId(id);
     }
 
 

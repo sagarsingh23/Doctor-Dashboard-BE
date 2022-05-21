@@ -86,7 +86,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
                 if (details.getId() == id && details.getId()==doctorLoginId) {
-                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
+                    doctorRepository.insertARowIntoTheTable(details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
@@ -135,5 +135,16 @@ public class DoctorServiceImpl implements DoctorService {
         genericMessage.setData("Successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality) {
+        if (doctorRepository.isSpecialityAvailable(speciality) != null) {
+            List<DoctorListDto> list = doctorRepository.getAllDoctorsBySpeciality(speciality);
+            genericMessage.setData(list);
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", speciality, 0);
     }
 }
