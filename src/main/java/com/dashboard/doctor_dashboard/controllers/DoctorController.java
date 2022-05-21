@@ -82,4 +82,10 @@ public class DoctorController {
         return doctorService.deleteDoctor(id);
     }
 
+    @GetMapping("/get-all-doctor/{speciality}")
+    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(@PathVariable("speciality") String speciality) {
+        return doctorService.getAllDoctorsBySpeciality(speciality);
+    }
+
+
 }

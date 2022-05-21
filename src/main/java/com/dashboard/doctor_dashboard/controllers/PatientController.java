@@ -2,6 +2,8 @@ package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.StatusDto;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +23,9 @@ public class PatientController {
 
     //CRUD operation for patient
 
-    @PostMapping()
-    public ResponseEntity<GenericMessage> addPatient(@RequestBody Patient patient) {
-        return patientService.addPatient(patient);
+    @PostMapping("/{loginId}")
+    public ResponseEntity<GenericMessage> addPatient(@RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
+        return patientService.addPatient(patient,loginId);
     }
 
     @GetMapping("/doctor/{doctorId}")
@@ -39,6 +41,11 @@ public class PatientController {
     @PutMapping("/{id}")
     public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
         return patientService.updatePatient(id, patient);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody PatientEntityDto patient) {
+        return patientService.updatePatientDetails(id, patient);
     }
 
     @DeleteMapping("/{id}")
@@ -118,5 +125,6 @@ public class PatientController {
     public ResponseEntity<GenericMessage> changeStatus(@PathVariable("doctorId") Long doctorId) {
         return patientService.changeStatus(doctorId);
     }
+
 
 }

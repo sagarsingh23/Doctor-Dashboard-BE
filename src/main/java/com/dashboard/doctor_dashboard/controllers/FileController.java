@@ -56,7 +56,7 @@ public class FileController {
             var fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/files/")
-                    .path(String.valueOf(dbFile.getPatientId()))
+                    .path(String.valueOf(dbFile.getAppointmentId()))
                     .toUriString();
             return new ResponseFile(
                     dbFile.getName(),
