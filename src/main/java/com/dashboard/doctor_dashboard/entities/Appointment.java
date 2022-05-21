@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.UUID;
 
 
 @NoArgsConstructor
@@ -32,10 +33,7 @@ public class Appointment {
     private String symptoms;
 
     private String patientName;
-
-
-
-   // private UUID referenceId;
+    //private UUID referenceId;
 
     @ManyToOne()
     @JsonBackReference
