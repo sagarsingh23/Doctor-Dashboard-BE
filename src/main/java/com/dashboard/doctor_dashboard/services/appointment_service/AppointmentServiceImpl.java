@@ -2,12 +2,20 @@ package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentListDto;
+import com.dashboard.doctor_dashboard.exceptions.APIException;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
+import com.dashboard.doctor_dashboard.repository.DoctorRepository;
+import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,15 +26,33 @@ public class AppointmentServiceImpl implements AppointmentService {
     private AppointmentRepository appointmentRepository;
 
     @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
+
+    @Autowired
+    private LoginRepo loginRepo;
+
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
+
+
+    @Autowired
     private ModelMapper mapper;
 
 
     @Override
-    public Appointment addAppointment(Appointment appointment) {
+    public Appointment addAppointment(Appointment appointment, HttpServletRequest request) {
 
-        System.out.println("patent id"+appointment.getPatient().getPID());
-        System.out.println("doctor id"+appointment.getDoctorDetails().getId());
-        return appointmentRepository.save(appointment);
+        Long loginId=jwtTokenProvider.getIdFromToken(request);
+        if (loginRepo.isIdAvailable(loginId) != null) {
+            if (patientRepository.getId(appointment.getPatient().getPID()) != null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) {
+                return appointmentRepository.save(appointment);
+            }
+        }
+        throw new ResourceNotFoundException("Patient", "id", loginId);
     }
 
     @Override

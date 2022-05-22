@@ -2,7 +2,6 @@ package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
@@ -30,11 +29,10 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private LoginRepo loginRepo;
+
+
     @Autowired
     JwtTokenProvider jwtTokenProvider;
-
-    GenericMessage genericMessage = new GenericMessage();
-
 
 
     @Override
@@ -45,6 +43,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ResponseEntity<GenericMessage> getAllDoctors(Long id) {
 
+        GenericMessage genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctors(id);
@@ -59,12 +58,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-//<<<<<<< HEAD
-//    public DoctorBasicDetailsDto getDoctorById(long id) {
-//        if (doctorRepository.isIdAvailable(id) != null && loginRepo.isIdAvailable(id)!=null)
-//            return doctorRepository.findDoctorById(id);
-//=======
-    public ResponseEntity<GenericMessage> getDoctorById(long id) {
+     public ResponseEntity<GenericMessage> getDoctorById(long id) {
+
+        GenericMessage genericMessage = new GenericMessage();
 
         if (doctorRepository.isIdAvailable(id) != null) {
             genericMessage.setData(doctorRepository.findDoctorById(id));
@@ -72,13 +68,13 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
 
-//>>>>>>> 71f06e33a9ec991c695a56bd29b24f86ef4c2418
         return null;
     }
 
     @Override
-//<<<<<<< HEAD
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request) {
+
+        GenericMessage genericMessage = new GenericMessage();
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
         System.out.println(doctorLoginId);
@@ -86,7 +82,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
                 if (details.getId() == id && details.getId()==doctorLoginId) {
-                    doctorRepository.insertARowIntoTheTable(details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
+                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
@@ -103,21 +99,18 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ResponseEntity<GenericMessage>  updateDoctor(DoctorFormDto details, long id, HttpServletRequest request) {
 
+        GenericMessage genericMessage = new GenericMessage();
+
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
         System.out.println(loginRepo.isIdAvailable(doctorLoginId) + ", " + doctorLoginId);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
-//                if (details.getId() == id && details.getId()==doctorLoginId) {
-//                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
-//                    return doctorRepository.getDoctorById(details.getId());
-//                }
                 if (details.getId() == id && details.getId() == doctorLoginId) {
                     doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
-//                    return doctorRepository.getDoctorById(details.getId());
                 }
 
                 return null;
@@ -131,6 +124,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseEntity<GenericMessage> deleteDoctor(long id) {
+
+        GenericMessage genericMessage = new GenericMessage();
+
         doctorRepository.deleteById(id);
         genericMessage.setData("Successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
@@ -139,6 +135,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality) {
+        GenericMessage genericMessage = new GenericMessage();
+
         if (doctorRepository.isSpecialityAvailable(speciality) != null) {
             List<DoctorListDto> list = doctorRepository.getAllDoctorsBySpeciality(speciality);
             genericMessage.setData(list);
