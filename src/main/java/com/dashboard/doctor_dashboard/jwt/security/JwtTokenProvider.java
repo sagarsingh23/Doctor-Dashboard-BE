@@ -30,7 +30,7 @@ public class JwtTokenProvider {
         var currentDate = new Date();
         var expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
         Map<String,Object> claims= new HashMap<>();
-        claims.put("details",tokenClaims);
+        claims.put("DoctorDetails",tokenClaims);
         claims.put("role",tokenClaims.getRole());
         return Jwts.builder()
                 .setClaims(claims)
@@ -66,8 +66,8 @@ public class JwtTokenProvider {
                     .getBody();
             ModelMapper mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
-            System.out.println(details.getId());
-            return details.getId();
+            System.out.println(details.getDoctorId());
+            return details.getDoctorId();
         }
         return null;
     }

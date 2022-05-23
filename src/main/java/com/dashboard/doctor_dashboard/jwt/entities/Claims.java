@@ -8,33 +8,33 @@ import java.util.Objects;
 
 @NoArgsConstructor
 public class Claims {
-    private Long id;
-    private String name;
-    private String email;
+    private Long doctorId;
+    private String doctorName;
+    private String doctorEmail;
     private String role;
 
-    public Long getId() {
-        return id;
+    public Long getDoctorId() {
+        return doctorId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
     }
 
-    public String getName() {
-        return name;
+    public String getDoctorName() {
+        return doctorName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDoctorEmail() {
+        return doctorEmail;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDoctorEmail(String doctorEmail) {
+        this.doctorEmail = doctorEmail;
     }
 
     public String getRole() {

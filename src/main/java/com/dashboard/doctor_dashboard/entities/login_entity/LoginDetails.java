@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.entities.login_entity;
 
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "login_details", uniqueConstraints = @UniqueConstraint(columnNames = {"emailId"}))
-public class DoctorLoginDetails {
+public class LoginDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -31,12 +30,12 @@ public class DoctorLoginDetails {
     @Column(name="role",nullable = false)
     private String role;
 
-    @OneToOne(mappedBy = "doctorLoginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "loginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DoctorDetails doctorDetails;
 
 
     @JsonManagedReference
-    @OneToOne(mappedBy = "doctorLoginDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "loginDetails",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Patient patient;
 
 

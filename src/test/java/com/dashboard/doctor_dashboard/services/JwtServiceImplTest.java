@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.jwt.entities.DoctorClaims;
+import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtServiceImpl;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
@@ -52,10 +52,10 @@ class JwtServiceImplTest {
         login.setId(1L);
         login.setUsername("sagar24");
 
-        DoctorClaims doctorClaims = new DoctorClaims();
-        doctorClaims.setDoctorId(login.getId());
-        doctorClaims.setDoctorEmail(login.getEmail());
-        doctorClaims.setDoctorName(login.getUsername());
+        Claims claims = new Claims();
+        claims.setDoctorId(login.getId());
+        claims.setDoctorEmail(login.getEmail());
+        claims.setDoctorName(login.getUsername());
 
         Authentication authentication = mock(Authentication.class);
 
@@ -67,7 +67,7 @@ class JwtServiceImplTest {
 
 
 
-        Mockito.when(jwtTokenProvider.generateToken(authentication,doctorClaims)).thenReturn(token);
+        Mockito.when(jwtTokenProvider.generateToken(authentication, claims)).thenReturn(token);
 
         String newToken = jwtService.authenticateUser(login);
 

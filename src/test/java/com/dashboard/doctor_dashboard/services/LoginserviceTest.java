@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.services;
 
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.services.login_service.LoginServiceImpl;
@@ -47,11 +47,11 @@ class LoginserviceTest {
         docDetails.put("given_name","pranay");
         docDetails.put("family_name","Reddy");
         docDetails.put("hd","nineleaps");
-        DoctorLoginDetails doctorLoginDetails=new DoctorLoginDetails(1L,"Pranay","Reddy","pranay@gmail.com","nineleaps");
+        LoginDetails loginDetails =new LoginDetails(1L,"Pranay","Reddy","pranay@gmail.com","nineleaps");
 
-        Mockito.when(loginRepo.findByEmailId(doctorLoginDetails.getEmailId())).thenReturn(null);
-        Mockito.when(loginRepo.save(doctorLoginDetails)).thenReturn(doctorLoginDetails);
-        System.out.println(doctorLoginDetails.getFirstName());
+        Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(null);
+        Mockito.when(loginRepo.save(loginDetails)).thenReturn(loginDetails);
+        System.out.println(loginDetails.getFirstName());
 
         Boolean f=loginService.addUser(docDetails);
         assertEquals(true,f);
@@ -66,11 +66,11 @@ class LoginserviceTest {
         docDetails.put("given_name","pranay");
         docDetails.put("family_name","Reddy");
         docDetails.put("hd","nineleaps");
-        DoctorLoginDetails doctorLoginDetails=new DoctorLoginDetails(1L,"Pranay","Reddy","pranay@gmail.com","nineleaps");
+        LoginDetails loginDetails =new LoginDetails(1L,"Pranay","Reddy","pranay@gmail.com","nineleaps");
 
-        Mockito.when(loginRepo.findByEmailId(doctorLoginDetails.getEmailId())).thenReturn(doctorLoginDetails);
+        Mockito.when(loginRepo.findByEmailId(loginDetails.getEmailId())).thenReturn(loginDetails);
 //        Mockito.doNothing().when()
-        Mockito.when(loginRepo.save(doctorLoginDetails)).thenReturn(doctorLoginDetails);
+        Mockito.when(loginRepo.save(loginDetails)).thenReturn(loginDetails);
 
         Boolean f=loginService.addUser(docDetails);
         assertEquals(false,f);

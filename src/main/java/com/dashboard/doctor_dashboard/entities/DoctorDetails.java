@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -49,7 +49,7 @@ public class DoctorDetails {
 
     @OneToOne()
     @JoinColumn(name = "login_id",referencedColumnName = "id",nullable = false)
-    private DoctorLoginDetails doctorLoginDetails;
+    private LoginDetails loginDetails;
 
     @Column(name = "login_id", insertable=false, updatable=false,nullable = false)
     private Long loginId;
@@ -103,7 +103,7 @@ public class DoctorDetails {
                 ", phoneNo='" + phoneNo + '\'' +
                 ", gender='" + gender + '\'' +
                 ", todolist=" + todolist +
-                ", doctorLoginDetails=" + doctorLoginDetails +
+                ", doctorLoginDetails=" + loginDetails +
                 ", loginId=" + loginId +
                 '}';
     }

@@ -1,16 +1,13 @@
 package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -71,7 +68,7 @@ public class Patient {
     @JsonBackReference()
     @OneToOne()
     @JoinColumn(name = "login_id",unique = true)
-    private DoctorLoginDetails doctorLoginDetails;
+    private LoginDetails loginDetails;
 
 
     public Long getPID() {

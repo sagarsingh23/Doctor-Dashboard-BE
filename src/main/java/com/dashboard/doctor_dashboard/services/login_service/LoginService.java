@@ -16,7 +16,7 @@ public interface LoginService {
 
     String takingInfoFromToken(GoogleIdToken idToken);
 
-    String loginCreator(long id, String email, String firstName);
+    String loginCreator(long id, String email, String firstName,String role);
 
     String deleteDoctorById(long id);
 }

@@ -25,10 +25,10 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
 //@Query(value = "select com.dashboard.doctor_dashboard.entity.dtos.Doctora.id,a.age,a.speciality,a.gender,a.phoneNo from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.firstName,ld.emailId,dd.speciality) from DoctorDetails dd inner join DoctorLoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.firstName,ld.emailId,dd.speciality) from DoctorDetails dd inner join DoctorLoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
 
     //
@@ -39,7 +39,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     String isSpecialityAvailable(String speciality);
 
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.firstName,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join DoctorLoginDetails ld on dd.id=ld.id and dd.id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
     @Query(value = "insert into doctor_details (age,gender,login_id,phone_no,speciality) values(:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)

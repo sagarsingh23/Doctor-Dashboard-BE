@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.services.login_service;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.login_entity.DoctorLoginDetails;
+import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
@@ -31,18 +30,31 @@ public class LoginServiceImpl implements LoginService {
 
     Logger logger= Logger.getLogger(LoginServiceImpl.class.getName());
 
-    private final String[] fields = {"given_name", "family_name", "hd", "email"};
+    private final String[] fields = {"name","hd", "email"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
 
-        var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[3]).toString());
+        var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[2]).toString());
         if (doctorLoginDetails == null) {
-            var newDoctor = new DoctorLoginDetails();
-            newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
-            newDoctor.setLastName(loginDetails.get(fields[1]).toString());
-            newDoctor.setDomain(loginDetails.get(fields[2]).toString());
-            newDoctor.setEmailId(loginDetails.get(fields[3]).toString());
+            var newDoctor = new LoginDetails();
+//            newDoctor.setFirstName(loginDetails.get(fields[0]).toString());
+//            newDoctor.setLastName(loginDetails.get(fields[1]).toString());
+            newDoctor.setName(loginDetails.get(fields[0]).toString());
+            if(loginDetails.get(fields[1])!=null && loginDetails.get(fields[1]).equals("nineleaps.com")) {
+                newDoctor.setDomain(loginDetails.get(fields[1]).toString());
+                newDoctor.setRole("DOCTOR");
+            }
+            else{
+                newDoctor.setDomain("google");
+                newDoctor.setRole("PATIENT");
+            }
+            newDoctor.setEmailId(loginDetails.get(fields[2]).toString());
+//            if(newDoctor.getDomain().equals("nineleaps.com")){
+//                newDoctor.setRole("DOCTOR");
+//            }else if(newDoctor.getDomain().equals("google")){
+//                newDoctor.setRole("PATIENT");
+//            }
             loginRepo.save(newDoctor);
             logger.log(Level.INFO,"User added");
             flag = true;
@@ -66,10 +78,12 @@ public class LoginServiceImpl implements LoginService {
 
         if (idToken != null) {
             var payload = idToken.getPayload();
+            System.out.println("payload="+payload);
             String email = payload.getEmail();
             logger.log(Level.INFO,"email={0}" ,email);
-            var firstName = payload.get("given_name").toString();
-            var lastName = payload.get("family_name").toString();
+            var name = payload.get("name").toString();
+//                    payload.get("given_name").toString().concat(" "+payload.get("family_name").toString());
+//            var lastName = payload.get("family_name").toString();
 
             addUser(payload);
             long id = loginRepo.getId(email);
@@ -83,7 +97,7 @@ public class LoginServiceImpl implements LoginService {
 //                logger.log(Level.INFO,"doctor details {0}",newDoctor);
 //
 //            }
-            return loginCreator(id, email, firstName);
+            return loginCreator(id, email, name,loginRepo.getRoleById(id));
 
         } else {
             logger.log(Level.WARNING,"Invalid ID token.");
@@ -95,11 +109,12 @@ public class LoginServiceImpl implements LoginService {
     JwtService jwtService;
 
     @Override
-    public String loginCreator(long id, String email, String firstName) {
+    public String loginCreator(long id, String email, String name,String role) {
         var login = new Login();
         login.setId(id);
         login.setEmail(email);
-        login.setUsername(firstName);
+        login.setUsername(name);
+        login.setRole(role);
         return jwtService.authenticateUser(login);
     }
 
