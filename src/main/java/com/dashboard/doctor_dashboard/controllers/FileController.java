@@ -25,11 +25,12 @@ public class FileController {
     @Autowired
     private FileStorageService storageService;
 
-    GenericMessage genericMessage = new GenericMessage();
 
     @ResponseBody
     @PostMapping("/api/patient/upload/{id}")
     public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) {
+        GenericMessage genericMessage = new GenericMessage();
+
         var message = "";
         try {
             var fileDB = storageService.store(file, id);
@@ -52,6 +53,8 @@ public class FileController {
 
     @GetMapping("/files")
     public ResponseEntity<GenericMessage> getListFiles() {
+        GenericMessage genericMessage = new GenericMessage();
+
         List<ResponseFile> files = storageService.getAllFiles().map(dbFile -> {
             var fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()

@@ -21,11 +21,11 @@ public class AttributeServiceImpl implements AttributeService {
     @Autowired
     private PatientRepository patientRepository;
 
-    GenericMessage genericMessage = new GenericMessage();
-
 
     @Override
     public ResponseEntity<GenericMessage> changeNotes(Long id, String notes) {
+        GenericMessage genericMessage = new GenericMessage();
+
         if (patientRepository.getId(id) != null && patientRepository.getId(id).equals(id)) {
             attributeRepository.changeNotes(id, notes);
             genericMessage.setData("Notes updated!!!");

@@ -42,8 +42,8 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
-    @Query(value = "insert into doctor_details (age,gender,login_id,phone_no,speciality) values(:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
+    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
     @Transactional
     @Modifying
-    void insertARowIntoTheTable(Short age,String speciality,String phoneNo,String gender,Long loginId);
+    void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId);
 }
