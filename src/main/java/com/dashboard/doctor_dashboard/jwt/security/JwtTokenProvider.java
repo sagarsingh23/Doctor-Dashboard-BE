@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.jwt.entities.DoctorClaims;
+import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import io.jsonwebtoken.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +12,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
@@ -22,16 +24,19 @@ public class JwtTokenProvider {
     private int jwtExpirationInMs;
 
     // generate token
-    public String generateToken(Authentication authentication, DoctorClaims doctorClaims) {
+    public String generateToken(Authentication authentication, Claims tokenClaims) {
         String email = authentication.getName();
+
         var currentDate = new Date();
         var expireDate = new Date(currentDate.getTime() + jwtExpirationInMs);
-
+        Map<String,Object> claims= new HashMap<>();
+        claims.put("details",tokenClaims);
+        claims.put("role",tokenClaims.getRole());
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date())
                 .setExpiration(expireDate)
-                .claim("DoctorDetails", doctorClaims)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
 
@@ -43,7 +48,7 @@ public class JwtTokenProvider {
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-
+        System.out.println("username:"+claims);
         return claims.getSubject();
     }
     public Long getIdFromToken(HttpServletRequest request){
@@ -60,9 +65,9 @@ public class JwtTokenProvider {
                     .parseClaimsJws(jwtToken)
                     .getBody();
             ModelMapper mapper = new ModelMapper();
-            DoctorClaims doctorDetails = mapper.map(claims.get("DoctorDetails"), DoctorClaims.class);
-            System.out.println(doctorDetails.getDoctorId());
-            return doctorDetails.getDoctorId();
+            Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
+            System.out.println(details.getId());
+            return details.getId();
         }
         return null;
     }
