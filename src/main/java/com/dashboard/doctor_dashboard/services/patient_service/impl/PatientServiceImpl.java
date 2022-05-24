@@ -83,6 +83,21 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId) {
+        GenericMessage genericMessage = new GenericMessage();
+
+        if(loginRepo.isIdAvailable(loginId) != null){
+            var patientDetails = patientRepository.getPatientByLoginId(loginId);
+            genericMessage.setData(mapToDto(patientDetails));
+            genericMessage.setStatus(Constants.SUCCESS);
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK) ;
+        }else {
+            throw new ResourceNotFoundException("Login Details", "id", loginId);
+        }
+
+    }
+
+    @Override
     public ResponseEntity<GenericMessage> updatePatient(Long id, Patient patient) {
 
         Optional<Patient> patients = patientRepository.findById(id);
