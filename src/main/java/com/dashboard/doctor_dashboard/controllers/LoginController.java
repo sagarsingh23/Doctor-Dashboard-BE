@@ -24,7 +24,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping(value = "api/doctor/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "api/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> tokenAuthentication(@RequestBody JwtToken idToken) throws GeneralSecurityException, IOException, JSONException {
         //authToken
         var jwt = new JwtToken();

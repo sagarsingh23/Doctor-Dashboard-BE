@@ -20,7 +20,7 @@ public class AppointmentController {
     @Autowired
     private AppointmentService appointmentService;
 
-    @PostMapping
+    @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) {
         GenericMessage genericMessage = new GenericMessage();
 
@@ -47,7 +47,7 @@ public class AppointmentController {
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
-    @GetMapping("/{appointId}")
+    @GetMapping("/{appointId}/patient")
     public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
         GenericMessage genericMessage = new GenericMessage();
 

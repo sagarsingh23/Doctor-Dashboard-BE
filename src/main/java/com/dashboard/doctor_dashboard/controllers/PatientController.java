@@ -8,6 +8,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.StatusDto;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,26 +23,25 @@ public class PatientController {
     private PatientService patientService;
 
     //CRUD operation for patient
-
     @PostMapping("/{loginId}")
-    public ResponseEntity<GenericMessage> addPatient(@RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
+    public ResponseEntity<GenericMessage> addPatientDetails(@RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
         return patientService.addPatient(patient,loginId);
     }
 
-    @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return patientService.getAllPatientByDoctorId(doctorId);
-    }
+//    @GetMapping("/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> getAllPatientsByDoctorId(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.getAllPatientByDoctorId(doctorId);
+//    }
 
     @GetMapping("/{id}/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> getPatientDtoById(@PathVariable("id") Long id, @PathVariable("doctorId") Long doctorId) {
         return patientService.getPatientById(id, doctorId);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
-        return patientService.updatePatient(id, patient);
-    }
+//    @PutMapping("/{id}")
+//    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
+//        return patientService.updatePatient(id, patient);
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody PatientEntityDto patient) {
@@ -52,16 +52,16 @@ public class PatientController {
     public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
         return patientService.deletePatientById(id);
     }
+//
+//    @PutMapping("/changeStatus/{id}")
+//    public ResponseEntity<GenericMessage> changePatientStatus(@PathVariable("id") Long id, @Valid @RequestBody StatusDto status) {
+//        return patientService.changePatientStatus(id, status.getStatus());
+//    }
 
-    @PutMapping("/changeStatus/{id}")
-    public ResponseEntity<GenericMessage> changePatientStatus(@PathVariable("id") Long id, @Valid @RequestBody StatusDto status) {
-        return patientService.changePatientStatus(id, status.getStatus());
-    }
-
-    @GetMapping("/recentAdded/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> recentlyAddedPatient(@PathVariable("doctorId") Long doctorId) {
-        return patientService.recentlyAddedPatient(doctorId);
-    }
+//    @GetMapping("/recentAdded/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> recentlyAddedPatient(@PathVariable("doctorId") Long doctorId) {
+//        return patientService.recentlyAddedPatient(doctorId);
+//    }
 
 
     //Dashboard Chart
