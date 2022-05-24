@@ -20,6 +20,9 @@ public interface PatientService {
 
     ResponseEntity<GenericMessage> getPatientById(Long id, Long doctorId) throws MyCustomException;
 
+    ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId);
+
+
     ResponseEntity<GenericMessage> updatePatient(Long id, Patient patient);
 
     ResponseEntity<GenericMessage> deletePatientById(Long id);

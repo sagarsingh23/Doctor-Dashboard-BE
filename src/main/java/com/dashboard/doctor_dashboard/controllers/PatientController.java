@@ -38,10 +38,20 @@ public class PatientController {
         return patientService.getPatientById(id, doctorId);
     }
 
+
 //    @PutMapping("/{id}")
 //    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
 //        return patientService.updatePatient(id, patient);
 //    }
+    @GetMapping("patientProfile/{loginId}")
+    public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId){
+        return patientService.getPatientDetailsById(loginId);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
+        return patientService.updatePatient(id, patient);
+    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id, @RequestBody PatientEntityDto patient) {
