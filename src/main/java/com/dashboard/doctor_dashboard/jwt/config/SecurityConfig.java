@@ -6,6 +6,8 @@ import com.dashboard.doctor_dashboard.jwt.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.PermissionEvaluator;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,10 +31,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/webjars/**",
             "/", "/csrf",
-            "/api/doctor/login",
+            "/api/user/login",
             "/api/patient/changeMessage/**",
             "/files/**"
 
+
+    };
+
+    private static final String[] DOCTOR_URL={
+
+            "/api/todolist/**",
+            "api/appointment/getAllAppointments/doctor/*",
+            "api/attribute/changeNotes/*",
+            "/files/{id}",
+    };
+    private static final String[] PATIENT_URL={
+
+            "api/appointment/getAllAppointments/patient/*",
+            "api/appointment/patient",
+            "api/appointment/*/patient",
+            "/api/patient/upload/*",
+            "/files/{id}"
+    };
+    private static final String[] GET_API_PATIENT_URL={
+
+    };
+    private static final String[] GET_API_DOCTOR_URL={
+
+    };
+    private static final String[] PUT_API_DOCTOR_URL={
 
     };
 
@@ -62,9 +89,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(ALLOWED_URL).permitAll()
-                .antMatchers("/api/doctor/welcome").hasAuthority("DOCTOR")
-                .antMatchers("/api/patient/welcome-patient").hasAuthority("PATIENT")
-
+                .antMatchers(DOCTOR_URL).hasAuthority("DOCTOR")
+                .antMatchers(PATIENT_URL).hasAuthority("PATIENT")
                 .anyRequest()
                 .authenticated();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -85,5 +111,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+
 
 }
