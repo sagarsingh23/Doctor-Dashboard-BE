@@ -56,6 +56,10 @@ public class AppointmentController {
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
+    @GetMapping("chart/{doctorId}/activePatient")
+    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.weeklyPatientCountChart(doctorId);
+    }
     @GetMapping("/recentAdded/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
         return appointmentService.recentAppointment(doctorId);

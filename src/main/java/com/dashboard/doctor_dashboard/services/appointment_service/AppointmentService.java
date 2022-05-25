@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+//import com.dashboard.doctor_dashboard.entities.dtos.AppointmentListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorAppointmentListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientAppointmentListDto;
@@ -19,6 +21,8 @@ public interface AppointmentService {
     List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId);
     PatientProfileDto getAppointmentById(Long appointId);
     ResponseEntity<GenericMessage> recentAppointment(Long doctorId);
+
+    ResponseEntity<GenericMessage> weeklyPatientCountChart(Long doctorId);
 
 
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);

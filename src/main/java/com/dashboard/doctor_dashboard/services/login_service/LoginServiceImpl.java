@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
 
     Logger logger= Logger.getLogger(LoginServiceImpl.class.getName());
 
-    private final String[] fields = {"name","hd", "email"};
+    private final String[] fields = {"given_name","hd", "email"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
@@ -81,7 +81,7 @@ public class LoginServiceImpl implements LoginService {
             System.out.println("payload="+payload);
             String email = payload.getEmail();
             logger.log(Level.INFO,"email={0}" ,email);
-            var name = payload.get("name").toString();
+            var name = payload.get("given_name").toString();
 //                    payload.get("given_name").toString().concat(" "+payload.get("family_name").toString());
 //            var lastName = payload.get("family_name").toString();
 
