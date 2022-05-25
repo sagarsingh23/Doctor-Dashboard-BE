@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.jwt.config;
 
+import com.dashboard.doctor_dashboard.jwt.security.CustomAuthenticationEntryPoint;
 import com.dashboard.doctor_dashboard.jwt.security.CustomUserDetailsService;
 import com.dashboard.doctor_dashboard.jwt.security.JwtAuthenticationEntryPoint;
 import com.dashboard.doctor_dashboard.jwt.security.JwtAuthenticationFilter;
@@ -16,6 +17,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.Filter;
@@ -92,7 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(DOCTOR_URL).hasAuthority("DOCTOR")
                 .antMatchers(PATIENT_URL).hasAuthority("PATIENT")
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -111,6 +116,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+//    @Bean
+//    public AuthenticationEntryPoint authenticationEntryPoint(){
+//        return new CustomAuthenticationEntryPoint();
+//    }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAuthenticationEntryPoint();
+    }
 
 }
