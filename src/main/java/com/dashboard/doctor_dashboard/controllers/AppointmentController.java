@@ -55,4 +55,9 @@ public class AppointmentController {
         genericMessage.setStatus(Constants.SUCCESS);
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
+
+    @GetMapping("/{doctorId}/activePatient")
+    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.weeklyPatientCountChart(doctorId);
+    }
 }

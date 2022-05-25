@@ -46,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/todolist/**",
             "api/appointment/getAllAppointments/doctor/*",
             "api/attribute/changeNotes/*",
+            "api/appointment/*/activePatient",
             "/files/{id}",
     };
     private static final String[] PATIENT_URL={
