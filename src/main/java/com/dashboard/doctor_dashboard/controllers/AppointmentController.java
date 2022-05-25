@@ -55,4 +55,23 @@ public class AppointmentController {
         genericMessage.setStatus(Constants.SUCCESS);
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
+
+    @GetMapping("/recentAdded/doctor/{doctorId}")
+    public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.recentAppointment(doctorId);
+    }
+
+
+
+
+    @GetMapping("/chart/{doctorId}/totalPatient")
+    public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.totalNoOfAppointment(doctorId);
+    }
+
+    @GetMapping("/chart/{doctorId}/totalActivePatient")
+    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.totalNoOfAppointmentAddedThisWeek(doctorId);
+    }
+
 }
