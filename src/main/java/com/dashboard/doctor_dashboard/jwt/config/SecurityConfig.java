@@ -116,6 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
     }
+
 //    @Bean
 //    public AuthenticationEntryPoint authenticationEntryPoint(){
 //        return new CustomAuthenticationEntryPoint();
