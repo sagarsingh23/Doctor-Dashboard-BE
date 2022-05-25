@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    @Query(value = "select appoint_id from patients where id=:appointmentId ", nativeQuery = true)
+    @Query(value = "select appoint_id from appointments where id=:appointmentId ", nativeQuery = true)
     Long getId(Long appointmentId);
 
     @Query(value = "select * from appointments where patient_id = :patientId",nativeQuery = true)
@@ -20,4 +20,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "select * from appointments where appoint_id = :appointId",nativeQuery = true)
     Appointment getAppointmentById(Long appointId);
+
+
 }

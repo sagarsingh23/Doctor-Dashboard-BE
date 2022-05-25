@@ -10,9 +10,12 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface AttributeRepository extends JpaRepository<Attributes, Long> {
-    @Query(value = "update attributes set notes =:notes where id=:patientId ", nativeQuery = true)
+    @Query(value = "update attributes set prescription =:prescription where appointment_id=:appointId ", nativeQuery = true)
     @Modifying
     @Transactional
-    void changeNotes(Long patientId, String notes);
+    void changeNotes(Long appointId, String prescription);
+
+    @Query(value = "select * from attributes where appointment_id=:appointId",nativeQuery = true)
+    Attributes getAttribute(Long appointId);
 
 }
