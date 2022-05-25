@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
-    @Query(value = "select appoint_id from appointments where id=:appointmentId ", nativeQuery = true)
+    @Query(value = "select appoint_id from appointments where appoint_id=:appointmentId ", nativeQuery = true)
     Long getId(Long appointmentId);
 
     @Query(value = "select * from appointments where patient_id = :patientId",nativeQuery = true)
@@ -21,10 +21,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where doctor_id = :doctorId",nativeQuery = true)
     List<Appointment> getAllAppointmentByDoctorId(Long doctorId);
 
+    @Query(value = "select * from appointments where doctor_id = :doctorId order by timestamp desc limit 3", nativeQuery = true)
+    List<Appointment> recentAppointment(Long doctorId);
+
     @Query(value = "select * from appointments where appoint_id = :appointId",nativeQuery = true)
     Appointment getAppointmentById(Long appointId);
 
     @Query(value = "Select date_of_appointment from appointments where doctor_id =:doctorId", nativeQuery = true)
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
+//=======
+    @Query(value = "Select COUNT(appoint_id) from appointments where doctor_id =:doctorId", nativeQuery = true)
+    int totalNoOfAppointment(@Param(value = "doctorId") Long doctorId);
+
+    @Query(value = "select count(appoint_id) from appointments where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
+    int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
 }

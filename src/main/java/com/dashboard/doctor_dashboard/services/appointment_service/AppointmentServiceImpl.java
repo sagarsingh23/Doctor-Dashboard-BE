@@ -1,17 +1,18 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentListDto;
+//import com.dashboard.doctor_dashboard.entities.dtos.AppointmentListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,18 +62,18 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<AppointmentListDto> getAllAppointmentByPatientId(Long patientId) {
+    public List<PatientAppointmentListDto> getAllAppointmentByPatientId(Long patientId) {
         List<Appointment> appointments = appointmentRepository.getAllAppointmentByPatientId(patientId);
-        List<AppointmentListDto> list = appointments.stream()
-                .map(this::mapToDto).collect(Collectors.toList());
+        List<PatientAppointmentListDto> list = appointments.stream()
+                .map(this::mapToDto2).collect(Collectors.toList());
 
         return list;
     }
 
     @Override
-    public List<AppointmentListDto> getAllAppointmentByDoctorId(Long doctorId) {
+    public List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId) {
         List<Appointment> appointments = appointmentRepository.getAllAppointmentByDoctorId(doctorId);
-        List<AppointmentListDto> list = appointments.stream()
+        List<DoctorAppointmentListDto> list = appointments.stream()
                 .map(this::mapToDto).collect(Collectors.toList());
 
         return list;
@@ -141,8 +142,41 @@ public class AppointmentServiceImpl implements AppointmentService {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,newList),HttpStatus.OK);
     }
 
-    private AppointmentListDto mapToDto(Appointment appointment) {
-        return mapper.map(appointment, AppointmentListDto.class);
+//    private DoctorAppointmentListDto mapToDto(Appointment appointment) {
+//        return mapper.map(appointment, DoctorAppointmentListDto.class);
+//    }
+    @Override
+    public ResponseEntity<GenericMessage> recentAppointment(Long doctorId) {
+
+        List<Appointment> appointments = appointmentRepository.recentAppointment(doctorId);
+        List<DoctorAppointmentListDto> list =  appointments.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list),HttpStatus.OK);
+    }
+
+
+
+    @Override
+    public ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId) {
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentRepository.totalNoOfAppointment(doctorId)),HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId) {
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentRepository.totalNoOfAppointmentAddedThisWeek(doctorId)),HttpStatus.OK);
+    }
+
+
+
+
+
+
+    private DoctorAppointmentListDto mapToDto(Appointment appointment) {
+        return mapper.map(appointment, DoctorAppointmentListDto.class);
+    }
+
+    private PatientAppointmentListDto mapToDto2(Appointment appointment) {
+        return mapper.map(appointment, PatientAppointmentListDto.class);
     }
 
 

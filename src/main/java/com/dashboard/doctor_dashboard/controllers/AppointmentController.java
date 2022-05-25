@@ -56,8 +56,26 @@ public class AppointmentController {
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
-    @GetMapping("/{doctorId}/activePatient")
+    @GetMapping("chart/{doctorId}/activePatient")
     public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
         return appointmentService.weeklyPatientCountChart(doctorId);
     }
+    @GetMapping("/recentAdded/doctor/{doctorId}")
+    public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.recentAppointment(doctorId);
+    }
+
+
+
+
+    @GetMapping("/chart/{doctorId}/totalPatient")
+    public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.totalNoOfAppointment(doctorId);
+    }
+
+    @GetMapping("/chart/{doctorId}/totalActivePatient")
+    public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.totalNoOfAppointmentAddedThisWeek(doctorId);
+    }
+
 }

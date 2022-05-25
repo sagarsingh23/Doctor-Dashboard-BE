@@ -18,13 +18,13 @@ public class AttributeController {
     private AttributeService attributeService;
 
 
-    @PutMapping("/changeNotes/{id}")
-    public ResponseEntity<GenericMessage> updatePrescription(@PathVariable("id") Long appointId, @RequestBody PrescriptionDto notes) { //updateNotes
+    @PutMapping("/changeNotes/{appointId}")
+    public ResponseEntity<GenericMessage> updatePrescription(@PathVariable("appointId") Long appointId, @RequestBody PrescriptionDto notes) { //updateNotes
         return attributeService.changeNotes(appointId, notes.getPrescription());
     }
 
-    @PutMapping("update/{id}")
-    public ResponseEntity<GenericMessage> updateAttributes(@PathVariable("id") Long appointId, @RequestBody Attributes attributes){
+    @PutMapping("update/{appointId}")
+    public ResponseEntity<GenericMessage> updateAttributes(@PathVariable("appointId") Long appointId, @RequestBody Attributes attributes){
         return attributeService.updateAttributeByAppointmentId(appointId,attributes);
     }
 

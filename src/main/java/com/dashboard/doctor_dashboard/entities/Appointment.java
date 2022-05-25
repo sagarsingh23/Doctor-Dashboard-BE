@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.UUID;
 
 
@@ -33,6 +34,21 @@ public class Appointment {
     private String symptoms;
 
     private String patientName;
+
+    private String patientEmail;
+    private String doctorName;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
+    private Date timestamp;
+
+
+    @PrePersist
+    public void onCreate() {
+        timestamp = new Date();
+    }
+
+
     //private UUID referenceId;
 
     @ManyToOne()
@@ -114,5 +130,21 @@ public class Appointment {
 
     public void setDoctorDetails(DoctorDetails doctorDetails) {
         this.doctorDetails = doctorDetails;
+    }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
+
+    public String getDoctorName() {
+        return doctorName;
+    }
+
+    public void setDoctorName(String doctorName) {
+        this.doctorName = doctorName;
     }
 }

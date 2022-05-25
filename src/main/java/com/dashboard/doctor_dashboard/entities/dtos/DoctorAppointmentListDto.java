@@ -7,13 +7,12 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AppointmentListDto {
+public class DoctorAppointmentListDto {
 
     private Long appointId;
-    private String category;
     private LocalDate dateOfAppointment;
-    private String symptoms;
     private String patientName;
+    private String patientEmail;
 
     public Long getAppointId() {
         return appointId;
@@ -21,14 +20,6 @@ public class AppointmentListDto {
 
     public void setAppointId(Long appointId) {
         this.appointId = appointId;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public LocalDate getDateOfAppointment() {
@@ -39,14 +30,6 @@ public class AppointmentListDto {
         this.dateOfAppointment = dateOfAppointment;
     }
 
-    public String getSymptoms() {
-        return symptoms;
-    }
-
-    public void setSymptoms(String symptoms) {
-        this.symptoms = symptoms;
-    }
-
     public String getPatientName() {
         return patientName;
     }
@@ -54,4 +37,14 @@ public class AppointmentListDto {
     public void setPatientName(String patientName) {
         this.patientName = patientName;
     }
+
+    public String getPatientEmail() {
+        return patientEmail;
+    }
+
+    public void setPatientEmail(String patientEmail) {
+        this.patientEmail = patientEmail;
+    }
+
 }
+
