@@ -1,11 +1,6 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
-//import com.dashboard.doctor_dashboard.entities.dtos.AppointmentListDto;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
@@ -84,8 +79,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public Appointment getAppointmentById(Long appointId) {
-        return appointmentRepository.getAppointmentById(appointId);
+    public PatientProfileDto getAppointmentById(Long appointId) {
+        Appointment appointment = appointmentRepository.getAppointmentById(appointId);
+        return mapper.map(appointment,PatientProfileDto.class);
     }
 
     @Override
