@@ -54,7 +54,11 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) {
-            if (patientRepository.getId(appointment.getPatient().getPID()) != null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) {
+            Long patientId=patientRepository.getId(appointment.getPatient().getPID());
+            System.out.println(appointment.getPatient().getPID());
+            System.out.println(appointment.toString());
+            if ( patientId!= null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) {
+                appointment.getPatient().setPID(patientId);
                 return appointmentRepository.save(appointment);
             }
         }

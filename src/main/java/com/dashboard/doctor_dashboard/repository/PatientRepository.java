@@ -33,8 +33,8 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     void changePatientStatus(Long patientId, String status);
 
 
-    @Query(value = "select id from patients where id=:patientId ", nativeQuery = true)
-    Long getId(Long patientId);
+    @Query(value = "select id from patients where login_id=:loginId ", nativeQuery = true)
+    Long getId(Long loginId);
 
     @Query(value = "select * from patients where doctor_id = :doctorId order by timestamp desc limit 3", nativeQuery = true)
     List<Patient> recentlyAddedPatient(Long doctorId);
