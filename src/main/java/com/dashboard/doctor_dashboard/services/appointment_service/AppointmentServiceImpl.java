@@ -50,8 +50,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) {
             Long patientId=patientRepository.getId(appointment.getPatient().getPID());
-            System.out.println(appointment.getPatient().getPID());
-            System.out.println(appointment.toString());
             if ( patientId!= null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) {
                 appointment.getPatient().setPID(patientId);
                 return appointmentRepository.save(appointment);
@@ -61,7 +59,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<PatientAppointmentListDto> getAllAppointmentByPatientId(Long patientId) {
+    public List<PatientAppointmentListDto> getAllAppointmentByPatientId(Long loginId) {
+        Long patientId=patientRepository.getId(loginId);
+
         List<Appointment> appointments = appointmentRepository.getAllAppointmentByPatientId(patientId);
         List<PatientAppointmentListDto> list = appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
@@ -91,7 +91,10 @@ public class AppointmentServiceImpl implements AppointmentService {
         ArrayList<String> newList = new ArrayList<>();
         var year= String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         var month= String.valueOf(Calendar.getInstance().get(Calendar.MONTH)+1);
-
+        if(Integer.parseInt(month)<10){
+            month="0"+month;
+        }
+        System.out.println(month);
         var firstWeek="1-7";
         var secondWeek="8-14";
         var thirdWeek="15-21";
@@ -114,31 +117,28 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         for (var i=0;i<localDateList.size();i++)
         {
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"01"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"01")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"08")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"01"))){
                 firstWeekCount++;
 
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"08"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"08")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"15")) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"08"))){
                 secondWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"15"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"15")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"22"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"15"))){
                 thirdWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"22"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"22")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+"29"))|| localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"22"))){
                 fourthWeekCount++;
             }
-            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-0"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-0"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-0"+month+"-"+"29"))){
+            if(localDateList.get(i).isAfter(LocalDate.parse(year+"-"+month+"-"+"29")) && localDateList.get(i).isBefore(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth)) || localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+"29")) ||localDateList.get(i).equals(LocalDate.parse(year+"-"+month+"-"+lengthOfMonth))){
                 lastWeekCount++;
             }
         }
-
         newList.add(firstWeek+","+firstWeekCount);
         newList.add(secondWeek+","+secondWeekCount);
         newList.add(thirdWeek+","+thirdWeekCount);
         newList.add(fourthWeek+","+fourthWeekCount);
         newList.add(lastWeek+","+lastWeekCount);
-
-        System.out.println(newList);
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,newList),HttpStatus.OK);
     }
 
