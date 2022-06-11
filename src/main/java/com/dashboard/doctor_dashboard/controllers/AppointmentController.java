@@ -78,4 +78,8 @@ public class AppointmentController {
         return appointmentService.totalNoOfAppointmentAddedThisWeek(doctorId);
     }
 
+
+
+    //new
+
 }
