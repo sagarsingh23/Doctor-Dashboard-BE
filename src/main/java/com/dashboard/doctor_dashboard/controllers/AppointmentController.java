@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
-
+// new
     @Autowired
     private AppointmentService appointmentService;
 
