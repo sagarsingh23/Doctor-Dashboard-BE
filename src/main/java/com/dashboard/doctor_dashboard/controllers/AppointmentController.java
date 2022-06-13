@@ -31,11 +31,7 @@ public class AppointmentController {
 
     @GetMapping("/getAllAppointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
-        GenericMessage genericMessage = new GenericMessage();
-
-        genericMessage.setData(appointmentService.getAllAppointmentByPatientId(patientId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        return appointmentService.getAllAppointmentByPatientId(patientId);
     }
 
     @GetMapping("/getAllAppointments/doctor/{doctorId}")
