@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -37,6 +38,8 @@ public class Appointment {
 
     private String patientEmail;
     private String doctorName;
+
+    private LocalTime appointmentTime;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -146,5 +149,13 @@ public class Appointment {
 
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
+    }
+
+    public LocalTime getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(LocalTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
     }
 }

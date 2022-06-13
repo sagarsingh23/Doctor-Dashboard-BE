@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -59,10 +60,38 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
-    public List<PatientAppointmentListDto> getAllAppointmentByPatientId(Long loginId) {
-        Long patientId=patientRepository.getId(loginId);
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId) {
 
-        List<Appointment> appointments = appointmentRepository.getAllAppointmentByPatientId(patientId);
+        System.out.println(LocalTime.now());
+        GenericMessage genericMessage = new GenericMessage();
+        List<PatientAppointmentListDto> today = new ArrayList<>();
+        Map<String,List<PatientAppointmentListDto>> m = new HashMap<>();
+
+        Long patientId=patientRepository.getId(loginId);
+        System.out.println(patientId);
+        if(patientId != null) {
+        List<PatientAppointmentListDto> past = mapToAppointList(appointmentRepository.pastAppointment(patientId));
+        List<PatientAppointmentListDto> upcoming = mapToAppointList(appointmentRepository.upcomingAppointment(patientId));
+        List<PatientAppointmentListDto> today1 = mapToAppointList(appointmentRepository.todayAppointment1(patientId));
+        List<PatientAppointmentListDto> today2 = mapToAppointList(appointmentRepository.todayAppointment2(patientId));
+        today.addAll(today1);
+        today.addAll(today2);
+
+        m.put("past",past);
+        m.put("today",today);
+        m.put("upcoming",upcoming);
+
+        genericMessage.setData(m);
+        genericMessage.setStatus(Constants.SUCCESS);
+
+
+      return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+     }
+      throw new ResourceNotFoundException("Patient", "id", loginId);
+
+}
+
+    List<PatientAppointmentListDto> mapToAppointList(List<Appointment> appointments){
         List<PatientAppointmentListDto> list = appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
 

@@ -17,7 +17,7 @@ import java.util.List;
 public interface AppointmentService {
 
     Appointment addAppointment(Appointment appointment, HttpServletRequest request);
-    List<PatientAppointmentListDto> getAllAppointmentByPatientId(Long patientId);
+    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
     List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId);
     PatientProfileDto getAppointmentById(Long appointId);
     ResponseEntity<GenericMessage> recentAppointment(Long doctorId);

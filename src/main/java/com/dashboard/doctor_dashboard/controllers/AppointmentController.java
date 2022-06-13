@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("api/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
-
+// new
     @Autowired
     private AppointmentService appointmentService;
 
@@ -31,11 +31,7 @@ public class AppointmentController {
 
     @GetMapping("/getAllAppointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
-        GenericMessage genericMessage = new GenericMessage();
-
-        genericMessage.setData(appointmentService.getAllAppointmentByPatientId(patientId));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        return appointmentService.getAllAppointmentByPatientId(patientId);
     }
 
     @GetMapping("/getAllAppointments/doctor/{doctorId}")
