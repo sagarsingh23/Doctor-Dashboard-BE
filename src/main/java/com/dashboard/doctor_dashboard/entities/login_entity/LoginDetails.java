@@ -6,6 +6,7 @@ import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.jdbc.core.SqlReturnType;
 
 import javax.persistence.*;
 
@@ -26,7 +27,8 @@ public class LoginDetails {
     private String emailId;
     @Column(name = "domain", nullable = false)
     private String domain;
-
+    @Column(name = "profile_pic",nullable = false,unique = true)
+    private String profilePic;
     @Column(name="role",nullable = false)
     private String role;
 
@@ -69,5 +71,13 @@ public class LoginDetails {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
     }
 }

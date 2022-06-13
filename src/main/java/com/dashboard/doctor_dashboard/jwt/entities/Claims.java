@@ -12,6 +12,15 @@ public class Claims {
     private String doctorName;
     private String doctorEmail;
     private String role;
+    private String profilePic;
+
+    public String getProfilePic() {
+        return profilePic;
+    }
+
+    public void setProfilePic(String profilePic) {
+        this.profilePic = profilePic;
+    }
 
     public Long getDoctorId() {
         return doctorId;

@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
 
     Logger logger= Logger.getLogger(LoginServiceImpl.class.getName());
 
-    private final String[] fields = {"given_name","hd", "email"};
+    private final String[] fields = {"given_name","hd", "email","picture"};
 
     public boolean addUser(Map<String, Object> loginDetails) {
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
@@ -50,6 +50,7 @@ public class LoginServiceImpl implements LoginService {
                 newDoctor.setRole("PATIENT");
             }
             newDoctor.setEmailId(loginDetails.get(fields[2]).toString());
+            newDoctor.setProfilePic(loginDetails.get(fields[3]).toString());
 //            if(newDoctor.getDomain().equals("nineleaps.com")){
 //                newDoctor.setRole("DOCTOR");
 //            }else if(newDoctor.getDomain().equals("google")){
@@ -97,7 +98,7 @@ public class LoginServiceImpl implements LoginService {
 //                logger.log(Level.INFO,"doctor details {0}",newDoctor);
 //
 //            }
-            return loginCreator(id, email, name,loginRepo.getRoleById(id));
+            return loginCreator(id, email, name,loginRepo.getRoleById(id),loginRepo.getProfilePic(id));
 
         } else {
             logger.log(Level.WARNING,"Invalid ID token.");
@@ -109,12 +110,13 @@ public class LoginServiceImpl implements LoginService {
     JwtService jwtService;
 
     @Override
-    public String loginCreator(long id, String email, String name,String role) {
+    public String loginCreator(long id, String email, String name,String role,String profilePic) {
         var login = new Login();
         login.setId(id);
         login.setEmail(email);
         login.setUsername(name);
         login.setRole(role);
+        login.setProfilePic(profilePic);
         return jwtService.authenticateUser(login);
     }
 

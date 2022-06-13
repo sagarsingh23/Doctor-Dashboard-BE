@@ -42,6 +42,7 @@ public class JwtServiceImpl implements JwtService {
         claims.setDoctorName(login.getUsername());
         claims.setDoctorId(login.getId());
         claims.setRole(login.getRole());
+        claims.setProfilePic(login.getProfilePic());
 
         String token = jwtTokenProvider.generateToken(authentication, claims);
 
