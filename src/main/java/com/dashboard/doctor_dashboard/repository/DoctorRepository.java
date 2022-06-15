@@ -16,13 +16,12 @@ import java.util.List;
 public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
 
 
-    @Query(value = "update DoctorDetails set age=:age,speciality=:speciality,gender=:gender,phoneNo=:phoneNo where id=:id")
+    @Query(value = "update DoctorDetails set age=:age,speciality=:speciality,gender=:gender,phoneNo=:phoneNo,experience=:exp,degree=:degree where id=:id")
     @Transactional
     @Modifying
-    void updateDoctorDb(Short age, String speciality, String gender, String phoneNo, long id);
+    void updateDoctorDb(Short age, String speciality, String gender, String phoneNo, long id,short exp,String degree);
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo) from DoctorDetails a where id=:id")
-//@Query(value = "select com.dashboard.doctor_dashboard.entity.dtos.Doctora.id,a.age,a.speciality,a.gender,a.phoneNo from DoctorDetails a where id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);
     //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
@@ -42,8 +41,8 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
-    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality)",nativeQuery = true)
+    @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
     @Transactional
     @Modifying
-    void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId);
+    void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId,short exp,String degree);
 }
