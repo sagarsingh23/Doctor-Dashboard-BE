@@ -130,4 +130,15 @@ public class CommonExceptionHandler {
         return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);
 
     }
+
+    @ExceptionHandler(InvalidDate.class)
+    public ResponseEntity<ErrorMessage> invalidDateException(InvalidDate e) {
+        ErrorMessage errorMessage = new ErrorMessage();
+
+
+        errorMessage.setErrorData(e.toString());
+        errorMessage.setErrorStatus(Constants.FAIL);
+
+        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);
+    }
 }

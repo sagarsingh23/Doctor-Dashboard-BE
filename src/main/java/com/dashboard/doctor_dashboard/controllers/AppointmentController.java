@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 
 
 @RestController
@@ -22,13 +23,15 @@ public class AppointmentController {
 
     @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) {
-        GenericMessage genericMessage = new GenericMessage();
 
-        genericMessage.setData(appointmentService.addAppointment(appointment,request));
-        genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        return appointmentService.addAppointment(appointment,request);
+
     }
-
+    @GetMapping("/getAvailableSlots/{doctorId}/{date}")
+    public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
+        System.out.println(LocalDate.parse(date));
+         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
+    }
     @GetMapping("/getAllAppointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
         return appointmentService.getAllAppointmentByPatientId(patientId);

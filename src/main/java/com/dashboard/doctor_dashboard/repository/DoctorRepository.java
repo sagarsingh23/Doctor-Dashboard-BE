@@ -32,7 +32,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
 
     //
-    @Query(value = "select id from doctor_details d where d.id=:id", nativeQuery = true)
+    @Query(value = "select id from doctor_details d where d.login_id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
 
     @Query(value = "select distinct(speciality) from doctor_details d where d.speciality=:speciality", nativeQuery = true)

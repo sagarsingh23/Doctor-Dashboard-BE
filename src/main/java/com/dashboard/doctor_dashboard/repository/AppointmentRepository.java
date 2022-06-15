@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -32,15 +35,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
     List<Appointment> upcomingAppointment(Long patientId);
 
-
-
-
-
-
-
-
-
-
+    @Query(value = "select appointment_time from appointments where doctor_id=:doctorId and date_of_appointment=:date",nativeQuery = true)
+    List<Time>getTimesByIdAndDate(LocalDate date, Long doctorId);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId",nativeQuery = true)
     List<Appointment> getAllAppointmentByDoctorId(Long doctorId);

@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.services.appointment_service;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -40,21 +42,48 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    private static Map<Long,Map<LocalDate,List<Boolean>>> slots=new HashMap<>();
+
+    private final List<Boolean> timesSlots=new ArrayList<>(Collections.nCopies(12,true));
+    List<String> times=Arrays.asList("10:00","10:30","11:00","11:30","12:00","12:30","14:00","14:30","15:00","15:30","16:00","16:30");
+
 
     @Autowired
     private ModelMapper mapper;
-
-
     @Override
-    public Appointment addAppointment(Appointment appointment, HttpServletRequest request) {
+    public ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) {
 
+        System.out.println(slots);
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) {
             Long patientId=patientRepository.getId(appointment.getPatient().getPID());
             if ( patientId!= null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) {
                 appointment.getPatient().setPID(patientId);
-                return appointmentRepository.save(appointment);
+                LocalDate appDate=appointment.getDateOfAppointment();
+                if(appDate.isAfter(LocalDate.now())&&appDate.isBefore(LocalDate.now().plusDays(8))) {
+                    List<Boolean> c = checkSlots(appointment.getDateOfAppointment(), appointment.getDoctorDetails().getId());
+                    String time=appointment.getAppointmentTime().toString();
+                    int index = times.indexOf(time);
+                        System.out.println(time+","+index);
+                        if(index==-1)
+                            throw new InvalidDate(appointment.getAppointmentTime().toString(),"Invalid time");
+
+                    if(c.get(index)) {
+                            c.set(index, false);
+                    }else {
+                        throw new InvalidDate(appointment.getAppointmentTime().toString(),"appointment is already booked for this time, please refresh.");
+                    }
+                    slots.get(appointment.getDoctorDetails().getId()).put(appointment.getDateOfAppointment(), c);
+                    appointmentRepository.save(appointment);
+                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"appointment created successfully"),HttpStatus.OK);
+                }
+                throw new InvalidDate(appDate.toString(),"appointment cannot be booked on this date");
+            }else if(patientId!=null){
+                throw new ResourceNotFoundException("Patient", "id", loginId);
+            } else if (doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) == null) {
+                throw new ResourceNotFoundException("Doctor", "id", loginId);
             }
+
         }
         throw new ResourceNotFoundException("Patient", "id", loginId);
     }
@@ -196,7 +225,56 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
 
+    private Map<Long,Map<LocalDate,List<Boolean>>> checkSlotsAvail(LocalDate date,Long doctorId){
+//        System.out.println(date);
+        Map<LocalDate,List<Boolean>> dateAndTime=new HashMap<>();
+         List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
 
+        List<LocalTime> doctorBookedSlots;
+        List<Time> dates=appointmentRepository.getTimesByIdAndDate(date,doctorId);
+//        System.out.println(doctorBookedSlots.get(0).toLocalTime());
+//        System.out.println(doctorBookedSlots);
+        doctorBookedSlots=dates.stream().map((n)->n.toLocalTime()).collect(Collectors.toList());
+        System.out.println(doctorBookedSlots.isEmpty());
+        if(doctorBookedSlots.isEmpty()!=true){
+            for (int i = 0; i < doctorBookedSlots.size(); i++) {
+                docTimesSlots.set(times.indexOf(doctorBookedSlots.get(i).toString()),false);
+            }
+
+            dateAndTime.put(date,docTimesSlots);
+            slots.put(doctorId, dateAndTime);
+            return slots;
+        }
+        System.out.println("timeslots"+timesSlots);
+        dateAndTime.put(date,timesSlots);
+        slots.put(doctorId, dateAndTime);
+        return slots;
+    }
+
+    public List<Boolean> checkSlots(LocalDate date,Long doctorId){
+        System.out.println(slots);
+        if(doctorRepository.isIdAvailable(doctorId)!=null) {
+            if (slots.get(doctorId) != null) {
+                if (date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8))) {
+                    if (slots.get(doctorId).get(date) != null) {
+                        System.out.println("yes"+slots.get(doctorId).get(date));
+                        return slots.get(doctorId).get(date);
+                    } else {
+                        System.out.println("no"+slots.get(doctorId).get(date));
+
+                        return checkSlotsAvail(date, doctorId).get(doctorId).get(date);
+                    }
+                }else {
+                    throw new InvalidDate(date.toString(),"select dates from specified range");
+                }
+            }
+            else{
+                return checkSlotsAvail(date,doctorId).get(doctorId).get(date);
+            }
+        }
+        throw new ResourceNotFoundException("Doctor","id",doctorId);
+
+    }
 
 
 

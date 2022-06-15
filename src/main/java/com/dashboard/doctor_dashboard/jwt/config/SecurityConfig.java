@@ -55,6 +55,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "api/appointment/patient",
             "api/appointment/*/patient",
             "/api/patient/upload/*",
+            "/api/patient/*",
             "/files/{id}"
     };
     private static final String[] GET_API_PATIENT_URL={

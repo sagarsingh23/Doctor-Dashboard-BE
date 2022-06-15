@@ -11,12 +11,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public interface AppointmentService {
 
-    Appointment addAppointment(Appointment appointment, HttpServletRequest request);
+    ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request);
     ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
     List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId);
     PatientProfileDto getAppointmentById(Long appointId);
@@ -27,5 +28,7 @@ public interface AppointmentService {
 
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
     ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);
+     List<Boolean> checkSlots(LocalDate date, Long doctorId);
+
 
 }
