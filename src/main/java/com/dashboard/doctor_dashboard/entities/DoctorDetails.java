@@ -36,6 +36,14 @@ public class DoctorDetails {
     @Column(name = "gender",nullable = false)
     private String gender;
 
+    @Column(name = "experience",nullable = false)
+    private short exp;
+
+    @Column(name = "degree",nullable = false)
+    private String degree;
+
+
+
     //references
     @JsonManagedReference("value_doctor")
     @OneToMany(mappedBy = "doctorDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -63,14 +71,16 @@ public class DoctorDetails {
     public void setId(Long id) {
         this.id = id;
     }
-    public DoctorDetails(Short age, String speciality, String phoneNo, String gender, Long loginId) {
+
+    public DoctorDetails(Short age, String speciality, String phoneNo, String gender, short exp, String degree, Long loginId) {
         this.age = age;
         this.speciality = speciality;
         this.phoneNo = phoneNo;
         this.gender = gender;
+        this.exp = exp;
+        this.degree = degree;
         this.loginId = loginId;
     }
-
 
     public Long getId() {
         return id;
@@ -93,7 +103,6 @@ public class DoctorDetails {
     }
 
 
-
     @Override
     public String toString() {
         return "DoctorDetails{" +
@@ -102,8 +111,8 @@ public class DoctorDetails {
                 ", speciality='" + speciality + '\'' +
                 ", phoneNo='" + phoneNo + '\'' +
                 ", gender='" + gender + '\'' +
-                ", todolist=" + todolist +
-                ", doctorLoginDetails=" + loginDetails +
+                ", exp=" + exp +
+                ", degree='" + degree + '\'' +
                 ", loginId=" + loginId +
                 '}';
     }

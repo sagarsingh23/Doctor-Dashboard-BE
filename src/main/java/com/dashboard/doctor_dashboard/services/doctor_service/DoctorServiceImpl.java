@@ -82,7 +82,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if(doctorRepository.isIdAvailable(details.getId())==null){
                 if (details.getId() == id && details.getId()==doctorLoginId) {
-                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId);
+                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
@@ -107,7 +107,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
                 if (details.getId() == id && details.getId() == doctorLoginId) {
-                    doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId());
+                    doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId(), details.getExp(), details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
