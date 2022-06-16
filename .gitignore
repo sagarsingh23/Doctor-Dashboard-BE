@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/application.properties
+/home/nineleaps/IdeaProjects/patient_dashboard_v2/src/main/resources/application.properties

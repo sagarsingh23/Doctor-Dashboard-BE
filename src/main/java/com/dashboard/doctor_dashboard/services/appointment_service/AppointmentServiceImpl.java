@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Array;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -42,9 +43,10 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
-    private static Map<Long,Map<LocalDate,List<Boolean>>> slots=new HashMap<>();
+    private final static Map<Long,Map<LocalDate,List<Boolean>>> slots=new HashMap<>();
 
-    private final List<Boolean> timesSlots=new ArrayList<>(Collections.nCopies(12,true));
+//    ArrayList<>(Collections.nCopies(12,true))
+    static final List<Boolean> timesSlots=List.of(true,true,true,true,true,true,true,true,true,true,true,true);
     List<String> times=Arrays.asList("10:00","10:30","11:00","11:30","12:00","12:30","14:00","14:30","15:00","15:30","16:00","16:30");
 
 
@@ -61,7 +63,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getPatient().setPID(patientId);
                 LocalDate appDate=appointment.getDateOfAppointment();
                 if(appDate.isAfter(LocalDate.now())&&appDate.isBefore(LocalDate.now().plusDays(8))) {
-                    List<Boolean> c = checkSlots(appointment.getDateOfAppointment(), appointment.getDoctorDetails().getId());
+                    List<Boolean> c = new ArrayList<>(checkSlots(appointment.getDateOfAppointment(), appointment.getDoctorDetails().getId()));
                     String time=appointment.getAppointmentTime().toString();
                     int index = times.indexOf(time);
                         System.out.println(time+","+index);
@@ -70,10 +72,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
                     if(c.get(index)) {
                             c.set(index, false);
+                            System.out.println("c"+c);
+
                     }else {
                         throw new InvalidDate(appointment.getAppointmentTime().toString(),"appointment is already booked for this time, please refresh.");
                     }
                     slots.get(appointment.getDoctorDetails().getId()).put(appointment.getDateOfAppointment(), c);
+                    System.out.println("book app"+slots);
                     appointmentRepository.save(appointment);
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"appointment created successfully"),HttpStatus.OK);
                 }
@@ -87,7 +92,9 @@ public class AppointmentServiceImpl implements AppointmentService {
         }
         throw new ResourceNotFoundException("Patient", "id", loginId);
     }
-
+    public Map<Long,Map<LocalDate,List<Boolean>>> returnMap(){
+        return slots;
+    }
     @Override
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId) {
 
@@ -229,25 +236,42 @@ public class AppointmentServiceImpl implements AppointmentService {
 //        System.out.println(date);
         Map<LocalDate,List<Boolean>> dateAndTime=new HashMap<>();
          List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
-
+        System.out.println("timeslots"+timesSlots);
         List<LocalTime> doctorBookedSlots;
         List<Time> dates=appointmentRepository.getTimesByIdAndDate(date,doctorId);
-//        System.out.println(doctorBookedSlots.get(0).toLocalTime());
-//        System.out.println(doctorBookedSlots);
         doctorBookedSlots=dates.stream().map((n)->n.toLocalTime()).collect(Collectors.toList());
         System.out.println(doctorBookedSlots.isEmpty());
-        if(doctorBookedSlots.isEmpty()!=true){
+        if(doctorBookedSlots.isEmpty()==false){
             for (int i = 0; i < doctorBookedSlots.size(); i++) {
                 docTimesSlots.set(times.indexOf(doctorBookedSlots.get(i).toString()),false);
             }
 
-            dateAndTime.put(date,docTimesSlots);
-            slots.put(doctorId, dateAndTime);
+            System.out.println("timeslots"+docTimesSlots);
+
+            if(slots.get(doctorId)==null){
+                dateAndTime.put(date,docTimesSlots);
+                slots.put(doctorId, dateAndTime);
+                return slots;
+            }
+            if(slots.get(doctorId).get(date)==null){
+                slots.get(doctorId).computeIfAbsent(date,k->docTimesSlots);
+                return slots;
+
+            }
+            slots.get(doctorId).computeIfPresent(date,(k,v)->v=docTimesSlots);
             return slots;
         }
         System.out.println("timeslots"+timesSlots);
-        dateAndTime.put(date,timesSlots);
-        slots.put(doctorId, dateAndTime);
+        if(slots.get(doctorId)==null){
+            dateAndTime.put(date,timesSlots);
+            slots.put(doctorId, dateAndTime);
+            return slots;
+        }
+        if(slots.get(doctorId).get(date)==null){
+            slots.get(doctorId).computeIfAbsent(date,k->timesSlots);
+            return slots;
+        }
+        slots.get(doctorId).computeIfPresent(date,(k,v)->v=timesSlots);
         return slots;
     }
 
@@ -258,6 +282,9 @@ public class AppointmentServiceImpl implements AppointmentService {
                 if (date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8))) {
                     if (slots.get(doctorId).get(date) != null) {
                         System.out.println("yes"+slots.get(doctorId).get(date));
+                        List<Boolean> returnList=new ArrayList<>(slots.get(doctorId).get(date));
+//                        return new ArrayList<>(slots.get(doctorId).get(date));
+//                        return slots.get(doctorId).get(date);
                         return slots.get(doctorId).get(date);
                     } else {
                         System.out.println("no"+slots.get(doctorId).get(date));
