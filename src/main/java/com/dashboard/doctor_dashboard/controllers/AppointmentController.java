@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -26,6 +28,10 @@ public class AppointmentController {
 
         return appointmentService.addAppointment(appointment,request);
 
+    }
+    @GetMapping("/getMap")
+    public Map<Long, Map<LocalDate, List<Boolean>>> getMap(){
+        return appointmentService.returnMap();
     }
     @GetMapping("/getAvailableSlots/{doctorId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){

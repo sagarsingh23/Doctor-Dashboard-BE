@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public interface AppointmentService {
@@ -25,7 +26,7 @@ public interface AppointmentService {
 
     ResponseEntity<GenericMessage> weeklyPatientCountChart(Long doctorId);
 
-
+    Map<Long, Map<LocalDate,List<Boolean>>> returnMap();
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
     ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);
      List<Boolean> checkSlots(LocalDate date, Long doctorId);
