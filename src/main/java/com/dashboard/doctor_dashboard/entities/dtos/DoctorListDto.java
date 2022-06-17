@@ -14,6 +14,7 @@ public class DoctorListDto {
 
     private String profilePic;
 
+
     public String getProfilePic() {
         return profilePic;
     }

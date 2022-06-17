@@ -42,6 +42,46 @@ public class Appointment {
 
     private LocalTime appointmentTime;
 
+    private Boolean isToBeAttended;
+
+    private Boolean isPending;
+
+    private Boolean isFollowUp;
+
+    private Boolean isCompleted;
+
+    public Boolean getToBeAttended() {
+        return isToBeAttended;
+    }
+
+    public void setToBeAttended(Boolean toBeAttended) {
+        isToBeAttended = toBeAttended;
+    }
+
+    public Boolean getPending() {
+        return isPending;
+    }
+
+    public void setPending(Boolean pending) {
+        isPending = pending;
+    }
+
+    public Boolean getFollowUp() {
+        return isFollowUp;
+    }
+
+    public void setFollowUp(Boolean followUp) {
+        isFollowUp = followUp;
+    }
+
+    public Boolean getCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(Boolean completed) {
+        isCompleted = completed;
+    }
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date timestamp;
