@@ -42,45 +42,7 @@ public class Appointment {
 
     private LocalTime appointmentTime;
 
-    private Boolean isToBeAttended;
-
-    private Boolean isPending;
-
-    private Boolean isFollowUp;
-
-    private Boolean isCompleted;
-
-    public Boolean getToBeAttended() {
-        return isToBeAttended;
-    }
-
-    public void setToBeAttended(Boolean toBeAttended) {
-        isToBeAttended = toBeAttended;
-    }
-
-    public Boolean getPending() {
-        return isPending;
-    }
-
-    public void setPending(Boolean pending) {
-        isPending = pending;
-    }
-
-    public Boolean getFollowUp() {
-        return isFollowUp;
-    }
-
-    public void setFollowUp(Boolean followUp) {
-        isFollowUp = followUp;
-    }
-
-    public Boolean getCompleted() {
-        return isCompleted;
-    }
-
-    public void setCompleted(Boolean completed) {
-        isCompleted = completed;
-    }
+    private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
@@ -209,6 +171,14 @@ public class Appointment {
 
     public void setPrescription(List<Prescription> prescription) {
         this.prescription = prescription;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 
