@@ -31,13 +31,11 @@ public class DoctorController {
     private DoctorService doctorService;
 
     @GetMapping("/get-all/doctor/{doctorId}")
-//    public ResponseEntity<List<DoctorListDto>> getAllDoctors(@PathVariable("doctorId") Long id) {
     public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id) {
 
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
             return details;
-//            return new ResponseEntity<>(details,HttpStatus.OK);
         throw new ResourceNotFoundException("doctor", "id", id);
     }
 
@@ -63,8 +61,6 @@ public class DoctorController {
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request)  {
-//    public ResponseEntity<GenericMessage> updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request) {
-
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
