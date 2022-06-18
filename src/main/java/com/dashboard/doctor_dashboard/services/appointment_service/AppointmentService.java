@@ -20,7 +20,11 @@ public interface AppointmentService {
 
     ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request);
     ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
-    List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId);
+
+
     PatientProfileDto getAppointmentById(Long appointId);
     ResponseEntity<GenericMessage> recentAppointment(Long doctorId);
 
@@ -29,7 +33,11 @@ public interface AppointmentService {
     Map<Long, Map<LocalDate,List<Boolean>>> returnMap();
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
     ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);
-     List<Boolean> checkSlots(LocalDate date, Long doctorId);
+    ResponseEntity<GenericMessage> patientCategoryGraph(Long patientId);
+
+
+
+    List<Boolean> checkSlots(LocalDate date, Long doctorId);
 
 
 }
