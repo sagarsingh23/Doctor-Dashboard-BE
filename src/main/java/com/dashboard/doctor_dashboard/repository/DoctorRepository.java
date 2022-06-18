@@ -24,12 +24,13 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,dd.specialisation,ld.name,ld.emailId) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
     List<DoctorListDto> getDoctorDetails();
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
+
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
 
     //
@@ -40,7 +41,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     String isSpecialityAvailable(String speciality);
 
     //
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
     @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
