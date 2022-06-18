@@ -16,7 +16,7 @@ public class DoctorFormDto {
     private Long id;
     @Range(min = 24, max = 100, message = "Enter age between 24-100")
     private Short age;
-    @Pattern(regexp = "^((?i)orthology|neurology|general|gastrology|cardiology)", message = "Select from specified speciality [orthology,neurology,cardiology,general,gastrology]")
+    @Pattern(regexp = "^((?i)Orthology|Dentist|General|gastrology|Dermatologist)", message = "Select from specified speciality [orthology,Dentist,Dermatologist,general,gastrology]")
     private String speciality;
     @Pattern(regexp = "^((?i)male|female|others)", message = "Select from specified gender [male,female,others]")
     private String gender;

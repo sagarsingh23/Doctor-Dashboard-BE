@@ -13,6 +13,7 @@ public class DoctorAppointmentListDto {
     private LocalDate dateOfAppointment;
     private String patientName;
     private String patientEmail;
+    private String status;
 
     public Long getAppointId() {
         return appointId;
@@ -46,5 +47,12 @@ public class DoctorAppointmentListDto {
         this.patientEmail = patientEmail;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 
