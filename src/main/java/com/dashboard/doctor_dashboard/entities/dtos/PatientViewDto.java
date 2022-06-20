@@ -1,34 +1,25 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 @AllArgsConstructor
+@NoArgsConstructor
 public class PatientViewDto {
 
-    private Long id;
+    private Long appointId;
 
-
-
-    private LocalTime timeOfAppointment;
+    private LocalTime appointmentTime;
 
     private String patientName;
 
     private String patientEmail;
 
-    private String patientStatus;
+    private String status;
 
-    public Long getId() {
-        return id;
-    }
 
-    public LocalTime getTimeOfAppointment() {
-        return timeOfAppointment;
-    }
 
-    public void setTimeOfAppointment(LocalTime timeOfAppointment) {
-        this.timeOfAppointment = timeOfAppointment;
-    }
 
     public String getPatientName() {
         return patientName;
@@ -46,11 +37,29 @@ public class PatientViewDto {
         this.patientEmail = patientEmail;
     }
 
-    public String getPatientStatus() {
-        return patientStatus;
+
+    public Long getAppointId() {
+
+        return appointId;
     }
 
-    public void setPatientStatus(String patientStatus) {
-        this.patientStatus = patientStatus;
+    public void setAppointId(Long appointId) {
+        this.appointId = appointId;
+    }
+
+    public LocalTime getAppointmentTime() {
+        return appointmentTime;
+    }
+
+    public void setAppointmentTime(LocalTime appointmentTime) {
+        this.appointmentTime = appointmentTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

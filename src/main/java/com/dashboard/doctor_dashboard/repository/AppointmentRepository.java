@@ -1,11 +1,14 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -56,7 +59,16 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select count(appoint_id) from appointments where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
     List<Appointment> receptionistDoctorAppointment(Long doctorId);
+
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status) from Appointment appo where appo.appointId=:appointmentId")
+    AppointmentViewDto getBasicAppointmentDetails(long appointmentId);
+
+    @Query(value = "update appointments set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
+    @Modifying
+    @Transactional
+    void setStatus(String status,Long appointmentId);
+
 
 }

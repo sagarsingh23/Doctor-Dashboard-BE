@@ -5,53 +5,27 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class VitalsUpdateDto {
 
-    private String patientName;
+    private Long appointmentId;
+    private Long glucoseLevels;
 
-    private String patientMail;
-
-    private Short glucose;
-
-    private Short temperature;
+    private Double bodyTempareture;
 
     private String bloodPressure;
 
-    public String getPatientName() {
-        return patientName;
+    public Long getGlucoseLevels() {
+        return glucoseLevels;
     }
 
-    public void setPatientName(String patientName) {
-        this.patientName = patientName;
+    public Double getBodyTempareture() {
+        return bodyTempareture;
     }
 
-    public String getPatientMail() {
-        return patientMail;
+    public Long getAppointmentId() {
+        return appointmentId;
     }
 
-    public void setPatientMail(String patientMail) {
-        this.patientMail = patientMail;
-    }
-
-    public Short getGlucose() {
-        return glucose;
-    }
-
-    public void setGlucose(Short glucose) {
-        this.glucose = glucose;
-    }
-
-    public Short getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(Short temperature) {
-        this.temperature = temperature;
-    }
 
     public String getBloodPressure() {
         return bloodPressure;
-    }
-
-    public void setBloodPressure(String bloodPressure) {
-        this.bloodPressure = bloodPressure;
     }
 }
