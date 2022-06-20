@@ -107,5 +107,10 @@ public class AppointmentController {
         return appointmentService.patientCategoryGraph(loginId);
     }
 
+    @GetMapping("/{appointId}")
+    public ResponseEntity<GenericMessage>getFollowDetails(@PathVariable("appointId") Long appointId){
+        return appointmentService.getFollowDetails(appointId);
+    }
+
 
 }

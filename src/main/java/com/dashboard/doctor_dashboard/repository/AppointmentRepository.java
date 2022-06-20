@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.dtos.FollowUpDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -92,4 +93,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     ArrayList<String> patientCategoryGraph(@Param(value = "patientId") Long patientId);
 
 
+    @Query(value = "select * from appointments where appoint_id=:appointId",nativeQuery = true)
+    Appointment getFollowUpData(Long appointId);
 }

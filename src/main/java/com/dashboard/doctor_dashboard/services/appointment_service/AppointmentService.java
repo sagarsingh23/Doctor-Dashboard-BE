@@ -23,6 +23,7 @@ public interface AppointmentService {
     ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId);
     ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId);
     ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
 
 
     PatientProfileDto getAppointmentById(Long appointId);

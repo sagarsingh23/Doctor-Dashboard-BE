@@ -48,4 +48,18 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Transactional
     @Modifying
     void insertARowIntoTheTable(Long doctorId,Short age,String speciality,String phoneNo,String gender,Long loginId,short exp,String degree);
+
+
+    @Query(value = "select p.gender from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    List<String> genderChart(Long doctorId);
+
+    @Query(value = "select p.blood_group from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    List<String> bloodGroupChart(Long doctorId);
+
+    @Query(value = "select p.age from patients p join appointments a where a.patient_id = p.id and doctor_id=:doctorId group by p.id",nativeQuery = true)
+    List<Long> ageGroupChart(Long doctorId);
+
+
+
+
 }

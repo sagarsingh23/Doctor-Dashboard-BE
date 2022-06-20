@@ -18,7 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DoctorServiceImpl implements DoctorService {
@@ -144,5 +144,57 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
         throw new ResourceNotFoundException("doctor", speciality, 0);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> genderChart(Long doctorId) {
+        Map<String,Integer> chart = new HashMap<>();
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+
+            List<String> genderChartValue = doctorRepository.genderChart(doctorId);
+
+            for (String s:genderChartValue) {
+                chart.put(s, Collections.frequency(genderChartValue,s));
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId) {
+         Map<String,Integer> chart = new HashMap<>();
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+
+            List<String> bloodGroupValue = doctorRepository.bloodGroupChart(doctorId);
+
+            for (String s:bloodGroupValue) {
+                chart.put(s, Collections.frequency(bloodGroupValue,s));
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
+        Map<String,Integer> chart = new HashMap<>();
+        chart.put("0-2",0);
+
+
+        if(doctorRepository.isIdAvailable(doctorId) != null){
+            List<Long> ageGroupValue = doctorRepository.ageGroupChart(doctorId);
+
+            for (Long s:ageGroupValue) {
+                int temp = 0;
+                if(s <= 2)
+                {
+                    chart.put("0-2",1);
+                }
+                //chart.put(s, Collections.frequency(ageGroupValue,s));
+            }
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("doctor", "id", doctorId);
     }
 }

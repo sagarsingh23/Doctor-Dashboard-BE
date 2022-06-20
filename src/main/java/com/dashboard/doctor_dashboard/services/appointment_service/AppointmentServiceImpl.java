@@ -182,6 +182,14 @@ public class AppointmentServiceImpl implements AppointmentService {
         throw new ResourceNotFoundException("Doctor", "id", doctorId);
     }
 
+    @Override
+    public ResponseEntity<GenericMessage> getFollowDetails(Long appointId) {
+        if(appointmentRepository.getId(appointId) != null && appointId == appointmentRepository.getId(appointId)){
+            System.out.println(mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class));
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class)),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Appointment", "id", appointId);
+    }
 
 
     @Override

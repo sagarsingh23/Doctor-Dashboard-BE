@@ -83,5 +83,18 @@ public class DoctorController {
         return doctorService.getAllDoctorsBySpeciality(speciality);
     }
 
+    @GetMapping("/{doctorId}/gender")
+    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.genderChart(doctorId);
+    }
 
+    @GetMapping("/{doctorId}/bloodGroup")
+    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.bloodGroupChart(doctorId);
+    }
+
+    @GetMapping("/{doctorId}/ageGroup")
+    public ResponseEntity<GenericMessage> ageGroup(@PathVariable("doctorId") Long doctorId) {
+        return doctorService.ageGroupChart(doctorId);
+    }
 }
