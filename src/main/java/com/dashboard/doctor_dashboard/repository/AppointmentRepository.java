@@ -1,7 +1,11 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+
+import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
+
 import com.dashboard.doctor_dashboard.entities.dtos.FollowUpDto;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -86,8 +90,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select count(appoint_id) from appointments where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
     List<Appointment> receptionistDoctorAppointment(Long doctorId);
+
+
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status) from Appointment appo where appo.appointId=:appointmentId")
+    AppointmentViewDto getBasicAppointmentDetails(long appointmentId);
+
+    @Query(value = "update appointments set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
+    @Modifying
+    @Transactional
+    void setStatus(String status,Long appointmentId);
+
+
 
     @Query(value = "select category,count(category) from appointments where patient_id =:patientId group by category", nativeQuery = true)
     ArrayList<String> patientCategoryGraph(@Param(value = "patientId") Long patientId);
@@ -95,4 +110,5 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "select * from appointments where appoint_id=:appointId",nativeQuery = true)
     Appointment getFollowUpData(Long appointId);
+
 }

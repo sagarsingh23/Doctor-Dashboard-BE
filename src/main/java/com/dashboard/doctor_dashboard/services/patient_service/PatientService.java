@@ -1,10 +1,7 @@
 package com.dashboard.doctor_dashboard.services.patient_service;
 
 import com.dashboard.doctor_dashboard.entities.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
+import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.MyCustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -58,5 +55,6 @@ public interface PatientService {
 
     ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientEntityDto patient);
 
+    ResponseEntity<GenericMessage> viewAppointment(long appointmentId, long patientId);
 
 }

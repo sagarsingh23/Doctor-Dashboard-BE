@@ -5,9 +5,7 @@ import com.dashboard.doctor_dashboard.entities.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.MyCustomException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.repository.AttributeRepository;
-import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.repository.PatientRepository;
+import com.dashboard.doctor_dashboard.repository.*;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,10 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
 
     @Autowired
     private LoginRepo loginRepo;
@@ -324,6 +326,23 @@ public class PatientServiceImpl implements PatientService {
 
         } else {
             throw new ResourceNotFoundException(PATIENT, "id", id);
+        }
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> viewAppointment(long appointmentId,long patientId){
+        if(loginRepo.isIdAvailable(patientId)!=null&&patientRepository.getId(patientId)!=null){
+            if(attributeRepository.existsById(appointmentId)){
+                AppointmentViewDto viewDto =appointmentRepository.getBasicAppointmentDetails(appointmentId);
+                viewDto.setAttributes(attributeRepository.getAttribute(appointmentId));
+                viewDto.setPrescription(prescriptionRepository.getAllPrescriptionByAppointment(appointmentId));
+                return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,viewDto),HttpStatus.OK);
+            }
+            else {
+                throw new ResourceNotFoundException("appointment","id",appointmentId);
+            }
+        }else {
+            throw new ResourceNotFoundException("patient","id",patientId);
         }
     }
 

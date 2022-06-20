@@ -5,10 +5,12 @@ import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientListDto;
 import com.dashboard.doctor_dashboard.entities.dtos.StatusDto;
+import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +23,9 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+
+    @Autowired
+    private AppointmentService appointmentService;
 
     //CRUD operation for patient
     @PostMapping("/{loginId}")
@@ -38,6 +43,10 @@ public class PatientController {
         return patientService.getPatientById(id, doctorId);
     }
 
+    @GetMapping("/{patientId}/appointment/{appointmentId}")
+    public ResponseEntity<GenericMessage> getAppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId){
+        return patientService.viewAppointment(appointmentId,patientId);
+    }
 
 //    @PutMapping("/{id}")
 //    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {

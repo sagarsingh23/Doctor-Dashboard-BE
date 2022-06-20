@@ -15,7 +15,7 @@ public class Attributes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aID;
-    private Long bloodPressure;
+    private String  bloodPressure;
     private Long glucoseLevel;
     private Double bodyTemp;
     private String prescription;
@@ -35,11 +35,11 @@ public class Attributes {
         this.aID = aID;
     }
 
-    public Long getBloodPressure() {
+    public String  getBloodPressure() {
         return bloodPressure;
     }
 
-    public void setBloodPressure(Long bloodPressure) {
+    public void setBloodPressure(String  bloodPressure) {
         this.bloodPressure = bloodPressure;
     }
 

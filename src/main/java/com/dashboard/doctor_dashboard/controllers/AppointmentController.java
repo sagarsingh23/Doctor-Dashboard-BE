@@ -40,7 +40,7 @@ public class AppointmentController {
     }
     @GetMapping("/getAllAppointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId) {
-        return appointmentService.getAllAppointmentByPatientId(patientId);
+        return appointmentService.getAllAppointmentByPatientId(patientId) ;
     }
 
 //    @GetMapping("/getAllAppointments/doctor/{doctorId}")

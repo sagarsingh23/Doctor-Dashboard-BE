@@ -2,6 +2,7 @@ package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
+import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,6 +27,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and dd.id!=:id")
     List<DoctorListDto> getAllDoctors(Long id);
+
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
     List<DoctorListDto> getDoctorDetails();
