@@ -79,6 +79,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                     slots.get(appointment.getDoctorDetails().getId()).put(appointment.getDateOfAppointment(), c);
                     System.out.println("book app"+slots);
+                    appointment.setStatus("To be attended");
                     appointmentRepository.save(appointment);
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"appointment created successfully"),HttpStatus.OK);
                 }
@@ -245,9 +246,7 @@ public class AppointmentServiceImpl implements AppointmentService {
             for (int i = 0; i < doctorBookedSlots.size(); i++) {
                 docTimesSlots.set(times.indexOf(doctorBookedSlots.get(i).toString()),false);
             }
-
             System.out.println("timeslots"+docTimesSlots);
-
             if(slots.get(doctorId)==null){
                 dateAndTime.put(date,docTimesSlots);
                 slots.put(doctorId, dateAndTime);
@@ -280,6 +279,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         if(doctorRepository.isIdAvailable(doctorId)!=null) {
             if (slots.get(doctorId) != null) {
                 if (date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8))) {
+
                     if (slots.get(doctorId).get(date) != null) {
                         System.out.println("yes"+slots.get(doctorId).get(date));
                         List<Boolean> returnList=new ArrayList<>(slots.get(doctorId).get(date));
@@ -296,7 +296,12 @@ public class AppointmentServiceImpl implements AppointmentService {
                 }
             }
             else{
-                return checkSlotsAvail(date,doctorId).get(doctorId).get(date);
+                if (date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8))) {
+                    return checkSlotsAvail(date, doctorId).get(doctorId).get(date);
+                }
+                else {
+                    throw new InvalidDate(date.toString(),"select dates from specified range");
+                }
             }
         }
         throw new ResourceNotFoundException("Doctor","id",doctorId);
