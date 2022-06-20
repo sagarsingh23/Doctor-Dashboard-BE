@@ -30,4 +30,13 @@ public interface DoctorService {
 
     ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(String speciality);
 
+    ResponseEntity<GenericMessage> genderChart(Long doctorId);
+
+    ResponseEntity<GenericMessage> bloodGroupChart(Long doctorId);
+
+    ResponseEntity<GenericMessage> ageGroupChart(Long doctorId);
+
+
+
+
 }

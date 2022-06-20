@@ -128,21 +128,70 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 }
 
-    List<PatientAppointmentListDto> mapToAppointList(List<Appointment> appointments){
-        List<PatientAppointmentListDto> list = appointments.stream()
-                .map(this::mapToDto2).collect(Collectors.toList());
 
-        return list;
+
+    @Override
+    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId) {
+        GenericMessage genericMessage = new GenericMessage();
+        if(doctorRepository.isIdAvailable(doctorId) != null) {
+            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId));
+            genericMessage.setData(past);
+            genericMessage.setStatus(Constants.SUCCESS);
+
+            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+
+    }
+
+
+    @Override
+    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId) {
+        if(doctorRepository.isIdAvailable(doctorId) != null) {
+            GenericMessage genericMessage = new GenericMessage();
+            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId));
+            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId));
+
+            List<DoctorAppointmentListDto> today = new ArrayList<>();
+            today.addAll(today1);
+            today.addAll(today2);
+            genericMessage.setData(today);
+            genericMessage.setStatus(Constants.SUCCESS);
+
+
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+
+    }
+
+
+
+
+    @Override
+    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId) {
+        GenericMessage genericMessage = new GenericMessage();
+        if(doctorRepository.isIdAvailable(doctorId) != null) {
+            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId));
+
+            genericMessage.setData(upcoming);
+            genericMessage.setStatus(Constants.SUCCESS);
+
+
+            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Doctor", "id", doctorId);
     }
 
     @Override
-    public List<DoctorAppointmentListDto> getAllAppointmentByDoctorId(Long doctorId) {
-        List<Appointment> appointments = appointmentRepository.getAllAppointmentByDoctorId(doctorId);
-        List<DoctorAppointmentListDto> list = appointments.stream()
-                .map(this::mapToDto).collect(Collectors.toList());
-
-        return list;
+    public ResponseEntity<GenericMessage> getFollowDetails(Long appointId) {
+        if(appointmentRepository.getId(appointId) != null && appointId == appointmentRepository.getId(appointId)){
+            System.out.println(mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class));
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,mapper.map(appointmentRepository.getFollowUpData(appointId),FollowUpDto.class)),HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Appointment", "id", appointId);
     }
+
 
     @Override
     public PatientProfileDto getAppointmentById(Long appointId) {
@@ -178,7 +227,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         ArrayList<LocalDate> localDateList =new ArrayList<>();
             for (java.sql.Date date : dateList) {
                 localDateList.add(date.toLocalDate());
-//                System.out.println(date.toLocalDate());
             }
 
         for (var i=0;i<localDateList.size();i++)
@@ -232,11 +280,22 @@ public class AppointmentServiceImpl implements AppointmentService {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentRepository.totalNoOfAppointmentAddedThisWeek(doctorId)),HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<GenericMessage> patientCategoryGraph(Long loginId) {
+        Long patientId = patientRepository.getId(loginId);
+        if(patientId != null) {
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.patientCategoryGraph(patientId)), HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("Patient", "id", loginId);
+
+    }
+
 
     private Map<Long,Map<LocalDate,List<Boolean>>> checkSlotsAvail(LocalDate date,Long doctorId){
 //        System.out.println(date);
         Map<LocalDate,List<Boolean>> dateAndTime=new HashMap<>();
-         List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
+
+    List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
         System.out.println("timeslots"+timesSlots);
         List<LocalTime> doctorBookedSlots;
         List<Time> dates=appointmentRepository.getTimesByIdAndDate(date,doctorId);
@@ -308,7 +367,19 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     }
 
+    List<PatientAppointmentListDto> mapToAppointList(List<Appointment> appointments){
+        List<PatientAppointmentListDto> list = appointments.stream()
+                .map(this::mapToDto2).collect(Collectors.toList());
 
+        return list;
+    }
+
+    List<DoctorAppointmentListDto> mapToAppointDoctorList(List<Appointment> appointments){
+        List<DoctorAppointmentListDto> list = appointments.stream()
+                .map(this::mapToDto).collect(Collectors.toList());
+
+        return list;
+    }
 
     private DoctorAppointmentListDto mapToDto(Appointment appointment) {
         return mapper.map(appointment, DoctorAppointmentListDto.class);

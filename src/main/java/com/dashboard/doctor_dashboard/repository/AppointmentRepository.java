@@ -1,7 +1,11 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
+
+import com.dashboard.doctor_dashboard.entities.dtos.FollowUpDto;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,9 +38,36 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
     List<Appointment> todayAppointment2(Long patientId);
 
-
     @Query(value = "select * from appointments where patient_id = :patientId and date_of_appointment > curdate()",nativeQuery = true)
     List<Appointment> upcomingAppointment(Long patientId);
+
+
+
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
+    List<Appointment> pastDoctorAppointment(Long doctorId);
+
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now())",nativeQuery = true)
+    List<Appointment> todayDoctorAppointment1(Long doctorId);
+
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
+    List<Appointment> todayDoctorAppointment2(Long doctorId);
+
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
+    List<Appointment> upcomingDoctorAppointment(Long doctorId);
+
+
+
+
+    @Query(value = "update appointments set status =:status where appoint_id=:appointId ", nativeQuery = true)
+    @Modifying
+    @Transactional
+    void changeAppointmentStatus(Long appointId, String status);
+
+
+
+
+
+
 
     @Query(value = "select appointment_time from appointments where doctor_id=:doctorId and date_of_appointment=:date",nativeQuery = true)
     List<Time>getTimesByIdAndDate(LocalDate date, Long doctorId);
@@ -52,7 +83,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "Select date_of_appointment from appointments where doctor_id =:doctorId", nativeQuery = true)
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
-//=======
+
     @Query(value = "Select COUNT(appoint_id) from appointments where doctor_id =:doctorId", nativeQuery = true)
     int totalNoOfAppointment(@Param(value = "doctorId") Long doctorId);
 
@@ -62,6 +93,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
     List<Appointment> receptionistDoctorAppointment(Long doctorId);
 
+
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status) from Appointment appo where appo.appointId=:appointmentId")
     AppointmentViewDto getBasicAppointmentDetails(long appointmentId);
 
@@ -70,5 +102,13 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Transactional
     void setStatus(String status,Long appointmentId);
 
+
+
+    @Query(value = "select category,count(category) from appointments where patient_id =:patientId group by category", nativeQuery = true)
+    ArrayList<String> patientCategoryGraph(@Param(value = "patientId") Long patientId);
+
+
+    @Query(value = "select * from appointments where appoint_id=:appointId",nativeQuery = true)
+    Appointment getFollowUpData(Long appointId);
 
 }

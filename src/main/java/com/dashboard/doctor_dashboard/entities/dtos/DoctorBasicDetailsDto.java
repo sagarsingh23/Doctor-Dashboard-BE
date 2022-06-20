@@ -11,6 +11,8 @@ public class DoctorBasicDetailsDto {
     private String phoneNo;
     private String gender;
     private Short age;
+    private String degree;
+    private short exp;
 
 
     public String getFirstName() {
@@ -35,5 +37,13 @@ public class DoctorBasicDetailsDto {
 
     public Short getAge() {
         return age;
+    }
+
+    public String getDegree() {
+        return degree;
+    }
+
+    public short getExp() {
+        return exp;
     }
 }
