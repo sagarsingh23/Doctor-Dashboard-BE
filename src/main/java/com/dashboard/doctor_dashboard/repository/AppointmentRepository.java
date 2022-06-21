@@ -56,6 +56,11 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> upcomingDoctorAppointment(Long doctorId);
 
 
+    @Query(value = "select count(*) from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
+    int todayAppointments(Long doctorId);
+
+
+
 
 
     @Query(value = "update appointments set status =:status where appoint_id=:appointId ", nativeQuery = true)

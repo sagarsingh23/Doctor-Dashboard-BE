@@ -33,6 +33,7 @@ public interface AppointmentService {
 
     Map<Long, Map<LocalDate,List<Boolean>>> returnMap();
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
+    ResponseEntity<GenericMessage> todayAppointments(Long doctorId);
     ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);
     ResponseEntity<GenericMessage> patientCategoryGraph(Long patientId);
 

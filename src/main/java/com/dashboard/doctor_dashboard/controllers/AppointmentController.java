@@ -97,6 +97,11 @@ public class AppointmentController {
         return appointmentService.totalNoOfAppointment(doctorId);
     }
 
+    @GetMapping("/chart/{doctorId}/todayAppointments")
+    public ResponseEntity<GenericMessage> todayAppointments(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.todayAppointments(doctorId);
+    }
+
     @GetMapping("/chart/{doctorId}/totalActivePatient")
     public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
         return appointmentService.totalNoOfAppointmentAddedThisWeek(doctorId);

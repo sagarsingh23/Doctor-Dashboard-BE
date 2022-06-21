@@ -276,6 +276,11 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     @Override
+    public ResponseEntity<GenericMessage> todayAppointments(Long doctorId) {
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentRepository.todayAppointments(doctorId)),HttpStatus.OK);
+    }
+
+    @Override
     public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId) {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentRepository.totalNoOfAppointmentAddedThisWeek(doctorId)),HttpStatus.OK);
     }
