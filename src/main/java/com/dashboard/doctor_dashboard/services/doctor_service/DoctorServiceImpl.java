@@ -180,21 +180,38 @@ public class DoctorServiceImpl implements DoctorService {
     public ResponseEntity<GenericMessage> ageGroupChart(Long doctorId) {
         Map<String,Integer> chart = new HashMap<>();
         chart.put("0-2",0);
+        chart.put("3-14",0);
+        chart.put("15-24",0);
+        chart.put("25-64",0);
+        chart.put("65+",0);
 
 
         if(doctorRepository.isIdAvailable(doctorId) != null){
             List<Long> ageGroupValue = doctorRepository.ageGroupChart(doctorId);
-
+            System.out.println(ageGroupValue);
             for (Long s:ageGroupValue) {
-                int temp = 0;
+
                 if(s <= 2)
                 {
-                    chart.put("0-2",1);
+                    chart.put("0-2", chart.get("0-2")+1);
+                } else if (s>=3 && s<=14) {
+                    chart.put("3-14",chart.get("3-14")+1);
+                } else if (s>=15 && s<=24) {
+                    chart.put("15-24",chart.get("15-24")+1);
+                } else if (s>=25 && s<=64) {
+                    chart.put("25-64",chart.get("25-64")+1);
+                } else if (s>=65) {
+                    chart.put("65+",chart.get("65+")+1);
                 }
-                //chart.put(s, Collections.frequency(ageGroupValue,s));
+
             }
+
+                //chart.put(s, Collections.frequency(ageGroupValue,s));
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
+
         }
         throw new ResourceNotFoundException("doctor", "id", doctorId);
+
     }
+
 }

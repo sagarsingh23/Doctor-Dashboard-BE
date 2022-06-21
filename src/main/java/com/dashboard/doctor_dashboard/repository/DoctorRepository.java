@@ -30,7 +30,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto(dd.id,ld.name,ld.emailId,dd.speciality) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id")
-    List<DoctorListDto> getDoctorDetails();
+    List<DoctorDropdownDto> getDoctorDetails();
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto(dd.id,ld.name,ld.emailId,ld.profilePic,dd.speciality,dd.exp,dd.degree) from DoctorDetails dd inner join LoginDetails ld on  dd.loginId=ld.id and speciality=:speciality")
     List<DoctorListDto> getAllDoctorsBySpeciality(String speciality);
