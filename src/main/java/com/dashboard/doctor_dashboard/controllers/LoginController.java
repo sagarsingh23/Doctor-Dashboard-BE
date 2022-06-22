@@ -36,6 +36,11 @@ public class LoginController {
         }
         throw new GoogleLoginException(jwt.getIdtoken());
     }
+
+    @GetMapping(value = "api/check")
+    public ResponseEntity<String> checkServerStatus(){
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @DeleteMapping(value = "api/doctor/login/delete/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
         return loginService.deleteDoctorById(id);
