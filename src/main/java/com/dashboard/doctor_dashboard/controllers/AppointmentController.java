@@ -1,8 +1,10 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.Prescription;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.services.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
@@ -22,9 +25,12 @@ import java.util.Map;
 @RequestMapping("api/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AppointmentController {
-// new
+
     @Autowired
     private AppointmentService appointmentService;
+
+    @Autowired
+    private PdFGeneratorServiceImpl pdFGeneratorService;
 
     @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@RequestBody Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
@@ -83,10 +89,17 @@ public class AppointmentController {
         return new ResponseEntity<>(genericMessage,HttpStatus.OK);
     }
 
-    @GetMapping("chart/{doctorId}/activePatient")
-    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.weeklyPatientCountChart(doctorId);
+    @GetMapping("chart/{doctorId}/weeklyGraphDoctor")
+    public ResponseEntity<GenericMessage> weeklyDoctorCountChart(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.weeklyDoctorCountChart(doctorId);
     }
+
+    @GetMapping("chart/{patientId}/weeklyGraphPatient")
+    public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("patientId") Long patientId) {
+        return appointmentService.weeklyPatientCountChart(patientId);
+    }
+
+
     @GetMapping("/recentAdded/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
         return appointmentService.recentAppointment(doctorId);

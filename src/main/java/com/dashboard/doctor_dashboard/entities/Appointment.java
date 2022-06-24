@@ -33,7 +33,7 @@ public class Appointment {
     @Future(message = "Only future dates can be entered ")
     private LocalDate dateOfAppointment;
 
-    @NotEmpty
+
     @Size(max = 100)
     private String symptoms;
     @NotNull
