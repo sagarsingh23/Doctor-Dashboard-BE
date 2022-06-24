@@ -14,6 +14,9 @@ public interface LoginRepo extends JpaRepository<LoginDetails, Long> {
     @Query(value = "select id from login_details l where l.email_id =:email", nativeQuery = true)
     int getId(String email);
 
+    @Query(value = "select email_id from login_details where id =:doctorId",nativeQuery = true)
+    String email(Long doctorId);
+
     @Query(value = "select id from login_details d where d.id=:id", nativeQuery = true)
     Long isIdAvailable(Long id);
     @Query(value = "select role from login_details d where d.id=:id", nativeQuery = true)
