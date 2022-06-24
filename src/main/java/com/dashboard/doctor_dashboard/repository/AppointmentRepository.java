@@ -47,10 +47,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment < curdate()",nativeQuery = true)
     List<Appointment> pastDoctorAppointment(Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now())",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
     List<Appointment> todayDoctorAppointment1(Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time < time(now())",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time < time(now())  and status='Vitals updated' ",nativeQuery = true)
     List<Appointment> todayDoctorAppointment2(Long doctorId);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
@@ -96,7 +96,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select count(appoint_id) from appointments where doctor_id=:doctorId and week(timestamp)=week(now())", nativeQuery = true)
     int totalNoOfAppointmentAddedThisWeek(@Param(value = "doctorId") Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate()",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and status='To be attended'",nativeQuery = true)
     List<Appointment> receptionistDoctorAppointment(Long doctorId);
 
 

@@ -45,7 +45,7 @@ public class RecetionistServiceImpl implements ReceptionistService {
     public ResponseEntity<GenericMessage> updateAppointmentVitals(VitalsUpdateDto attributes, long appointmentId) {
         if(appointmentRepository.existsById(appointmentId)){
             attributeRepository.updateVitals(attributes.getBloodPressure(),attributes.getBodyTemperature(),attributes.getGlucoseLevels(),appointmentId);
-            appointmentRepository.setStatus("vitals updated",appointmentId);
+            appointmentRepository.setStatus("Vitals updated",appointmentId);
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
         }
 

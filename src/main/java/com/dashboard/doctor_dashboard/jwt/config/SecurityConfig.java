@@ -36,7 +36,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/", "/csrf",
             "/api/user/login",
             "/api/patient/changeMessage/**",
-            "/files/**"
+            "/files/**",
+            "/api/receptionist/**"
 
 
     };
