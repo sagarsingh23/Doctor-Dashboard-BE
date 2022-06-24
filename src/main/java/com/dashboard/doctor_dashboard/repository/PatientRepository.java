@@ -13,6 +13,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Long> {
@@ -102,5 +103,9 @@ public interface PatientRepository extends JpaRepository<Patient, Long> {
     @Modifying
     void insertIntoPatient(int age,String mobileNo,String alternateMobileNo,String gender,String address,String bloodGroup,Long loginId);
 
+    @Query(value = "update patients set mobile_no=:mobileNo where id=:patientId",nativeQuery = true)
+    @Modifying
+    @Transactional
+    void updateMobileNo(String mobileNo,long patientId);
 
 }

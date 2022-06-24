@@ -6,12 +6,13 @@ import lombok.AllArgsConstructor;
 public class DoctorDropdownDto {
 
     private long id;
-
+    private String name;
+    private String emailId;
     private String speciality;
 
-    private String name;
 
-    private String emailId;
+
+
 
     public long getId() {
         return id;

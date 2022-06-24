@@ -18,18 +18,24 @@ public class AppointmentViewDto {
     private String email;
     private String gender;
     private String speciality;
+
+    private short age;
+    private String bloodGroup;
     private LocalDate dateOfAppointment;
     private LocalTime timeOfAppointment;
     private Attributes attributes;
     private String status;
     private List<Prescription> prescription;
 
-    public AppointmentViewDto(String name, String speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status) {
+    public AppointmentViewDto(String name, String speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status,String bloodGroup,short age,String gender) {
         this.name = name;
         this.speciality = speciality;
         this.dateOfAppointment = dateOfAppointment;
         this.timeOfAppointment = timeOfAppointment;
         this.status = status;
+        this.bloodGroup=bloodGroup;
+        this.gender=gender;
+        this.age=age;
     }
     public void setEmail(String email) {
         this.email = email;

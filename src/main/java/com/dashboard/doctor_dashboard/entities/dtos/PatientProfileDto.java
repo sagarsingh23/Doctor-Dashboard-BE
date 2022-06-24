@@ -19,6 +19,16 @@ public class PatientProfileDto {
     private Attributes attributes;
     private PatientEntityDto patient;
 
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Long getAppointId() {
         return appointId;
     }

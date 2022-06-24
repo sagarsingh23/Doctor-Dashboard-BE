@@ -6,6 +6,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
 
 import com.dashboard.doctor_dashboard.entities.dtos.FollowUpDto;
 
+import com.dashboard.doctor_dashboard.entities.dtos.NotificationDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -63,7 +64,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
 
 
-    @Query(value = "update appointments set status =:status where appoint_id=:appointId ", nativeQuery = true)
+    @Query(value = "update appointments set status =:status, is_read=1 where appoint_id=:appointId ", nativeQuery = true)
     @Modifying
     @Transactional
     void changeAppointmentStatus(Long appointId, String status);
@@ -99,8 +100,8 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     List<Appointment> receptionistDoctorAppointment(Long doctorId);
 
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status) from Appointment appo where appo.appointId=:appointmentId")
-    AppointmentViewDto getBasicAppointmentDetails(long appointmentId);
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
+    AppointmentViewDto getBasicAppointmentDetails(long appointmentId,long patientId);
 
     @Query(value = "update appointments set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
     @Modifying
@@ -116,4 +117,14 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where appoint_id=:appointId",nativeQuery = true)
     Appointment getFollowUpData(Long appointId);
 
+    @Query(value = "select doctor_id from appointments where appoint_id=:appointmentId ", nativeQuery = true)
+    Long getDoctorId(Long appointmentId);
+
+    @Query(value = "select gender from doctor_details where id=:doctorId",nativeQuery = true)
+    String getGenderById(Long doctorId);
+    @Query(value = "select email_id from login_details where id=:loginId",nativeQuery = true)
+    String getEmailById(Long loginId);
+
+    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
+    List<NotificationDto> getNotifications(Long patientId);
 }

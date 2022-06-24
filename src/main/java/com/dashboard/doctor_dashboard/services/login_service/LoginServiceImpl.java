@@ -122,6 +122,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public String deleteDoctorById(long id) {
+        System.out.println("in");
         loginRepo.deleteById(id);
         return "Successfully deleted";
     }

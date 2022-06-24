@@ -24,7 +24,9 @@ public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long appointId;
-
+    @NotNull
+    @NotEmpty
+    @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
     private String category;
 
     @NotNull
@@ -34,14 +36,21 @@ public class Appointment {
     @NotEmpty
     @Size(max = 100)
     private String symptoms;
-
+    @NotNull
+    @NotEmpty
     private String patientName;
-
+    @NotNull
+    @NotEmpty
     private String patientEmail;
+    @NotNull
+    @NotEmpty
     private String doctorName;
-
+    @NotNull
     private LocalTime appointmentTime;
-
+    @Column(name = "is_read",columnDefinition = "boolean default false")
+    private Boolean isRead;
+    @NotNull
+    @NotEmpty
     private String status;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -56,12 +65,13 @@ public class Appointment {
 
 
     //private UUID referenceId;
-
+    @NotNull
     @ManyToOne()
     @JsonBackReference
     @JoinColumn(name = "patient_id")
     private Patient patient;
 
+    @NotNull
     @ManyToOne()
     @JsonBackReference("value_doctor")
     @JoinColumn(name = "doctor_id")
@@ -70,6 +80,7 @@ public class Appointment {
     @JsonManagedReference
     @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Attributes attributes;
+
 
     @JsonManagedReference("prescription")
     @OneToMany(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

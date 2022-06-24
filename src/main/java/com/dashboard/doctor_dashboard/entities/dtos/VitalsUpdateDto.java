@@ -2,22 +2,30 @@ package com.dashboard.doctor_dashboard.entities.dtos;
 
 import lombok.AllArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 @AllArgsConstructor
 public class VitalsUpdateDto {
 
+    @NotNull
     private Long appointmentId;
+    @NotNull
     private Long glucoseLevels;
 
-    private Double bodyTempareture;
+    @NotNull
+    private Double bodyTemperature;
 
+    @NotNull
+    @NotEmpty
     private String bloodPressure;
 
     public Long getGlucoseLevels() {
         return glucoseLevels;
     }
 
-    public Double getBodyTempareture() {
-        return bodyTempareture;
+    public Double getBodyTemperature() {
+        return bodyTemperature;
     }
 
     public Long getAppointmentId() {

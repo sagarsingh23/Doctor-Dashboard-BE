@@ -3,12 +3,19 @@ package com.dashboard.doctor_dashboard.entities.dtos;
 import com.dashboard.doctor_dashboard.entities.Prescription;
 import lombok.AllArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
 public class UpdatePrescriptionDto {
+
     private List<Prescription> prescriptions;
+    @NotNull
+    @NotEmpty
     private String status;
+    @NotNull
+    @NotEmpty
     private String notes;
 
     public List<Prescription> getPrescriptions() {

@@ -53,8 +53,10 @@ public interface PatientService {
 
     ResponseEntity<GenericMessage> changeStatus(Long doctorId);
 
-    ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientEntityDto patient);
+    ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientDetailsUpdateDto patientDetailsUpdateDto);
 
-    ResponseEntity<GenericMessage> viewAppointment(long appointmentId, long patientId);
+    ResponseEntity<GenericMessage> viewAppointment(Long appointmentId, long patientId);
+
+    ResponseEntity<GenericMessage> getNotifications(long patientId);
 
 }

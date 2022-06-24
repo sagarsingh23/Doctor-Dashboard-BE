@@ -26,6 +26,9 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private AttributeRepository attributeRepository;
+
+    @Autowired
+    private DoctorRepository doctorRepository;
     @Autowired
     private AppointmentRepository appointmentRepository;
     @Autowired
@@ -102,13 +105,14 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResponseEntity<GenericMessage> updatePatient(Long id, Patient patient) {
 
-        Optional<Patient> patients = patientRepository.findById(id);
+//        Optional<Patient> patients = patientRepository.findByLoginId(id);
+//        Optional<Patient> patients = patientRepository.getId(id);
         Optional<Attributes> attributes = attributeRepository.findById(id);
 
-        if (patients.isPresent() && attributes.isPresent()) {
-
-            var value = patients.get();
-            var value1 = attributes.get();
+//        if (patients.isPresent() && attributes.isPresent()) {
+//
+//            var value = patients.get();
+//            var value1 = attributes.get();
 
 //            value.setFullName(patient.getFullName());
 //            value.setAge(patient.getAge());
@@ -124,14 +128,9 @@ public class PatientServiceImpl implements PatientService {
 //            value1.setSymptoms(patient.getAttributes().getSymptoms());
 //            value1.setGlucoseLevel(patient.getAttributes().getGlucoseLevel());
 
-            patientRepository.save(value);
-            attributeRepository.save(value1);
+//
+        return null;
 
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,value),HttpStatus.OK);
-
-        } else {
-            throw new ResourceNotFoundException(PATIENT, "id", id);
-        }
     }
 
     @Override
@@ -303,24 +302,24 @@ public class PatientServiceImpl implements PatientService {
 
 
     @Override
-    public ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientEntityDto patient) {
+    public ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientDetailsUpdateDto patient) {
 
         GenericMessage genericMessage = new GenericMessage();
 
-        Optional<Patient> patients = patientRepository.findById(id);
-        if (patients.isPresent()) {
+//        Optional<Patient> patients = patientRepository.findById(id);
+        if (loginRepo.existsById(patient.getPatientId()) && patientRepository.getId(patient.getPatientId())!=null) {
+            Long patientId=patientRepository.getId(patient.getPatientId());
+//            var value = patients.get();
+////            value.setAddress(patient.getAddress());
+////            value.setAlternateMobileNo(patient.getAlternateMobileNo());
+////            value.setAge(patient.getAge());
+////            value.setGender(patient.getGender());
+////            value.setBloodGroup(patient.getBloodGroup());
+//            value.setMobileNo(patient.getMobileNo());
+            patientRepository.updateMobileNo(patient.getMobileNo(),patient.getPatientId());
+//            patientRepository.save(value);
 
-            var value = patients.get();
-            value.setAddress(patient.getAddress());
-            value.setAlternateMobileNo(patient.getAlternateMobileNo());
-            value.setAge(patient.getAge());
-            value.setGender(patient.getGender());
-            value.setBloodGroup(patient.getBloodGroup());
-            value.setMobileNo(patient.getMobileNo());
-
-            patientRepository.save(value);
-
-            genericMessage.setData(mapper.map(value,PatientEntityDto.class));
+//            genericMessage.setData(mapper.map(value,PatientDetailsUpdateDto.class));
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
 
@@ -330,10 +329,27 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> viewAppointment(long appointmentId,long patientId){
+    public ResponseEntity<GenericMessage> getNotifications(long patientId) {
+        System.out.println("get Id"+patientRepository.getId(patientId));
+//        System.out.println(loginRepo.existsById(patientId)&&patientRepository.getId(patientId));
+        if (loginRepo.existsById(patientId)&&patientRepository.getId(patientId)!=null) {
+
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, appointmentRepository.getNotifications(patientRepository.getId(patientId))), HttpStatus.OK);
+        }
+        throw new ResourceNotFoundException("patient","id",patientId);
+    }
+    @Override
+    public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
+
         if(loginRepo.isIdAvailable(patientId)!=null&&patientRepository.getId(patientId)!=null){
-            if(attributeRepository.existsById(appointmentId)){
-                AppointmentViewDto viewDto =appointmentRepository.getBasicAppointmentDetails(appointmentId);
+            System.out.println(appointmentId);
+            if(attributeRepository.findById(appointmentId)!=null){
+
+                AppointmentViewDto viewDto =appointmentRepository.getBasicAppointmentDetails(appointmentId,patientRepository.getId(patientId));
+
+                Long doctorId=doctorRepository.isIdAvailable(appointmentRepository.getDoctorId(appointmentId));
+//                viewDto.setGender(appointmentRepository.getGenderById(doctorId));
+                viewDto.setEmail(appointmentRepository.getEmailById(doctorId));
                 viewDto.setAttributes(attributeRepository.getAttribute(appointmentId));
                 viewDto.setPrescription(prescriptionRepository.getAllPrescriptionByAppointment(appointmentId));
                 return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,viewDto),HttpStatus.OK);
