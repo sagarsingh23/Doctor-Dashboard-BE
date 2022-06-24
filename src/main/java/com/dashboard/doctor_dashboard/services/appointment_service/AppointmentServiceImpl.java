@@ -3,19 +3,28 @@ package com.dashboard.doctor_dashboard.services.appointment_service;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
+import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.sql.Array;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -43,6 +52,9 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Autowired
     JwtTokenProvider jwtTokenProvider;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     private final static Map<Long,Map<LocalDate,List<Boolean>>> slots=new HashMap<>();
 
 //    ArrayList<>(Collections.nCopies(12,true))
@@ -52,9 +64,13 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Autowired
     private ModelMapper mapper;
-    @Override
-    public ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) {
 
+    public AppointmentServiceImpl() {
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
+        Map<String,String> m = new HashMap<>();
         System.out.println(slots);
         Long loginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(loginId) != null) {
@@ -81,7 +97,11 @@ public class AppointmentServiceImpl implements AppointmentService {
                     System.out.println("book app"+slots);
                     appointment.setStatus("To be attended");
                     appointmentRepository.save(appointment);
-                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"appointment created successfully"),HttpStatus.OK);
+                    m.put("appointId",appointment.getAppointId().toString());
+                    m.put("message","Appointment Successfully created..");
+
+                    sendEmailToUser(appointment);
+                    return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m),HttpStatus.OK);
                 }
                 throw new InvalidDate(appDate.toString(),"appointment cannot be booked on this date");
             }else if(patientId!=null){
@@ -393,6 +413,68 @@ public class AppointmentServiceImpl implements AppointmentService {
     private PatientAppointmentListDto mapToDto2(Appointment appointment) {
         return mapper.map(appointment, PatientAppointmentListDto.class);
     }
+
+    public void sendEmailToUser(Appointment appointment) throws JSONException, MessagingException, UnsupportedEncodingException {
+        String doctorEmail = loginRepo.email(appointment.getDoctorDetails().getId());
+        System.out.println(doctorEmail);
+        String toEmail = appointment.getPatientEmail();
+        String fromEmail = "mecareapplication@gmail.com";
+        String senderName = "meCare Application";
+        String subject = "Appointment Confirmed";
+
+        String content = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
+                + "</style></head>"
+                + "<div style=\"background-color: white; color:black  \">\n"
+                + " <p style=\"text-align: left; font-size:15px ;\">Hi [[name]],</p>\n"
+                + " <p style =\"text-align:left; font-size:15px ;line-height: 0.8\n"
+                + " font-family: 'Arial' \n" + " ;\n"
+                + " \"\n" + " >\n"
+                + "Your appointment has been booked. Check the details given below.</p>"
+
+                + "<table><tr><th>Doctor Name</th><th>Doctor Email</th><th>Speciality</th><th>Date of Appointment</th><th>Appointment Time</th></tr><tr><td>[[doctorName]]</td><td>[[doctorEmail]]</td><td>[[speciality]]</td><td>[[dateOfAppointment]]</td><td>[[appointmentTime]]</td></tr></table>"
+
+                + " <p style=\" text-align: left ;font-size:13px \">\n"
+                + " For further queries, please mail to:\n" + " <span style=\"color: #FFFFF; \"\n"
+                + " >mecareapplication@gmail.com</span\n" + " >\n" + " </p>\n"
+                + " <p style=\" text-align: left;font-size:13px;line-height: 0.8\">\n"
+                + " Thanks & Regards, </p>\n"
+                + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare Application team</span\n"
+                + " </div>";
+
+        content = content.replace("[[name]]", appointment.getPatientName());
+        content = content.replace("[[doctorName]]", appointment.getDoctorName());
+        content = content.replace("[[doctorEmail]]", doctorEmail);
+        content = content.replace("[[speciality]]", appointment.getCategory());
+        content = content.replace("[[dateOfAppointment]]", appointment.getDateOfAppointment().toString());
+        content = content.replace("[[appointmentTime]]", appointment.getAppointmentTime().toString());
+        JSONObject obj = new JSONObject();
+        obj.put("fromEmail", fromEmail);
+        obj.put("toEmail", toEmail);
+        obj.put("senderName", senderName);
+        obj.put("subject", subject);
+        obj.put("content", content);
+        sendMailer(obj);
+    }
+
+
+    private void sendMailer(JSONObject obj) throws MessagingException, JSONException, UnsupportedEncodingException {
+
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message);
+            helper.setFrom(obj.get("fromEmail").toString(), obj.get("senderName").toString());
+            helper.setTo(obj.get("toEmail").toString());
+            helper.setText(obj.get("content").toString(), true);
+            helper.setSubject(obj.get("subject").toString());
+            System.out.println("I am printing"+message.getSubject());
+            mailSender.send(message);
+        }catch (Exception e)
+        {
+            throw new ReportNotFound(e.getMessage());
+        }
+
+    }
+
 
 
 }
