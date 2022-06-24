@@ -52,7 +52,7 @@ public class PatientController {
 //    public ResponseEntity<GenericMessage> updatePatient(@PathVariable("id") Long id, @RequestBody Patient patient) {
 //        return patientService.updatePatient(id, patient);
 //    }
-    @GetMapping("patientProfile/{loginId}")
+    @GetMapping("/patientProfile/{loginId}")
     public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId){
         return patientService.getPatientDetailsById(loginId);
     }
