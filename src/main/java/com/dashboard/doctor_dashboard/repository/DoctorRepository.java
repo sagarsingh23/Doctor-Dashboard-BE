@@ -17,10 +17,10 @@ import java.util.List;
 public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
 
 
-    @Query(value = "update DoctorDetails set age=:age,speciality=:speciality,gender=:gender,phoneNo=:phoneNo,experience=:exp,degree=:degree where id=:id")
+    @Query(value = "update DoctorDetails set phoneNo=:phoneNo where id=:id")
     @Transactional
     @Modifying
-    void updateDoctorDb(Short age, String speciality, String gender, String phoneNo, long id,short exp,String degree);
+    void updateDoctorDb(String phoneNo);
     //
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto(a.id,a.age,a.speciality,a.gender,a.phoneNo,a.exp,a.degree) from DoctorDetails a where id=:id")
     DoctorFormDto getDoctorById(Long id);

@@ -9,7 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public class UpdatePrescriptionDto {
-
+    private PatientDto patientDto;
     private List<Prescription> prescriptions;
     @NotNull
     @NotEmpty
@@ -17,6 +17,14 @@ public class UpdatePrescriptionDto {
     @NotNull
     @NotEmpty
     private String notes;
+
+    public PatientDto getPatientDto() {
+        return patientDto;
+    }
+
+    public void setPatientDto(PatientDto patientDto) {
+        this.patientDto = patientDto;
+    }
 
     public List<Prescription> getPrescriptions() {
         return prescriptions;

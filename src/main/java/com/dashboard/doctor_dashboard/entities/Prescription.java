@@ -29,6 +29,14 @@ public class Prescription {
     private Appointment appointment;
 
 
+    public Prescription(String drugName, Long quantity, String type, Long days, String time) {
+        this.drugName = drugName;
+        this.quantity = quantity;
+        this.type = type;
+        this.days = days;
+        this.time = time;
+    }
+
     public Long getPresId() {
         return presId;
     }

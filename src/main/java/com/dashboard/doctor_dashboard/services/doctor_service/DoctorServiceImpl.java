@@ -107,7 +107,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if (doctorRepository.isIdAvailable(details.getId()) != null) {
                 if (details.getId() == id && details.getId() == doctorLoginId) {
-                    doctorRepository.updateDoctorDb(details.getAge(), details.getSpeciality(), details.getGender(), details.getPhoneNo(), details.getId(), details.getExp(), details.getDegree());
+                    doctorRepository.updateDoctorDb(details.getPhoneNo());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
@@ -181,8 +181,8 @@ public class DoctorServiceImpl implements DoctorService {
         Map<String,Integer> chart = new HashMap<>();
         chart.put("0-2",0);
         chart.put("3-14",0);
-        chart.put("15-24",0);
-        chart.put("25-64",0);
+        chart.put("15-25",0);
+        chart.put("26-64",0);
         chart.put("65+",0);
 
 
@@ -196,17 +196,15 @@ public class DoctorServiceImpl implements DoctorService {
                     chart.put("0-2", chart.get("0-2")+1);
                 } else if (s>=3 && s<=14) {
                     chart.put("3-14",chart.get("3-14")+1);
-                } else if (s>=15 && s<=24) {
-                    chart.put("15-24",chart.get("15-24")+1);
-                } else if (s>=25 && s<=64) {
-                    chart.put("25-64",chart.get("25-64")+1);
+                } else if (s>=15 && s<=25) {
+                    chart.put("15-25",chart.get("15-25")+1);
+                } else if (s>=26 && s<=64) {
+                    chart.put("26-64",chart.get("26-64")+1);
                 } else if (s>=65) {
                     chart.put("65+",chart.get("65+")+1);
                 }
 
             }
-
-                //chart.put(s, Collections.frequency(ageGroupValue,s));
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
 
         }
