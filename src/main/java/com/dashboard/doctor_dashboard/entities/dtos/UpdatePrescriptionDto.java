@@ -7,9 +7,18 @@ import java.util.List;
 
 @AllArgsConstructor
 public class UpdatePrescriptionDto {
+    private PatientDto patientDto;
     private List<Prescription> prescriptions;
     private String status;
     private String notes;
+
+    public PatientDto getPatientDto() {
+        return patientDto;
+    }
+
+    public void setPatientDto(PatientDto patientDto) {
+        this.patientDto = patientDto;
+    }
 
     public List<Prescription> getPrescriptions() {
         return prescriptions;
