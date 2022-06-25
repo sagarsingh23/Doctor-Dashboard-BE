@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
 import com.dashboard.doctor_dashboard.entities.Attributes;
+import com.dashboard.doctor_dashboard.entities.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -19,6 +20,7 @@ public class PatientProfileDto {
 
     private Attributes attributes;
     private PatientEntityDto patient;
+    private Prescription prescription;
 
     private String status;
 
@@ -84,6 +86,14 @@ public class PatientProfileDto {
 
     public void setPatient(PatientEntityDto patient) {
         this.patient = patient;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 
     public String getCategory() {

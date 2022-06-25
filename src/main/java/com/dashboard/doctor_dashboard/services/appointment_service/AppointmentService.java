@@ -32,7 +32,9 @@ public interface AppointmentService {
     PatientProfileDto getAppointmentById(Long appointId);
     ResponseEntity<GenericMessage> recentAppointment(Long doctorId);
 
+    ResponseEntity<GenericMessage> weeklyDoctorCountChart(Long doctorId);
     ResponseEntity<GenericMessage> weeklyPatientCountChart(Long doctorId);
+
 
     Map<Long, Map<LocalDate,List<Boolean>>> returnMap();
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);

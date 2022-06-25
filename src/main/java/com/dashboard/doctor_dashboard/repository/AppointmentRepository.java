@@ -90,6 +90,9 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "Select date_of_appointment from appointments where doctor_id =:doctorId", nativeQuery = true)
     ArrayList<Date> getAllDatesByDoctorId(@Param(value = "doctorId") Long doctorId);
 
+    @Query(value = "Select date_of_appointment from appointments where patient_id =:patientId", nativeQuery = true)
+    ArrayList<Date> getAllDatesByPatientId(@Param(value = "patientId") Long patientId);
+
     @Query(value = "Select COUNT(appoint_id) from appointments where doctor_id =:doctorId", nativeQuery = true)
     int totalNoOfAppointment(@Param(value = "doctorId") Long doctorId);
 
