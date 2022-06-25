@@ -31,6 +31,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.sql.Array;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -99,7 +101,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                     appointmentRepository.save(appointment);
                     m.put("appointId",appointment.getAppointId().toString());
                     m.put("message","Appointment Successfully created..");
-
                     sendEmailToUser(appointment);
                     return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m),HttpStatus.OK);
                 }
@@ -392,7 +393,6 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 
     private Map<Long,Map<LocalDate,List<Boolean>>> checkSlotsAvail(LocalDate date,Long doctorId){
-//        System.out.println(date);
         Map<LocalDate,List<Boolean>> dateAndTime=new HashMap<>();
 
     List<Boolean> docTimesSlots=new ArrayList<>(Collections.nCopies(12,true));
@@ -486,7 +486,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         System.out.println(doctorEmail);
         String toEmail = appointment.getPatientEmail();
         String fromEmail = "mecareapplication@gmail.com";
-        String senderName = "meCare Application";
+        String senderName = "meCare Team";
         String subject = "Appointment Confirmed";
 
         String content = "<head><style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }"
@@ -498,21 +498,21 @@ public class AppointmentServiceImpl implements AppointmentService {
                 + " \"\n" + " >\n"
                 + "Your appointment has been booked. Check the details given below.</p>"
 
-                + "<table><tr><th>Doctor Name</th><th>Doctor Email</th><th>Speciality</th><th>Date of Appointment</th><th>Appointment Time</th></tr><tr><td>[[doctorName]]</td><td>[[doctorEmail]]</td><td>[[speciality]]</td><td>[[dateOfAppointment]]</td><td>[[appointmentTime]]</td></tr></table>"
+                + "<table><tr><th>Doctor Name</th><th>Doctor Email</th><th>Speciality</th><th>Date of Appointment</th><th>Appointment Time</th></tr><tr><td>Dr.[[doctorName]]</td><td>[[doctorEmail]]</td><td>[[speciality]]</td><td>[[dateOfAppointment]]</td><td>[[appointmentTime]]</td></tr></table>"
 
                 + " <p style=\" text-align: left ;font-size:13px \">\n"
                 + " For further queries, please mail to:\n" + " <span style=\"color: #FFFFF; \"\n"
                 + " >mecareapplication@gmail.com</span\n" + " >\n" + " </p>\n"
                 + " <p style=\" text-align: left;font-size:13px;line-height: 0.8\">\n"
                 + " Thanks & Regards, </p>\n"
-                + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare Application team</span\n"
+                + " <p style=\"font-size: 13px; text-align: left;line-height: 0.8\">meCare team</span\n"
                 + " </div>";
 
         content = content.replace("[[name]]", appointment.getPatientName());
         content = content.replace("[[doctorName]]", appointment.getDoctorName());
         content = content.replace("[[doctorEmail]]", doctorEmail);
         content = content.replace("[[speciality]]", appointment.getCategory());
-        content = content.replace("[[dateOfAppointment]]", appointment.getDateOfAppointment().toString());
+        content = content.replace("[[dateOfAppointment]]", formatDate(appointment.getDateOfAppointment().toString()));
         content = content.replace("[[appointmentTime]]", appointment.getAppointmentTime().toString());
         JSONObject obj = new JSONObject();
         obj.put("fromEmail", fromEmail);
@@ -540,6 +540,12 @@ public class AppointmentServiceImpl implements AppointmentService {
             throw new ReportNotFound(e.getMessage());
         }
 
+    }
+
+    String formatDate(String Date1){
+        String[] newArray = Date1.split("-",5);
+        String newDate = newArray[2]+"-"+newArray[1]+"-"+newArray[0];
+        return newDate;
     }
 
 

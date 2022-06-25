@@ -38,7 +38,7 @@ public class PdFGeneratorServiceImpl {
             PdfWriter.getInstance(document, file);
 
 
-            Phrase date1 = fs1.process("Date: "+ LocalDate.now());
+            Phrase date1 = fs1.process("Date: "+ formatDate(LocalDate.now().toString()));
             Paragraph date = new Paragraph(date1);
             date.setAlignment(Element.ALIGN_RIGHT);
 
@@ -189,5 +189,11 @@ public class PdFGeneratorServiceImpl {
         font.setColor(1,1,1);
         fs.addFont(font);
         return fs.process(text);
+    }
+
+    String formatDate(String Date1){
+        String[] newArray = Date1.split("-",5);
+        String newDate = newArray[2]+"-"+newArray[1]+"-"+newArray[0];
+        return newDate;
     }
 }
