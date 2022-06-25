@@ -76,7 +76,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where doctor_id = :doctorId",nativeQuery = true)
     List<Appointment> getAllAppointmentByDoctorId(Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId order by timestamp desc limit 3", nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated' limit 3", nativeQuery = true)
     List<Appointment> recentAppointment(Long doctorId);
 
     @Query(value = "select * from appointments where appoint_id = :appointId",nativeQuery = true)
