@@ -77,4 +77,17 @@ public class PatientDto {
     public void setGender(String gender) {
         this.gender = gender;
     }
+
+    @Override
+    public String toString() {
+        return "PatientDto{" +
+                "category='" + category + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", status='" + status + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", patientEmail='" + patientEmail + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                '}';
+    }
 }

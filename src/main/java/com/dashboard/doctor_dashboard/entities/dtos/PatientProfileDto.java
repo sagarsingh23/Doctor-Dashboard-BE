@@ -15,6 +15,7 @@ public class PatientProfileDto {
     private String patientName;
     private String patientEmail;
     private String symptoms;
+    private String category;
 
     private Attributes attributes;
     private PatientEntityDto patient;
@@ -85,5 +86,12 @@ public class PatientProfileDto {
         this.patient = patient;
     }
 
-   }
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+}
 
