@@ -1,7 +1,6 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
 import lombok.AllArgsConstructor;
-
 import lombok.NoArgsConstructor;
 
 

@@ -5,8 +5,6 @@ import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public interface TodoService {
 

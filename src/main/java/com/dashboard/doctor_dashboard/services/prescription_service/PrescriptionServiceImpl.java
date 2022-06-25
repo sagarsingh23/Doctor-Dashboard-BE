@@ -1,11 +1,12 @@
 package com.dashboard.doctor_dashboard.services.prescription_service;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
 import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -58,12 +58,14 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
     public String addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
         if(appointmentRepository.getId(appointId) != null) {
             if (appointId == updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId()) {
-
                 pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(),updatePrescriptionDto.getPatientDto(),updatePrescriptionDto.getNotes());
+                System.out.println(appointId+"1");
                 sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
-
+                System.out.println(appointId+"2");
                 prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
+                System.out.println(appointId+"3");
                 attributeRepository.changeNotes(appointId, updatePrescriptionDto.getNotes());
+                System.out.println(appointId+"4");
                 appointmentRepository.changeAppointmentStatus(appointId, updatePrescriptionDto.getStatus());
                 return "Prescription Added";
             }

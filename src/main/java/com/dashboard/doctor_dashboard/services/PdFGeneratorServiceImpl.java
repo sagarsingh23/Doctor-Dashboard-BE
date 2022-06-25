@@ -23,7 +23,7 @@ public class PdFGeneratorServiceImpl {
         OutputStream file=new FileOutputStream("/home/nineleaps/Downloads/prescription/prescription.pdf");
         try
         {
-
+            System.out.println("in");
 
             Document document = new Document(PageSize.A4, 20, 20, 20, 20);
             FontSelector fs = new FontSelector();
@@ -41,6 +41,9 @@ public class PdFGeneratorServiceImpl {
             Phrase date1 = fs1.process("Date: "+ formatDate(LocalDate.now().toString()));
             Paragraph date = new Paragraph(date1);
             date.setAlignment(Element.ALIGN_RIGHT);
+
+
+
 
             Phrase name=fs.process("meCare");
             Paragraph name1=new Paragraph(name);
@@ -68,15 +71,22 @@ public class PdFGeneratorServiceImpl {
            details.addCell(getBillHeaderCell("Speciality"));
 
 
-           PdfPTable notes = new PdfPTable(1);
+
+
+            PdfPTable notes = new PdfPTable(1);
            notes.setWidthPercentage(100);
            notes.addCell(new Paragraph(notes1+"                      \n"+"\n"+"\n"+"\n"+"\n"+"\n"));
+            System.out.println("nothing:1");
 
+            System.out.println(patientDto.toString());
             details.addCell(getBillRowCell(patientDto.getPatientName()));
             details.addCell(getBillRowCell(String.valueOf(patientDto.getAge())));
             details.addCell(getBillRowCell(patientDto.getGender()));
             details.addCell(getBillRowCell(patientDto.getDoctorName()));
             details.addCell(getBillRowCell(patientDto.getCategory()));
+
+            System.out.println("nothing:2");
+
 
 
             PdfPTable billTable = new PdfPTable(5);
@@ -95,6 +105,8 @@ public class PdFGeneratorServiceImpl {
                 billTable.addCell(getBillRowCell(prescriptions.get(i).getDays().toString()));
                 billTable.addCell(getBillRowCell(prescriptions.get(i).getTime()));
             }
+            System.out.println("nothing3");
+
 
             document.open();
             document.add(name2);
@@ -132,11 +144,13 @@ public class PdFGeneratorServiceImpl {
 
 
             document.setMarginMirroringTopBottom(true);
+
             document.close();
             file.close();
 
         }
         catch (Exception e) {
+            System.out.println(e);
             file.close();
             throw new ReportNotFound(e.getMessage());
         }

@@ -1,13 +1,7 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
-
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 
 @NoArgsConstructor
@@ -76,5 +70,18 @@ public class PatientDto {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public String toString() {
+        return "PatientDto{" +
+                "category='" + category + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", status='" + status + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", patientEmail='" + patientEmail + '\'' +
+                ", age=" + age +
+                ", gender='" + gender + '\'' +
+                '}';
     }
 }

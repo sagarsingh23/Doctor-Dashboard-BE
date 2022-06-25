@@ -1,11 +1,7 @@
 package com.dashboard.doctor_dashboard.repository;
 
 import com.dashboard.doctor_dashboard.entities.Appointment;
-
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
-
-import com.dashboard.doctor_dashboard.entities.dtos.FollowUpDto;
-
 import com.dashboard.doctor_dashboard.entities.dtos.NotificationDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,11 +10,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
-import java.sql.Date;
 import java.util.List;
 
 @Repository
