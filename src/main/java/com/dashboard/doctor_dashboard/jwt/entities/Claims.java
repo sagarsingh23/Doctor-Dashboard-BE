@@ -3,8 +3,6 @@ package com.dashboard.doctor_dashboard.jwt.entities;
 
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
-
 
 @NoArgsConstructor
 public class Claims {

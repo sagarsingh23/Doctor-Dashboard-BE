@@ -6,7 +6,6 @@ import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import org.springframework.jdbc.core.SqlReturnType;
 
 import javax.persistence.*;
 
