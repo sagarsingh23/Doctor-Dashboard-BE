@@ -22,4 +22,11 @@ public interface AttributeRepository extends JpaRepository<Attributes, Long> {
     @Query(value = "select * from attributes where appointment_id=:appointId",nativeQuery = true)
     Attributes getAttribute(Long appointId);
 
+
+    @Query(value = "select appointment_id from attributes where appointment_id=:appointId",nativeQuery = true)
+    Long checkAppointmentPresent(Long appointId);
+
+
+
+
 }
