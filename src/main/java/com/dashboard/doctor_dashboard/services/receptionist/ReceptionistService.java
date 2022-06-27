@@ -10,5 +10,6 @@ public interface ReceptionistService {
     ResponseEntity<GenericMessage> getDoctorDetails();
     ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId);
     ResponseEntity<GenericMessage> updateAppointmentVitals(VitalsUpdateDto attributes, long appointmentId);
+    ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff();
 
 }

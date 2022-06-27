@@ -125,4 +125,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
 
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
     List<NotificationDto> getNotifications(Long patientId);
+
+    @Query(value = "select * from appointments where date_of_appointment = curdate()",nativeQuery = true)
+    List<Appointment> todayAllAppointmentForClinicStaff();
 }

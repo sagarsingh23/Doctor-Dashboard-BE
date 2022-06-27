@@ -54,6 +54,16 @@ public class RecetionistServiceImpl implements ReceptionistService {
             throw new ResourceNotFoundException("appointments","id",appointmentId);
 
     }
+
+    @Override
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff() {
+        List<Appointment> appointmentList = appointmentRepository.todayAllAppointmentForClinicStaff();
+
+        List<PatientViewDto> patientViewDto = appointmentList.stream()
+                .map(this::mapToDto2).collect(Collectors.toList());
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
+    }
+
     private PatientViewDto mapToDto2(Appointment appointment) {
         return mapper.map(appointment, PatientViewDto.class);
     }

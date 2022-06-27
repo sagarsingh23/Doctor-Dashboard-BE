@@ -28,6 +28,11 @@ public class RecepetionistController {
       return   receptionistService.updateAppointmentVitals(vitalsUpdateDto,appointmentId);
     }
 
+    @GetMapping("/getAllAppointments")
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(){
+        return receptionistService.todayAllAppointmentForClinicStaff();
+    }
+
 }
 
 
