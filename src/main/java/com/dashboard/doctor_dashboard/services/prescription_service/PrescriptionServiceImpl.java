@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -56,20 +57,26 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
 
     @Override
     public String addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
-        if(appointmentRepository.getId(appointId) != null) {
-            if (appointId == updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId()) {
 
-                appointmentRepository.changeAppointmentStatus(appointId, updatePrescriptionDto.getStatus());
-                attributeRepository.changeNotes(appointId, updatePrescriptionDto.getNotes());
-                prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
-                pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(),updatePrescriptionDto.getPatientDto(),updatePrescriptionDto.getNotes());
-                sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
 
-                return "Prescription Added";
+           if (appointmentRepository.getId(appointId) != null) {
+               if(appointmentRepository.checkStatus(appointId).equals("Vitals updated")){
+                    if (appointId == updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId()) {
+
+                      appointmentRepository.changeAppointmentStatus(appointId, updatePrescriptionDto.getStatus());
+                      attributeRepository.changeNotes(appointId, updatePrescriptionDto.getNotes());
+                      prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
+                      pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(), updatePrescriptionDto.getPatientDto(), updatePrescriptionDto.getNotes());
+                      sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
+
+                      return "Prescription Added";
+                    }
+               throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
+              }
+               else
+                   throw new APIException(HttpStatus.BAD_REQUEST,"Prescription cannot be added for other status like completed,follow Up, and to be attended");
             }
-            throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
-        }
-        throw new ResourceNotFoundException("Appointment","id",appointId);
+             throw new ResourceNotFoundException("Appointment", "id", appointId);
     }
 
     @Override

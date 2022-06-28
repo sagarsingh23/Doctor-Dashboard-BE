@@ -18,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.print.attribute.Attribute;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,9 +65,13 @@ public class RecetionistServiceImpl implements ReceptionistService {
 
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff() {
-        List<Appointment> appointmentList = appointmentRepository.todayAllAppointmentForClinicStaff();
+        List<Appointment> appointments = new ArrayList<>();
+        List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1();
+        List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2();
+        appointments.addAll(appointmentList1);
+        appointments.addAll(appointmentList2);
 
-        List<PatientViewDto> patientViewDto = appointmentList.stream()
+        List<PatientViewDto> patientViewDto = appointments.stream()
                 .map(this::mapToDto2).collect(Collectors.toList());
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
     }
