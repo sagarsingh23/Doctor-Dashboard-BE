@@ -3,8 +3,6 @@ package com.dashboard.doctor_dashboard.entities.dtos;
 import com.dashboard.doctor_dashboard.entities.Appointment;
 import lombok.AllArgsConstructor;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -12,37 +10,32 @@ import javax.validation.constraints.NotNull;
 public class VitalsDto {
 
     @NotNull
-    private Long glucoseLevel;
+    private Long appointmentId;
+    @NotNull
+    private Long glucoseLevels;
 
     @NotNull
-    private Double bodyTemp;
+    private Double bodyTemperature;
 
     @NotNull
     @NotEmpty
     private String bloodPressure;
 
-    @OneToOne()
-    @JoinColumn(name = "appointment_id")
-    private Appointment appointment;
-
-
-    public Long getGlucoseLevel() {
-        return glucoseLevel;
+    public Long getGlucoseLevels() {
+        return glucoseLevels;
     }
 
-    public Double getBodyTemp() {
-        return bodyTemp;
+    public Double getBodyTemperature() {
+        return bodyTemperature;
     }
+
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
 
     public String getBloodPressure() {
         return bloodPressure;
     }
 
-    public Appointment getAppointment() {
-        return appointment;
-    }
-
-    public void setAppointment(Appointment appointment) {
-        this.appointment = appointment;
-    }
 }

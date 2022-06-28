@@ -50,6 +50,11 @@ public class AppointmentController {
         return appointmentService.getAllAppointmentByPatientId(patientId) ;
     }
 
+    @GetMapping("/getAllAppointments/doctor/{doctorId}")
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
+        return appointmentService.getAllAppointmentByDoctorId(doctorId) ;
+    }
+
 //    @GetMapping("/getAllAppointments/doctor/{doctorId}")
 //    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
 //        GenericMessage genericMessage = new GenericMessage();
@@ -60,22 +65,22 @@ public class AppointmentController {
 //    }
 
 
-    @GetMapping("/getAllAppointments/past/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getPastAppointmentByDoctorId(doctorId);
-    }
-
-    @GetMapping("/getAllAppointments/today/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getTodayAppointmentByDoctorId(doctorId);
-    }
-
-
-    @GetMapping("/getAllAppointments/upcoming/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
-        return appointmentService.getUpcomingAppointmentByDoctorId(doctorId);
-    }
-
+//    @GetMapping("/getAllAppointments/past/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
+//        return appointmentService.getPastAppointmentByDoctorId(doctorId);
+//    }
+//
+//    @GetMapping("/getAllAppointments/today/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
+//        return appointmentService.getTodayAppointmentByDoctorId(doctorId);
+//    }
+//
+//
+//    @GetMapping("/getAllAppointments/upcoming/doctor/{doctorId}")
+//    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId) {
+//        return appointmentService.getUpcomingAppointmentByDoctorId(doctorId);
+//    }
+//
 
 
     @GetMapping("/{appointId}/patient")
