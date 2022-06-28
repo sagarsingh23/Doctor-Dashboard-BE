@@ -150,7 +150,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId) {
 
-        System.out.println(LocalTime.now());
         GenericMessage genericMessage = new GenericMessage();
         List<PatientAppointmentListDto> today = new ArrayList<>();
         Map<String,List<PatientAppointmentListDto>> m = new HashMap<>();
@@ -179,15 +178,29 @@ public class AppointmentServiceImpl implements AppointmentService {
 
 }
 
-
-
     @Override
-    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId) {
+
         GenericMessage genericMessage = new GenericMessage();
-        if(doctorRepository.isIdAvailable(doctorId) != null) {
+        List<DoctorAppointmentListDto> today = new ArrayList<>();
+        Map<String,List<DoctorAppointmentListDto>> m = new HashMap<>();
+        Long doctorId = doctorRepository.isIdAvailable(loginId);
+
+        if(doctorId != null) {
             List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId));
-            genericMessage.setData(past);
+            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingAppointment(doctorId));
+            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayAppointment1(doctorId));
+            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayAppointment2(doctorId));
+            today.addAll(today1);
+            today.addAll(today2);
+
+            m.put("past",past);
+            m.put("today",today);
+            m.put("upcoming",upcoming);
+
+            genericMessage.setData(m);
             genericMessage.setStatus(Constants.SUCCESS);
+
 
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
@@ -196,43 +209,61 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
 
-    @Override
-    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId) {
-        if(doctorRepository.isIdAvailable(doctorId) != null) {
-            GenericMessage genericMessage = new GenericMessage();
-            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId));
-            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId));
-
-            List<DoctorAppointmentListDto> today = new ArrayList<>();
-            today.addAll(today1);
-            today.addAll(today2);
-            genericMessage.setData(today);
-            genericMessage.setStatus(Constants.SUCCESS);
 
 
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+//    @Override
+//    public ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId) {
+//        GenericMessage genericMessage = new GenericMessage();
+//        if(doctorRepository.isIdAvailable(doctorId) != null) {
+//            List<DoctorAppointmentListDto> past = mapToAppointDoctorList(appointmentRepository.pastDoctorAppointment(doctorId));
+//            genericMessage.setData(past);
+//            genericMessage.setStatus(Constants.SUCCESS);
+//
+//            return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+//        }
+//        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+//
+//    }
+//
+//
+//    @Override
+//    public ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId) {
+//        if(doctorRepository.isIdAvailable(doctorId) != null) {
+//            GenericMessage genericMessage = new GenericMessage();
+//            List<DoctorAppointmentListDto> today1 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment1(doctorId));
+//            List<DoctorAppointmentListDto> today2 = mapToAppointDoctorList(appointmentRepository.todayDoctorAppointment2(doctorId));
+//
+//            List<DoctorAppointmentListDto> today = new ArrayList<>();
+//            today.addAll(today1);
+//            today.addAll(today2);
+//            genericMessage.setData(today);
+//            genericMessage.setStatus(Constants.SUCCESS);
+//
+//
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        }
+//        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+//
+//    }
+//
+//
+//
+//
+//    @Override
+//    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId) {
+//        GenericMessage genericMessage = new GenericMessage();
+//        if(doctorRepository.isIdAvailable(doctorId) != null) {
+//            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId));
+//
+//            genericMessage.setData(upcoming);
+//            genericMessage.setStatus(Constants.SUCCESS);
+//
+//
+//            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+//        }
+//        throw new ResourceNotFoundException("Doctor", "id", doctorId);
+//    }
 
-    }
-
-
-
-
-    @Override
-    public ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId) {
-        GenericMessage genericMessage = new GenericMessage();
-        if(doctorRepository.isIdAvailable(doctorId) != null) {
-            List<DoctorAppointmentListDto> upcoming = mapToAppointDoctorList(appointmentRepository.upcomingDoctorAppointment(doctorId));
-
-            genericMessage.setData(upcoming);
-            genericMessage.setStatus(Constants.SUCCESS);
-
-
-            return new ResponseEntity<>(genericMessage, HttpStatus.OK);
-        }
-        throw new ResourceNotFoundException("Doctor", "id", doctorId);
-    }
 
     @Override
     public ResponseEntity<GenericMessage> getFollowDetails(Long appointId) {

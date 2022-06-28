@@ -19,9 +19,7 @@ public interface AppointmentService {
 
     ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
     ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
-    ResponseEntity<GenericMessage> getPastAppointmentByDoctorId(Long doctorId);
-    ResponseEntity<GenericMessage> getTodayAppointmentByDoctorId(Long doctorId);
-    ResponseEntity<GenericMessage> getUpcomingAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId);
     ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
 
 
