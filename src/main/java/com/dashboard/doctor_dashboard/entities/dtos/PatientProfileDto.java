@@ -5,7 +5,9 @@ import com.dashboard.doctor_dashboard.entities.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,9 +20,28 @@ public class PatientProfileDto {
     private String symptoms;
     private String category;
 
+    private Boolean isBookedAgain;
+
+    public Boolean getBookedAgain() {
+        return isBookedAgain;
+    }
+
+    public void setBookedAgain(Boolean bookedAgain) {
+        isBookedAgain = bookedAgain;
+    }
+
+    public Long getFollowUpAppointmentId() {
+        return followUpAppointmentId;
+    }
+
+    public void setFollowUpAppointmentId(Long followUpAppointmentId) {
+        this.followUpAppointmentId = followUpAppointmentId;
+    }
+
+    private Long followUpAppointmentId;
     private Attributes attributes;
     private PatientEntityDto patient;
-    private Prescription prescription;
+    private List<Prescription> prescription;
 
     private String status;
 
@@ -88,11 +109,11 @@ public class PatientProfileDto {
         this.patient = patient;
     }
 
-    public Prescription getPrescription() {
+    public List<Prescription> getPrescription() {
         return prescription;
     }
 
-    public void setPrescription(Prescription prescription) {
+    public void setPrescription(List<Prescription> prescription) {
         this.prescription = prescription;
     }
 

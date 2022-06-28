@@ -45,7 +45,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time >= time(now()) and status='Vitals updated'",nativeQuery = true)
     List<Appointment> todayDoctorAppointment1(Long doctorId);
 
-    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and appointment_time < time(now())  and status='Vitals updated' ",nativeQuery = true)
+    @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment = curdate() and (status='Completed' or status='Follow Up') ",nativeQuery = true)
     List<Appointment> todayDoctorAppointment2(Long doctorId);
 
     @Query(value = "select * from appointments where doctor_id = :doctorId and date_of_appointment > curdate()",nativeQuery = true)
@@ -64,10 +64,10 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
     @Transactional
     void changeAppointmentStatus(Long appointId, String status);
 
-
-
-
-
+    @Query(value = "update appointments set is_booked_again =true where appoint_id=:appointId ", nativeQuery = true)
+    @Modifying
+    @Transactional
+    void changeFollowUpStatus(Long appointId);
 
 
     @Query(value = "select appointment_time from appointments where doctor_id=:doctorId and date_of_appointment=:date",nativeQuery = true)

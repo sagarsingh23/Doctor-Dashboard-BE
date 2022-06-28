@@ -103,7 +103,7 @@ public class Prescription {
                 ", type='" + type + '\'' +
                 ", days=" + days +
                 ", time='" + time + '\'' +
-                ", appointment=" + appointment +
+//                ", appointment=" + appointment +
                 '}';
     }
 }

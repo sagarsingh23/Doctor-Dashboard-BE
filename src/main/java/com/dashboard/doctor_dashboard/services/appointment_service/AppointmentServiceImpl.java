@@ -81,6 +81,22 @@ public class AppointmentServiceImpl implements AppointmentService {
                 appointment.getPatient().setPID(patientId);
                 LocalDate appDate=appointment.getDateOfAppointment();
                 if(appDate.isAfter(LocalDate.now())&&appDate.isBefore(LocalDate.now().plusDays(8))) {
+
+                    if(appointment.getIsBookedAgain()!=null&& appointment.getIsBookedAgain()) {
+                        if(appointment.getFollowUpAppointmentId()!=null && appointmentRepository.existsById(appointment.getFollowUpAppointmentId())) {
+                            Appointment getAppointmentById = appointmentRepository.getAppointmentById(appointment.getFollowUpAppointmentId());
+                            if (appointment.getPatient().getPID() != getAppointmentById.getPatient().getPID()) {
+                                throw new ResourceNotFoundException("pat", "id", appointment.getFollowUpAppointmentId());
+                            }
+                            appointmentRepository.changeFollowUpStatus(appointment.getFollowUpAppointmentId());
+                            appointment.setIsBookedAgain(null);
+                        }
+//
+//                      appointment.setBookedAgain(true);
+                        else {
+                            throw new ResourceNotFoundException("appointment", "id", appointment.getFollowUpAppointmentId());
+                        }
+                    }
                     List<Boolean> c = new ArrayList<>(checkSlots(appointment.getDateOfAppointment(), appointment.getDoctorDetails().getId()));
                     String time=appointment.getAppointmentTime().toString();
                     int index = times.indexOf(time);
@@ -93,6 +109,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                     }
                     slots.get(appointment.getDoctorDetails().getId()).put(appointment.getDateOfAppointment(), c);
                     appointment.setStatus("To be attended");
+
                     appointmentRepository.save(appointment);
                     m.put("appointId",appointment.getAppointId().toString());
                     m.put("message","Appointment Successfully created..");
@@ -230,6 +247,8 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public PatientProfileDto getAppointmentById(Long appointId) {
         Appointment appointment = appointmentRepository.getAppointmentById(appointId);
+        System.out.println(appointment);
+        System.out.println( mapper.map(appointment,PatientProfileDto.class));
         return mapper.map(appointment,PatientProfileDto.class);
     }
 

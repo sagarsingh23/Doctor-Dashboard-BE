@@ -58,15 +58,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
     public String addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
         if(appointmentRepository.getId(appointId) != null) {
             if (appointId == updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId()) {
-                pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(),updatePrescriptionDto.getPatientDto(),updatePrescriptionDto.getNotes());
-                System.out.println(appointId+"1");
-                sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
-                System.out.println(appointId+"2");
-                prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
-                System.out.println(appointId+"3");
-                attributeRepository.changeNotes(appointId, updatePrescriptionDto.getNotes());
-                System.out.println(appointId+"4");
                 appointmentRepository.changeAppointmentStatus(appointId, updatePrescriptionDto.getStatus());
+
+                attributeRepository.changeNotes(appointId, updatePrescriptionDto.getNotes());
+                prescriptionRepository.saveAll(updatePrescriptionDto.getPrescriptions());
+                pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(),updatePrescriptionDto.getPatientDto(),updatePrescriptionDto.getNotes());
+                sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
                 return "Prescription Added";
             }
             throw new ResourceNotFoundException("Appointment", "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());

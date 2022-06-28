@@ -15,6 +15,15 @@ public class PatientAppointmentListDto {
     private LocalTime appointmentTime;
     private String doctorName;
     private String status;
+    private Boolean isBookedAgain;
+
+    public Boolean getBookedAgain() {
+        return isBookedAgain;
+    }
+
+    public void setBookedAgain(Boolean bookedAgain) {
+        isBookedAgain = bookedAgain;
+    }
 
     public Long getAppointId() {
         return appointId;

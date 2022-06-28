@@ -46,7 +46,7 @@ public class Appointment {
     private String doctorName;
     @NotNull
     private LocalTime appointmentTime;
-    @Column(name = "is_read",columnDefinition = "boolean default false")
+    @Column(name = "is_read",columnDefinition = "boolean default 0")
     private Boolean isRead;
     @NotNull
     @NotEmpty
@@ -56,6 +56,11 @@ public class Appointment {
     @Column(nullable = false)
     private Date timestamp;
 
+    @Column
+    private Boolean isBookedAgain;
+
+    @Column
+    private Long followUpAppointmentId;
 
     @PrePersist
     public void onCreate() {
@@ -189,6 +194,45 @@ public class Appointment {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Boolean getIsBookedAgain() {
+        return isBookedAgain;
+    }
+
+    public void setIsBookedAgain(Boolean bookedAgain) {
+        isBookedAgain = bookedAgain;
+    }
+
+    public Long getFollowUpAppointmentId() {
+        return followUpAppointmentId;
+    }
+
+    public void setFollowUpAppointmentId(Long followUpAppointmentId) {
+        this.followUpAppointmentId = followUpAppointmentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Appointment{" +
+                "appointId=" + appointId +
+                ", category='" + category + '\'' +
+                ", dateOfAppointment=" + dateOfAppointment +
+                ", symptoms='" + symptoms + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", patientEmail='" + patientEmail + '\'' +
+                ", doctorName='" + doctorName + '\'' +
+                ", appointmentTime=" + appointmentTime +
+                ", isRead=" + isRead +
+                ", status='" + status + '\'' +
+                ", timestamp=" + timestamp +
+                ", isBookedAgain=" + isBookedAgain +
+                ", followUpAppointmentId=" + followUpAppointmentId +
+                ", patient=" + patient +
+                ", doctorDetails=" + doctorDetails +
+                ", attributes=" + attributes +
+                ", prescription=" + prescription +
+                '}';
     }
 }
 
