@@ -411,7 +411,7 @@ public class AppointmentServiceImpl implements AppointmentService {
     }
 
     public void sendEmailToUser(Appointment appointment) throws JSONException, MessagingException, UnsupportedEncodingException {
-        log.info("Mail Service Started");
+        log.info("Appointment Mail Service Started");
 
         String doctorEmail = loginRepo.email(appointment.getDoctorDetails().getId());
         String toEmail = appointment.getPatientEmail();
@@ -447,12 +447,12 @@ public class AppointmentServiceImpl implements AppointmentService {
             helper.setText(obj.get("content").toString(), true);
             helper.setSubject(obj.get("subject").toString());
             mailSender.send(message);
-            log.info("Mail Service Stopped!!");
+            log.info(" Appointment Mail Service Stopped!!");
 
         }catch (Exception e)
         {
             logger.info(Constants.MAIL_ERROR);
-            log.info("Mail Service Stopped!!");
+            log.info("Exception!!! Mail Service Stopped!!");
             throw new ResourceNotFound(e.getMessage());
         }
 
