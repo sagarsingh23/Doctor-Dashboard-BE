@@ -20,7 +20,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public ResponseEntity<GenericMessage> addTodo(Todolist todolist) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         genericMessage.setData(todoRepository.save(todolist));
         genericMessage.setStatus(Constants.SUCCESS);
@@ -29,7 +29,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public ResponseEntity<GenericMessage> getTodoById(Long id) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Optional<Todolist> value = todoRepository.findById(id);
         if (value.isPresent()) {
@@ -42,7 +42,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public ResponseEntity<GenericMessage> getAllTodoByDoctorId(Long doctorId) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         genericMessage.setData(todoRepository.findByDoctorId(doctorId));
         genericMessage.setStatus(Constants.SUCCESS);
@@ -51,7 +51,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public ResponseEntity<GenericMessage> updateTodo(Long id, Todolist todolist) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         Optional<Todolist> value1 = todoRepository.findById(id);
         if (value1.isPresent()) {
@@ -67,7 +67,7 @@ public class TodoServiceImpl implements TodoService {
 
     @Override
     public ResponseEntity<GenericMessage> deleteTodoById(Long id) {
-        GenericMessage genericMessage = new GenericMessage();
+        var genericMessage = new GenericMessage();
 
         todoRepository.deleteById(id);
         genericMessage.setData("successfully deleted");
