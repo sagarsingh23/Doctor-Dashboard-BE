@@ -5,8 +5,8 @@ import com.dashboard.doctor_dashboard.entities.Attributes;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
-import com.dashboard.doctor_dashboard.entities.dtos.VitalsDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
@@ -17,14 +17,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.print.attribute.Attribute;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RecetionistServiceImpl implements ReceptionistService {
+public class ReceptionistServiceImpl implements ReceptionistService {
     @Autowired
     private ModelMapper mapper;
     @Autowired
@@ -41,27 +39,16 @@ public class RecetionistServiceImpl implements ReceptionistService {
 
     @Override
     public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId) {
-        List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId);
+        if(doctorRepository.isIdAvailable(doctorId) != null) {
+            List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId);
 
-        List<PatientViewDto> patientViewDto = appointmentList.stream()
-                .map(this::mapToDto2).collect(Collectors.toList());
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
+            List<PatientViewDto> patientViewDto = appointmentList.stream()
+                    .map(this::mapToDto2).collect(Collectors.toList());
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, patientViewDto), HttpStatus.OK);
+        }
+        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
     }
 
-
-
-
-//    @Override
-//    public ResponseEntity<GenericMessage> updateAppointmentVitals(VitalsDto attributes, long appointmentId) {
-//        if(appointmentRepository.existsById(appointmentId)){
-//            attributeRepository.updateVitals(attributes.getBloodPressure(),attributes.getBodyTemp(),attributes.getGlucoseLevel(),appointmentId);
-//            appointmentRepository.setStatus("Vitals updated",appointmentId);
-//            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successful"), HttpStatus.OK);
-//        }
-//
-//            throw new ResourceNotFoundException("appointments","id",appointmentId);
-//
-//    }
 
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff() {
@@ -88,7 +75,7 @@ public class RecetionistServiceImpl implements ReceptionistService {
                 throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
 
         }
-        throw new ResourceNotFoundException("appointments","id",appointmentId);
+        throw new ResourceNotFound(Constants.APPOINTMENT_NOT_FOUND);
 
     }
 
