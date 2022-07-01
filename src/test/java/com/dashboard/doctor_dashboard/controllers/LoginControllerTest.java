@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
@@ -68,4 +69,22 @@ class LoginControllerTest {
     }
 
 
+    @Test
+    void checkServerStatus() {
+        ResponseEntity<String> response = loginController.checkServerStatus();
+        assertEquals(HttpStatus.OK,response.getStatusCode());
+    }
+
+    @Test
+    void deleteDoctorById() {
+         final Long id = 1L;
+
+        String message = "Successfully deleted";
+
+        Mockito.when(loginService.deleteDoctorById(Mockito.any(Long.class))).thenReturn(message);
+
+        String newMessage = loginController.deleteDoctorById(id);
+        assertThat(newMessage).isNotNull();
+        assertEquals(message,newMessage);
+    }
 }

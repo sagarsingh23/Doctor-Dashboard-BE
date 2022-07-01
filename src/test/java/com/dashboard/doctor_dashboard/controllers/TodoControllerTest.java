@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.Todolist;
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,9 +11,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,57 +46,63 @@ class TodoControllerTest {
 
     @Test
     void addTodo() {
-        Todolist todolist = new Todolist(1L,"hello",true,null);
-        Mockito.when(todoService.addTodo(Mockito.any(Todolist.class))).thenReturn(todolist);
-        Todolist newTodo = todoController.addTodo(todolist);
-        assertEquals(todolist.getDescription(),newTodo.getDescription());
+        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
+        Mockito.when(todoService.addTodo(Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        ResponseEntity<GenericMessage> newTodo = todoController.addTodo(todolist);
+        assertEquals(message.getData(),newTodo.getBody().getData());
     }
 
     @Test
     void getAllTodoByDoctorId() {
         List<Todolist> list = new ArrayList<Todolist>();
-        Todolist todolist1 = new Todolist(1L,"task1",true,null);
-        Todolist todolist2 = new Todolist(2L,"task2",true,null);
-
+        Todolist todolist1 = new Todolist(1L,"task1",true,null,null,null);
+        Todolist todolist2 = new Todolist(2L,"task2",true,null,null,null);
         list.addAll(Arrays.asList(todolist1,todolist2));
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
 
-        Mockito.when(todoService.getAllTodoByDoctorId(Mockito.any(Long.class))).thenReturn(list);
-        List<Todolist> newList = todoController.getAllTodoByDoctorId(1L);
+        Mockito.when(todoService.getAllTodoByDoctorId(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        ResponseEntity<GenericMessage> newList = todoController.getAllTodoByDoctorId(1L);
 
-        assertEquals(list.size(),newList.size());
-        assertEquals(todolist1.getDescription(),newList.get(0).getDescription());
-        assertEquals(todolist2.getDescription(),newList.get(1).getDescription());
+        System.out.println(newList.getBody().getData());
+        System.out.println(list);
 
+        assertEquals(list,newList.getBody().getData());
     }
 
     @Test
     void getTodoById() {
-        Todolist todolist = new Todolist(1L,"hello",true,null);
-        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(todolist);
-        Todolist newTodo = todoController.getTodoById(1L);
-        assertEquals(todolist.getDescription(),newTodo.getDescription());
+        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
+
+        Mockito.when(todoService.getTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        ResponseEntity<GenericMessage> newTodo = todoController.getTodoById(1L);
+        assertEquals(todolist,newTodo.getBody().getData());
     }
 
     @Test
     void deleteTodo() {
-       Todolist todolist = new Todolist(1L,"hello",true,null);
+        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
 
-       Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn("Deleted");
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Deleted");
 
-       String newString = todoController.deleteTodo(1L);
-       assertEquals("Deleted",newString);
+        Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+
+        ResponseEntity<GenericMessage> newString = todoController.deleteTodo(1L);
+        assertEquals("Deleted",newString.getBody().getData());
     }
 
     @Test
     void updateTodo() {
-        Todolist todolist = new Todolist(1L,"hello",true,null);
+        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
 
-        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(todolist);
+        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
 
-        Todolist newTodoList = todoController.updateTodo(1L,todolist);
+        ResponseEntity<GenericMessage> newTodoList = todoController.updateTodo(1L,todolist);
 
-        assertEquals(todolist.getId(),newTodoList.getId());
-        assertEquals(todolist.getDescription(),newTodoList.getDescription());
+
+        assertEquals(todolist,newTodoList.getBody().getData());
 
     }
 }

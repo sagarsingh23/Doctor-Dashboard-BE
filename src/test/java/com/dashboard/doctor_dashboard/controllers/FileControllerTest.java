@@ -1,9 +1,10 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
 import com.dashboard.doctor_dashboard.entities.report.ResponseMessage;
 import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
-import com.dashboard.doctor_dashboard.exceptions.ReportNotFound;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -45,7 +46,7 @@ class FileControllerTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -60,7 +61,7 @@ class FileControllerTest {
 
         Mockito.when(fileStorageService.store(file,id)).thenReturn(fileDB);
 
-        ResponseEntity<ResponseMessage> newMessage = fileController.uploadFile(file,id);
+        ResponseEntity<GenericMessage> newMessage = fileController.uploadFile(file,id);
 
         assertThat(newMessage).isNotNull();
         assertEquals(newMessage.getStatusCode(),message.getStatusCode());
@@ -74,7 +75,7 @@ class FileControllerTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -89,57 +90,28 @@ class FileControllerTest {
 
         Mockito.when(fileStorageService.store(file,id)).thenReturn(null);
 
-        ResponseEntity<ResponseMessage> newMessage = fileController.uploadFile(file,id);
+        ResponseEntity<GenericMessage> newMessage = fileController.uploadFile(file,id);
 
         assertThat(newMessage).isNotNull();
         assertEquals(newMessage.getStatusCode(),message.getStatusCode());
     }
 
+    @Test
+    void throwsException() throws IOException {
+        final Long id = 1L;
 
+        MultipartFile file = new MockMultipartFile(
+                "file",
+                "hello.txt",
+                MediaType.TEXT_PLAIN_VALUE,
+                "Hello, World!".getBytes()
+        );
 
-//    @Test
-//    @Disabled
-//    void getListFiles() {
-//
-//        List<ResponseFile> files = new ArrayList<>();
-//        ResponseFile file1 = new ResponseFile("file1",null,".png",10000);
-//        ResponseFile file2 = new ResponseFile("file2",null,".png",10000);
-//        files.addAll(Arrays.asList(file1,file2));
-//
-//
-//        List<FileDB> report = new ArrayList<>();
-//        final Long id = 1L;
-//        FileDB fileDB = new FileDB();
-//        fileDB.setDataReport(null);
-//        fileDB.setId(1L);
-//        fileDB.setType(".png");
-//        fileDB.setName("file1");
-//        fileDB.setPatientId(id);
-//
-//        FileDB fileDB1 = new FileDB();
-//        fileDB1.setDataReport(null);
-//        fileDB1.setId(2L);
-//        fileDB1.setType(".png");
-//        fileDB1.setName("file2");
-//        fileDB1.setPatientId(id);
-//
-//        Mockito.when(fileStorageService.getAllFiles().map(dbFile -> {
-//            ServletUriComponentsBuilder newValue = Mockito.any(ServletUriComponentsBuilder.class);
-//            return new ResponseFile(
-//                    dbFile.getName(),
-//                    newValue.toString(),
-//                    dbFile.getType(),
-//                    dbFile.getDataReport().length);
-//        }).collect(Collectors.toList())).thenReturn(files.stream().toList());
-//
-//        ResponseEntity<List<ResponseFile>> newFile = fileController.getListFiles();
-//        System.out.println(newFile);
-//
-//
-//
-//
-//
-//    }
+        Mockito.when(fileStorageService.store(file,id)).thenThrow(IOException.class);
+
+        ResponseEntity<GenericMessage> response = fileController.uploadFile(file,id);
+        assertEquals(HttpStatus.EXPECTATION_FAILED,response.getStatusCode());
+    }
 
 
     @Test
@@ -150,7 +122,7 @@ class FileControllerTest {
         fileDB.setId(1L);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         Mockito.when(fileStorageService.getFile(id)).thenReturn(fileDB);
 
@@ -158,7 +130,7 @@ class FileControllerTest {
         System.out.println(newFile.getStatusCodeValue());
 
         assertThat(newFile).isNotNull();
-       assertEquals(200,newFile.getStatusCodeValue());
+        assertEquals(200,newFile.getStatusCodeValue());
 
     }
 
@@ -168,7 +140,7 @@ class FileControllerTest {
 
         Mockito.when(fileStorageService.getFile(id)).thenReturn(null);
 
-        assertThrows(ReportNotFound.class,() -> {
+        assertThrows(ResourceNotFound.class,() -> {
             fileController.getFile(id);
         });
     }
