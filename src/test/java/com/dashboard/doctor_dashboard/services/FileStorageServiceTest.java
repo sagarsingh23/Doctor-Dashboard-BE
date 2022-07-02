@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
@@ -32,7 +33,7 @@ class FileStorageServiceTest {
     private FileDBRepository fileDBRepository;
 
     @Mock
-    private PatientRepository patientRepository;
+    private AppointmentRepository appointmentRepository;
 
     @InjectMocks
     private FileStorageService fileStorageService;
@@ -60,7 +61,7 @@ class FileStorageServiceTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -69,11 +70,11 @@ class FileStorageServiceTest {
                 "Hello, World!".getBytes()
         );
 
-        Mockito.when(patientRepository.getId(id)).thenReturn(id);
+        Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
         Mockito.when(fileDBRepository.save(Mockito.any(FileDB.class))).thenReturn(fileDB);
 
-        FileDB newFile = fileStorageService.store(file,id);
 
+        FileDB newFile = fileStorageService.store(file,id);
         assertThat(newFile).isNotNull();
         assertEquals(newFile,fileDB);
     }
@@ -87,11 +88,11 @@ class FileStorageServiceTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = mock(MultipartFile.class);
 
-        Mockito.when(patientRepository.getId(id)).thenReturn(id);
+        Mockito.when(appointmentRepository.getId(id)).thenReturn(id);
         Mockito.when(file.getOriginalFilename()).thenReturn(null);
 
         FileDB newFile = fileStorageService.store(file,id);
@@ -109,7 +110,7 @@ class FileStorageServiceTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -118,7 +119,7 @@ class FileStorageServiceTest {
                 "Hello, World!".getBytes()
         );
 
-        Mockito.when(patientRepository.getId(id)).thenReturn(null);
+        Mockito.when(appointmentRepository.getId(id)).thenReturn(null);
 
         FileDB newFile = fileStorageService.store(file,id);
 
@@ -136,7 +137,7 @@ class FileStorageServiceTest {
         fileDB.setId(id);
         fileDB.setType(".png");
         fileDB.setName("file1");
-        fileDB.setPatientId(id);
+        fileDB.setAppointmentId(id);
 
         MultipartFile file = new MockMultipartFile(
                 "file",
@@ -145,7 +146,7 @@ class FileStorageServiceTest {
                 "Hello, World!".getBytes()
         );
 
-        Mockito.when(fileDBRepository.findByPatientId(id)).thenReturn(fileDB);
+        Mockito.when(fileDBRepository.findByAppointmentId(id)).thenReturn(fileDB);
 
         FileDB newFile = fileStorageService.getFile(id);
 
@@ -153,34 +154,4 @@ class FileStorageServiceTest {
         assertEquals(newFile,fileDB);
     }
 
-    @Test
-    void getAllFiles() {
-
-        List<FileDB> report = new ArrayList<>();
-        final Long id = 1L;
-        FileDB fileDB = new FileDB();
-
-        fileDB.setDataReport(null);
-        fileDB.setId(1L);
-        fileDB.setType(".png");
-        fileDB.setName("file1");
-        fileDB.setPatientId(id);
-
-        FileDB fileDB1 = new FileDB();
-        fileDB1.setDataReport(null);
-        fileDB1.setId(2L);
-        fileDB1.setType(".png");
-        fileDB1.setName("file2");
-        fileDB1.setPatientId(id);
-
-        report.addAll(Arrays.asList(fileDB,fileDB1));
-
-        Mockito.when(fileDBRepository.findAll()).thenReturn(report);
-
-        Stream<FileDB> newFile = fileStorageService.getAllFiles();
-
-        assertThat(newFile).isNotNull();
-        assertEquals(newFile.collect(Collectors.toList()), report);
-
-    }
 }
