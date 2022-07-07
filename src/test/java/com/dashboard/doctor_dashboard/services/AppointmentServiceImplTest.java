@@ -18,6 +18,7 @@ import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentSe
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -47,6 +48,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
+
 
 class AppointmentServiceImplTest {
 
@@ -121,8 +123,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,null,patient,doctorDetails);
 
 
 
@@ -131,7 +136,9 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
+        Mockito.doReturn(appointment1).when(appointmentRepository).save(Mockito.any(Appointment.class));
         Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
@@ -179,8 +186,11 @@ class AppointmentServiceImplTest {
         Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate1,"fever","sagar","sagarssn23@gmail.com",
-                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
+
+        AppointmentDto appointment2 = new AppointmentDto(1L,"dentist", localDate1,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
 
@@ -189,13 +199,16 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(Mockito.any(Long.class))).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment1,Appointment.class)).thenReturn(appointment);
+        Mockito.when(mapper.map(appointment2,Appointment.class)).thenReturn(appointment);
+
 
         InvalidDate resourceNotFoundException = assertThrows(InvalidDate.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         InvalidDate resourceNotFoundException1 = assertThrows(InvalidDate.class,()->{
-            appointmentService.addAppointment(appointment1,request);
+            appointmentService.addAppointment(appointment2,request);
         });
 
         assertAll(
@@ -235,8 +248,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
-                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
+//        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+//                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
 
@@ -245,7 +261,7 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         assertThat(resourceNotFoundException).isNotNull();
@@ -281,10 +297,8 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
-                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
-
-
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(loginId);
@@ -292,7 +306,7 @@ class AppointmentServiceImplTest {
         Mockito.when(patientRepository.getId(Mockito.any(Long.class))).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         assertThat(resourceNotFoundException).isNotNull();
@@ -326,9 +340,8 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
-                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
-
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -339,7 +352,7 @@ class AppointmentServiceImplTest {
 
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         assertThat(resourceNotFoundException).isNotNull();
@@ -376,8 +389,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
 
@@ -386,6 +402,8 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
+
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
 
 
@@ -429,17 +447,22 @@ class AppointmentServiceImplTest {
         Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
+
 
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(loginId);
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
-        Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
-        Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(patientRepository.getId(appointment1.getPatient().getPID())).thenReturn(patientId);
+        Mockito.when(doctorRepository.isIdAvailable(appointment1.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment1,Appointment.class)).thenReturn(appointment);
+        Mockito.doReturn(appointment).when(appointmentRepository).save(Mockito.any(Appointment.class));
 
 
         //BookAgainHandler
-        Mockito.when(appointmentRepository.existsById(appointment.getFollowUpAppointmentId())).thenReturn(true);
+        Mockito.when(appointmentRepository.existsById(appointment1.getFollowUpAppointmentId())).thenReturn(true);
         Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment);
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
 
@@ -447,18 +470,18 @@ class AppointmentServiceImplTest {
         Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
-        Mockito.when(loginRepo.email(appointment.getDoctorDetails().getId())).thenReturn("pranay23@gmail.com");
-        Mockito.when(pdFGeneratorService.formatDate(appointment.getDateOfAppointment().toString())).thenReturn("12-07-2022");
+        Mockito.when(loginRepo.email(appointment1.getDoctorDetails().getId())).thenReturn("pranay23@gmail.com");
+        Mockito.when(pdFGeneratorService.formatDate(appointment1.getDateOfAppointment().toString())).thenReturn("12-07-2022");
 
-        ResponseEntity<GenericMessage> response = appointmentService.addAppointment(appointment,request);
+        ResponseEntity<GenericMessage> response = appointmentService.addAppointment(appointment1,request);
         System.out.println(response);
 
         InvalidDate invalidDate = assertThrows(InvalidDate.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         assertThat(invalidDate).isNotNull();
-        assertEquals(appointment.getAppointmentTime().toString()+":"+Constants.APPOINTMENT_ALREADY_BOOKED,invalidDate.getMessage());
+        assertEquals(appointment1.getAppointmentTime().toString()+":"+Constants.APPOINTMENT_ALREADY_BOOKED,invalidDate.getMessage());
 
     }
 
@@ -492,8 +515,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
 
 
 
@@ -502,11 +528,13 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
+        Mockito.doReturn(appointment1).when(appointmentRepository).save(Mockito.any(Appointment.class));
 
 
         //BookAgainHandler
         Mockito.when(appointmentRepository.existsById(appointment.getFollowUpAppointmentId())).thenReturn(true);
-        Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment);
+        Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment1);
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
 
         Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
@@ -551,8 +579,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,null,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
 
@@ -561,7 +592,8 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
-
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
+        Mockito.doReturn(appointment1).when(appointmentRepository).save(Mockito.any(Appointment.class));
 
         //BookAgainHandler
         Mockito.when(appointmentRepository.existsById(appointment.getFollowUpAppointmentId())).thenReturn(true);
@@ -595,8 +627,12 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
+
 
 
 
@@ -605,6 +641,7 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
 
 
         //BookAgainHandler
@@ -639,8 +676,11 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,null,patient,doctorDetails,null,null);
+
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
 
@@ -649,6 +689,7 @@ class AppointmentServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
         Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
         Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
 
 
         //BookAgainHandler
@@ -692,43 +733,37 @@ class AppointmentServiceImplTest {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
+
+
+        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+                "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
+
         Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient,doctorDetails,null,null);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment2 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,true,2L,patient1,doctorDetails,null,null);
+
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(loginId);
         Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(loginId);
-        Mockito.when(patientRepository.getId(appointment.getPatient().getPID())).thenReturn(patientId);
-        Mockito.when(doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(patientRepository.getId(appointment1.getPatient().getPID())).thenReturn(patientId);
+        Mockito.when(doctorRepository.isIdAvailable(appointment1.getDoctorDetails().getId())).thenReturn(doctorId);
+        Mockito.when(mapper.map(appointment1,Appointment.class)).thenReturn(appointment);
 
 
         //BookAgainHandler
-        Mockito.when(appointmentRepository.existsById(appointment.getFollowUpAppointmentId())).thenReturn(true);
-        Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment1);
+        Mockito.when(appointmentRepository.existsById(appointment1.getFollowUpAppointmentId())).thenReturn(true);
+        Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment2);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,()->{
-            appointmentService.addAppointment(appointment,request);
+            appointmentService.addAppointment(appointment1,request);
         });
 
         assertThat(resourceNotFoundException).isNotNull();
         assertEquals(Constants.APPOINTMENT_NOT_FOUND,resourceNotFoundException.getMessage());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     @Test
