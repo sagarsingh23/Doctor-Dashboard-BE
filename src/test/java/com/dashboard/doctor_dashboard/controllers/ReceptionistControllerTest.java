@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
+import com.dashboard.doctor_dashboard.entities.model.Attributes;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -77,9 +77,9 @@ class ReceptionistControllerTest {
     void getAddVitalsTest() {
         final Long appointId = 1L;
         String message = "Vital Successfully updated";
-        Attributes attributes = new Attributes(1L,"120/80",100L,99D,"mri check",null,null,null);
+        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
 
-        Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(Attributes.class),Mockito.any(Long.class))).thenReturn(
+        Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(AttributesDto.class),Mockito.any(Long.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.OK));
 
         ResponseEntity<GenericMessage> newMessage = receptionistController.addVitals(appointId,attributes);
