@@ -1,8 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Todolist;
+import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.model.Todolist;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,10 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,6 +27,7 @@ class TodoControllerTest {
 
     @Mock
     private TodoService todoService;
+
 
     @InjectMocks
     private TodoController todoController;
@@ -46,9 +46,9 @@ class TodoControllerTest {
 
     @Test
     void addTodo() {
-        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
-        Mockito.when(todoService.addTodo(Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        Mockito.when(todoService.addTodo(Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
         ResponseEntity<GenericMessage> newTodo = todoController.addTodo(todolist);
         assertEquals(message.getData(),newTodo.getBody().getData());
     }
@@ -94,10 +94,10 @@ class TodoControllerTest {
 
     @Test
     void updateTodo() {
-        Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
+        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
 
-        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(Todolist.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
 
         ResponseEntity<GenericMessage> newTodoList = todoController.updateTodo(1L,todolist);
 
