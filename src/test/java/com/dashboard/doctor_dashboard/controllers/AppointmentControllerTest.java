@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,15 +53,15 @@ class AppointmentControllerTest {
         m.put("appointId","1L");
         m.put("message","Successfully created");
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+        AppointmentDto appointment = new AppointmentDto(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+                "pranay", LocalTime.now(),true,"completed",null,null,null,null);
 
-        Mockito.when(appointmentService.addAppointment(Mockito.any(Appointment.class),Mockito.any(HttpServletRequest.class))).thenReturn(
+        Mockito.when(appointmentService.addAppointment(Mockito.any(AppointmentDto.class),Mockito.any(HttpServletRequest.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m), HttpStatus.OK));
 
         ResponseEntity<GenericMessage> response = appointmentController.addAppointment(appointment,request);
         assertThat(response).isNotNull();
-        assertEquals(m,response.getBody().getData());
+        assertEquals(m, Objects.requireNonNull(response.getBody()).getData());
     }
 
     @Test
