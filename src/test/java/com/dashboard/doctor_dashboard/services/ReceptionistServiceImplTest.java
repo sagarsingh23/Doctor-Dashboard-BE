@@ -1,5 +1,6 @@
 package com.dashboard.doctor_dashboard.services;
 
+import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
@@ -135,7 +136,7 @@ class ReceptionistServiceImplTest {
     void addAppointmentVitals_SUCCESS() {
         final Long appointId = 1L;
         String message = "successful";
-        Attributes attributes = new Attributes(1L,"120/80",100L,99D,"mri check",null,null,null);
+        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
 
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(true);
@@ -150,7 +151,7 @@ class ReceptionistServiceImplTest {
     @Test
     void throwErrorIFIdNotPresentInAppointmentDbForAppointmentVitals() {
         final Long appointId = 1L;
-        Attributes attributes = new Attributes(1L,"120/80",100L,99D,"mri check",null,null,null);
+        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(false);
 
@@ -164,7 +165,7 @@ class ReceptionistServiceImplTest {
     void throwErrorIFIdNotPresentInAttributeDbForAppointmentVitals() {
         final Long appointId = 1L;
         String message = "successful";
-        Attributes attributes = new Attributes(1L,"120/80",100L,99D,"mri check",null,null,null);
+        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
 
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(true);
