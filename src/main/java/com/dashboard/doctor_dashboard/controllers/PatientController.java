@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;

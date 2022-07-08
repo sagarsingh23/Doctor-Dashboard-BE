@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Utils.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;

@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

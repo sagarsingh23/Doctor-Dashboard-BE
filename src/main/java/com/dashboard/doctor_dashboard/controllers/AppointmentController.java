@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;

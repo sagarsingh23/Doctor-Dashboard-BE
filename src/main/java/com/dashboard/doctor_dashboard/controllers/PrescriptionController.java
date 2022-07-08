@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
 import org.codehaus.jettison.json.JSONException;
