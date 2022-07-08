@@ -1,12 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.entities.model.Attributes;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;

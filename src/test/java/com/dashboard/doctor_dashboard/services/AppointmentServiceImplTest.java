@@ -5,7 +5,7 @@ import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.model.Patient;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
@@ -15,23 +15,22 @@ import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -39,7 +38,6 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
-import java.lang.management.LockInfo;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
@@ -75,7 +73,7 @@ class AppointmentServiceImplTest {
     private JavaMailSender mailSender;
 
     @Mock
-    private MailService mailService;
+    private MailServiceImpl mailService;
 
     @Mock
     private MimeMessage mimeMessage;
@@ -113,7 +111,7 @@ class AppointmentServiceImplTest {
 
         Map<String,String> expected = new HashMap<>();
         expected.put("appointId","1");
-        expected.put("message",Constants.APPOINTMENT_CREATED);
+        expected.put("message", Constants.APPOINTMENT_CREATED);
 
 
         Patient patient = new Patient();

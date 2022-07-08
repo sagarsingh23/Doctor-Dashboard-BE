@@ -1,7 +1,8 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Utils.Constants;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
+import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,14 +19,13 @@ import java.io.UnsupportedEncodingException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class MailServiceTest {
 
     @InjectMocks
-    private MailService mailService;
+    private MailServiceImpl mailService;
 
     @Mock
     private JavaMailSender mailSender;

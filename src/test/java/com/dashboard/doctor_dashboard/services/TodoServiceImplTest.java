@@ -2,7 +2,7 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.entities.model.Todolist;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;

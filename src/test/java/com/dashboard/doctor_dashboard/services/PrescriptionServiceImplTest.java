@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.model.Prescription;
-import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -12,8 +12,9 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.PdFGeneratorServiceImpl;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -62,7 +62,7 @@ class PrescriptionServiceImplTest {
     private JavaMailSender mailSender;
 
     @Mock
-    private MailService mailService;
+    private MailServiceImpl mailService;
 
     @Mock
     private MimeMessage mimeMessage;
