@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Utils;
+package com.dashboard.doctor_dashboard.utils;
 
 @SuppressWarnings("squid:S6126")
 public class Constants {

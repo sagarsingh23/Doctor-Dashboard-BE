@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Utils;
+package com.dashboard.doctor_dashboard.utils;
 
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import lombok.extern.slf4j.Slf4j;

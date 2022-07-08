@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.Utils.wrapper;
+package com.dashboard.doctor_dashboard.utils.wrapper;
 
 import java.util.Date;
 
