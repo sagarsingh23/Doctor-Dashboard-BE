@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.entities.model.Attributes;
+import com.dashboard.doctor_dashboard.entities.model.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.List;
 

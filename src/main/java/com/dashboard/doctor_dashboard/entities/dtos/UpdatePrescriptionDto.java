@@ -1,14 +1,15 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.entities.model.Prescription;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 public class UpdatePrescriptionDto {
     private PatientDto patientDto;
     private List<Prescription> prescriptions;

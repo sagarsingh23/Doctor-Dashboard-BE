@@ -1,7 +1,7 @@
 package com.dashboard.doctor_dashboard.entities.dtos;
 
-import com.dashboard.doctor_dashboard.entities.Attributes;
-import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.entities.model.Attributes;
+import com.dashboard.doctor_dashboard.entities.model.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,6 +27,7 @@ public class AppointmentViewDto {
     private String status;
     private List<Prescription> prescription;
 
+    @SuppressWarnings("squid:S107")
     public AppointmentViewDto(String name, String speciality, LocalDate dateOfAppointment, LocalTime timeOfAppointment, String status,String bloodGroup,short age,String gender) {
         this.name = name;
         this.speciality = speciality;
