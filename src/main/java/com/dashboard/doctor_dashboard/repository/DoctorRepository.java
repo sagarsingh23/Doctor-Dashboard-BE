@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
@@ -46,6 +46,7 @@ public interface DoctorRepository extends JpaRepository<DoctorDetails, Long> {
     @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.DoctorBasicDetailsDto(ld.name,ld.emailId,dd.speciality,dd.phoneNo,dd.gender,dd.age,dd.degree,dd.exp) from DoctorDetails dd inner join LoginDetails ld on dd.id=ld.id and dd.id=:id")
     DoctorBasicDetailsDto findDoctorById(Long id);
 
+    @SuppressWarnings("squid:S107")
     @Query(value = "insert into doctor_details (id,age,gender,login_id,phone_no,speciality,experience,degree) values(:doctorId,:age,:gender,:loginId,:phoneNo,:speciality,:exp,:degree)",nativeQuery = true)
     @Transactional
     @Modifying
