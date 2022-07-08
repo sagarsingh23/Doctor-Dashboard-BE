@@ -1,17 +1,11 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
-@Getter
+@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
 public class APIException extends RuntimeException {
-
-    public final HttpStatus status;
-    public final String message;
-
-    public APIException(HttpStatus status, String message) {
-        this.status = status;
-        this.message = message;
+    public APIException(String message) {
+        super(message);
     }
-
 }
