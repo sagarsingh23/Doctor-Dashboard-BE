@@ -1,8 +1,9 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
@@ -78,7 +79,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.getAllDoctors(id);
         });
     }
@@ -107,7 +108,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.getDoctorById(id);
         });
     }
@@ -154,7 +155,7 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.addDoctorDetails(doctorFormDto,id,request);
         });
 
@@ -162,17 +163,17 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorIfDetailsIdMisMatchForAddDoctor() {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 1L;
+        long id = 3L;
         Long doctorLoginId = 2L;
-        Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(4L,(short) 26,"orthology","male",
+        Long loginId = 3L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(6L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.addDoctorDetails(doctorFormDto,id,request);
         });
 
@@ -181,17 +182,17 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorDetailsNotEqualsWithTheDoctorLoginIdForAddDoctor() {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 1L;
-        Long doctorLoginId = 2L;
-        Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        long id = 3L;
+        Long doctorLoginId = 6L;
+        Long loginId = 3L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(3L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.addDoctorDetails(doctorFormDto,id,request);
         });
 
@@ -229,7 +230,7 @@ class DoctorServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(id))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.addDoctorDetails(doctorFormDto,id,request);
         });
     }
@@ -273,7 +274,7 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(doctorFormDto.getId());
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
            doctorService.updateDoctor(doctorFormDto,id,request);
         });
 
@@ -281,17 +282,17 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorIfDetailsIdMisMatchForUpdateDoctor() {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 1L;
-        Long doctorLoginId = 2L;
-        Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(4L,(short) 26,"orthology","male",
+        long id = 3L;
+        Long doctorLoginId = 4L;
+        Long loginId = 3L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(5L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(doctorFormDto.getId());
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.updateDoctor(doctorFormDto,id,request);
         });
 
@@ -300,17 +301,17 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorDetailsNotEqualsWithTheDoctorLoginIdForUpdateDoctor() {
         HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 1L;
-        Long doctorLoginId = 2L;
-        Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        long id = 6L;
+        Long doctorLoginId = 4L;
+        Long loginId = 6L;
+        DoctorFormDto doctorFormDto = new DoctorFormDto(6L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
                 .thenReturn(doctorFormDto.getId());
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.updateDoctor(doctorFormDto,id,request);
         });
 
@@ -328,7 +329,7 @@ class DoctorServiceImplTest {
         Mockito.when(loginRepo.isIdAvailable(id))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.updateDoctor(doctorFormDto,id,request);
         });
     }
@@ -347,7 +348,7 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(id))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.updateDoctor(doctorFormDto,id,request);
         });
     }
@@ -366,7 +367,7 @@ class DoctorServiceImplTest {
         Mockito.when(doctorRepository.isIdAvailable(id))
                 .thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.updateDoctor(doctorFormDto,id,request);
         });
     }
@@ -407,7 +408,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isSpecialityAvailable(speciality)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.getAllDoctorsBySpeciality(speciality);
         });
     }
@@ -436,7 +437,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.genderChart(id);
         });
 
@@ -466,7 +467,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.bloodGroupChart(id);
         });
     }
@@ -504,7 +505,7 @@ class DoctorServiceImplTest {
 
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
+        assertThrows(ResourceNotFoundException.class,()->{
             doctorService.ageGroupChart(id);
         });
     }

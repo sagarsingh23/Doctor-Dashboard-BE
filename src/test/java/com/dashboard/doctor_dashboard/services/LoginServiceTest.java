@@ -69,10 +69,10 @@ class LoginServiceTest {
     @Test
     void checkIfTheDomainIsNotNineleapsForAddUser(){
         Map<String,Object> docDetails= new HashMap<>();
-        docDetails.put("given_name","pranay");
+        docDetails.put("given_name","sagar");
         docDetails.put("hd","gmail.com");
-        docDetails.put("email","pranay@gmail.com");
-        docDetails.put("picture","picture1");
+        docDetails.put("email","sagar@gmail.com");
+        docDetails.put("picture","picture2");
 
         Mockito.when(loginRepo.findByEmailId(Mockito.any(String.class))).thenReturn(null);
         Boolean f= loginService.addUser(docDetails);
@@ -84,10 +84,10 @@ class LoginServiceTest {
     void checkIfTheDomainIsNullForAddUser(){
 
         Map<String,Object> docDetails= new HashMap<>();
-        docDetails.put("given_name","pranay");
+        docDetails.put("given_name","gokul");
         docDetails.put("hd",null);
-        docDetails.put("email","pranay@gmail.com");
-        docDetails.put("picture","picture1");
+        docDetails.put("email","gokul@gmail.com");
+        docDetails.put("picture","picture2");
 
         Mockito.when(loginRepo.findByEmailId(Mockito.any(String.class))).thenReturn(null);
         Boolean f= loginService.addUser(docDetails);

@@ -27,6 +27,10 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.stubbing.Answer;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -947,12 +951,17 @@ class AppointmentServiceImplTest {
     @Test
     void getAllAppointmentByPatientId_SUCCESS() {
         final Long patientId = 1L;
+        int pageNo = 2;
+
+        Pageable paging= PageRequest.of(pageNo, 10);
+
         Map<String, List<PatientAppointmentListDto>> getAllAppointment =new HashMap<>();
         PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
+        Page<Appointment> list1=new PageImpl<>(list);
 
         List<PatientAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
         getAllAppointment.put("past",dto);
@@ -960,13 +969,13 @@ class AppointmentServiceImplTest {
         getAllAppointment.put("upcoming",dto);
 
         Mockito.when(patientRepository.getId(Mockito.any(Long.class))).thenReturn(patientId);
-        Mockito.when(appointmentRepository.pastAppointment(patientId)).thenReturn(list);
-        Mockito.when(appointmentRepository.todayAppointment1(patientId)).thenReturn(list);
-        Mockito.when(appointmentRepository.todayAppointment2(patientId)).thenReturn(list);
-        Mockito.when(appointmentRepository.upcomingAppointment(patientId)).thenReturn(list);
+        Mockito.when(appointmentRepository.pastAppointment(patientId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.todayAppointment1(patientId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.todayAppointment2(patientId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.upcomingAppointment(patientId,paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,PatientAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
     }
@@ -974,11 +983,11 @@ class AppointmentServiceImplTest {
     @Test
     void throwErrorIfIdNotFoundInPatientDbForAllAppointmentPatient(){
         final Long patientId = 1L;
-
+        int pageNo = 2;
         Mockito.when(patientRepository.getId(patientId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByPatientId(patientId);
+            appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
         });
         assertEquals(Constants.PATIENT_NOT_FOUND,resourceNotFoundException.getMessage());
 
@@ -988,6 +997,10 @@ class AppointmentServiceImplTest {
     void getAllAppointmentByDoctorId_SUCCESS() {
 
         final Long doctorId = 1L;
+        int pageNo = 2;
+
+        Pageable paging= PageRequest.of(pageNo, 10);
+
         Map<String, List<DoctorAppointmentListDto>> getAllAppointment =new HashMap<>();
         DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
@@ -996,6 +1009,7 @@ class AppointmentServiceImplTest {
                 "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
+        Page<Appointment> list1=new PageImpl<>(list);
 
 
         getAllAppointment.put("past",dto);
@@ -1003,13 +1017,13 @@ class AppointmentServiceImplTest {
         getAllAppointment.put("upcoming",dto);
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(doctorId);
-        Mockito.when(appointmentRepository.pastDoctorAppointment(doctorId)).thenReturn(list);
-        Mockito.when(appointmentRepository.todayDoctorAppointment1(doctorId)).thenReturn(list);
-        Mockito.when(appointmentRepository.todayDoctorAppointment2(doctorId)).thenReturn(list);
-        Mockito.when(appointmentRepository.upcomingDoctorAppointment(doctorId)).thenReturn(list);
+        Mockito.when(appointmentRepository.pastDoctorAppointment(doctorId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.todayDoctorAppointment1(doctorId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.todayDoctorAppointment2(doctorId,paging)).thenReturn(list1);
+        Mockito.when(appointmentRepository.upcomingDoctorAppointment(doctorId,paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,DoctorAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
 
@@ -1018,11 +1032,12 @@ class AppointmentServiceImplTest {
     @Test
     void throwErrorIfIdNotFoundInDoctorDbForAllAppointmentDoctor(){
         final Long doctorId = 1L;
+        int pageNo = 2;
 
         Mockito.when(doctorRepository.isIdAvailable(doctorId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByDoctorId(doctorId);
+            appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
         });
         assertEquals(Constants.DOCTOR_NOT_FOUND,resourceNotFoundException.getMessage());
 

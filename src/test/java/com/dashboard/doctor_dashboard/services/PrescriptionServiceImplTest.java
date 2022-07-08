@@ -62,6 +62,9 @@ class PrescriptionServiceImplTest {
     private JavaMailSender mailSender;
 
     @Mock
+    private MailService mailService;
+
+    @Mock
     private MimeMessage mimeMessage;
 
     @InjectMocks
@@ -99,6 +102,7 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         ResponseEntity<GenericMessage> newMessage = prescriptionService.addPrescription(appointId,details);
@@ -127,10 +131,13 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
+        Mockito.doThrow(new MailErrorException("Mail Error")).when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
 
-        assertThrows(MailErrorException.class,()->{
+
+        MailErrorException mailErrorException = assertThrows(MailErrorException.class,()->{
             prescriptionService.addPrescription(appointId,details);
         });
+        System.out.println(mailErrorException);
     }
 
 
