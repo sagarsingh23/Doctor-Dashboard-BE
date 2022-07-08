@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.exceptions;
+package com.dashboard.doctor_dashboard.Utils.wrapper;
 
 import java.util.Date;
 
@@ -28,4 +28,12 @@ public class ErrorDetails {
         return details;
     }
 
+    @Override
+    public String toString() {
+        return "ErrorDetails{" +
+                "timestamp=" + timestamp +
+                ", message='" + message + '\'' +
+                ", details='" + details + '\'' +
+                '}';
+    }
 }

@@ -1,8 +1,8 @@
-package com.dashboard.doctor_dashboard.services;
+package com.dashboard.doctor_dashboard.Utils;
 
-import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.entities.model.Prescription;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.FontSelector;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -151,7 +151,7 @@ public class PdFGeneratorServiceImpl {
         catch (Exception e) {
             file.close();
             log.info("PDF Service Stopped");
-            throw new ResourceNotFound(e.getMessage());
+            throw new ResourceNotFoundException(e.getMessage());
         }
     }
     public static PdfPCell getBillHeaderCell(String text) {
@@ -204,8 +204,19 @@ public class PdFGeneratorServiceImpl {
         return fs.process(text);
     }
 
-    String formatDate(String date1){
+    public String formatDate(String date1){
         String[] newArray = date1.split("-",5);
         return newArray[2]+"-"+newArray[1]+"-"+newArray[0];
+    }
+
+    public String monthHandler(String month){
+        if(Integer.parseInt(month)>10){
+            return "0"+month;
+        }
+        return month;
+    }
+
+    public Boolean dateHandler(LocalDate date){
+        return date.isAfter(LocalDate.now()) && date.isBefore(LocalDate.now().plusDays(8));
     }
 }
