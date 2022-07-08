@@ -1,10 +1,13 @@
-package com.dashboard.doctor_dashboard.entities;
+package com.dashboard.doctor_dashboard.entities.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -22,6 +25,14 @@ public class Prescription {
     private String type;
     private Long days;
     private String time;
+
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
     @JsonBackReference("prescription")
     @ManyToOne()

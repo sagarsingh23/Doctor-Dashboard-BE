@@ -1,13 +1,16 @@
-package com.dashboard.doctor_dashboard.entities;
+package com.dashboard.doctor_dashboard.entities.model;
 
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 
@@ -41,6 +44,15 @@ public class DoctorDetails {
 
     @Column(name = "degree",nullable = false)
     private String degree;
+
+
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
 
 

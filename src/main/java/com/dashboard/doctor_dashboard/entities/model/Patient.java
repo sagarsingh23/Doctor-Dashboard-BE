@@ -1,9 +1,11 @@
-package com.dashboard.doctor_dashboard.entities;
+package com.dashboard.doctor_dashboard.entities.model;
 
 import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -48,6 +50,15 @@ public class Patient {
     private String address;
 
     private String alternateMobileNo;
+
+
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Date updatedAt;
 
 
     @Temporal(TemporalType.TIMESTAMP)

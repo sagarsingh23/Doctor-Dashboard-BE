@@ -1,13 +1,15 @@
 package com.dashboard.doctor_dashboard.entities.login_entity;
 
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.model.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @NoArgsConstructor
@@ -30,6 +32,10 @@ public class LoginDetails {
     private String profilePic;
     @Column(name="role",nullable = false)
     private String role;
+
+    @CreationTimestamp
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private Date createdAt;
 
     @OneToOne(mappedBy = "loginDetails", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private DoctorDetails doctorDetails;
@@ -78,5 +84,21 @@ public class LoginDetails {
 
     public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
+    }
+
+
+    @Override
+    public String toString() {
+        return "LoginDetails{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", emailId='" + emailId + '\'' +
+                ", domain='" + domain + '\'' +
+                ", profilePic='" + profilePic + '\'' +
+                ", role='" + role + '\'' +
+                ", createdAt=" + createdAt +
+                ", doctorDetails=" + doctorDetails +
+                ", patient=" + patient +
+                '}';
     }
 }
