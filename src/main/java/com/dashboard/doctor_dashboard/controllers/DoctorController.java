@@ -1,14 +1,14 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.entities.dtos.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("squid:S1612")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/api/doctor")
+@RequestMapping("/api/v1/doctor")
 public class DoctorController {
 
     @Autowired
@@ -33,14 +32,14 @@ public class DoctorController {
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
         if (details != null)
             return details;
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("id") long id) {
         if (doctorService.getDoctorById(id) != null)
             return doctorService.getDoctorById(id);
-        throw new ResourceNotFoundException("doctor", "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @PostMapping("/add-doctor-details/{id}")
@@ -48,26 +47,26 @@ public class DoctorController {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
+                    .toList();
             throw new ValidationsException(errors);
         }
         var doctorFormDto = doctorService.addDoctorDetails(details,id,request);
         if (doctorFormDto != null)
             return doctorFormDto;
-        throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
+        throw new APIException("Id Mismatch");
     }
     @PutMapping("/update/{id}")
     public ResponseEntity<GenericMessage>  updateDoctorDetails(@PathVariable("id") long id, @Valid @RequestBody DoctorFormDto details, BindingResult bindingResult,HttpServletRequest request)  {
         if (bindingResult.hasErrors()) {
             List<String> errors = bindingResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
+                    .toList();
             throw new ValidationsException(errors);
         }
         var doctorFormDto = doctorService.updateDoctor(details,id,request);
         if (doctorFormDto != null)
             return doctorFormDto;
-        throw new APIException(HttpStatus.BAD_REQUEST, "id mismatch");
+        throw new APIException("Id Mismatch");
     }
 
     @DeleteMapping("/{id}")

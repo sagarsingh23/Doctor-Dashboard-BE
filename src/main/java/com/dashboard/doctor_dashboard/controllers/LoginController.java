@@ -22,7 +22,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping(value = "api/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "api/v1/user/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> tokenAuthentication(@RequestBody JwtToken idToken) throws GeneralSecurityException, IOException, JSONException {
         //authToken
         var jwt = new JwtToken();
@@ -30,16 +30,16 @@ public class LoginController {
         var jsonObject = new JSONObject();
         if (!jwt.getIdtoken().equals("ID token expired.")) {
             jsonObject.put("jwt_token", jwt.getIdtoken());
-            return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+            return new ResponseEntity<>(jsonObject.toString(), HttpStatus.CREATED);
         }
         throw new GoogleLoginException(jwt.getIdtoken());
     }
 
-    @GetMapping(value = "api/check")
+    @GetMapping(value = "api/v1/check")
     public ResponseEntity<String> checkServerStatus(){
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    @DeleteMapping(value = "api/doctor/login/delete/{id}")
+    @DeleteMapping(value = "api/v1/doctor/login/delete/{id}")
     public String deleteDoctorById(@PathVariable("id") long id ){
         return loginService.deleteDoctorById(id);
     }
