@@ -28,7 +28,6 @@ public class JwtServiceImpl implements JwtService {
         String roles = login.getRole();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(roles));
-        System.out.println("authorities "+authorities);
         var authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 login.getEmail(), login.getUsername(),authorities));
 

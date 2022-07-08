@@ -11,7 +11,7 @@ import java.util.List;
 
 public class MyUserDetails implements UserDetails {
 
-    private LoginDetails user;
+    private transient LoginDetails user;
     public MyUserDetails(LoginDetails user) {
         this.user=user;
     }
