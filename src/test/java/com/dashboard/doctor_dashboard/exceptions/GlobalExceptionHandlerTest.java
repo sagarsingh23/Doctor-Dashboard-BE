@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.entities.wrapper.ErrorDetails;
-import com.dashboard.doctor_dashboard.entities.wrapper.ErrorMessage;
-import com.dashboard.doctor_dashboard.entities.wrapper.ValidationsSchema;
+import com.dashboard.doctor_dashboard.Utils.wrapper.ErrorDetails;
+import com.dashboard.doctor_dashboard.Utils.wrapper.ErrorMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.ValidationsSchema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
