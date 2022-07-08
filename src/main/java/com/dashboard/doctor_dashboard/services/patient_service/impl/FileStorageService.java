@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.stream.Stream;
 
 @Service
 public class FileStorageService {
@@ -42,11 +41,6 @@ public class FileStorageService {
 
     public FileDB getFile(Long id) {
         return fileDBRepository.findByAppointmentId(id);
-    }
-
-
-    public Stream<FileDB> getAllFiles() {
-        return fileDBRepository.findAll().stream();
     }
 
 }

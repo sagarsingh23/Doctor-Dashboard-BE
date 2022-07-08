@@ -1,33 +1,28 @@
 package com.dashboard.doctor_dashboard.services.prescription_service;
 
-import com.dashboard.doctor_dashboard.entities.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.Utils.PdFGeneratorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -45,6 +40,8 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
     @Autowired
     private PdFGeneratorServiceImpl pdFGeneratorService;
 
+    @Autowired
+    private MailServiceImpl mailService;
 
 
     @Autowired
@@ -57,7 +54,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
 
 
     @Override
-    public String addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
+    public ResponseEntity<GenericMessage> addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
 
            if (appointmentRepository.getId(appointId) != null) {
                if(appointmentRepository.checkStatus(appointId).equals("Vitals updated")){
@@ -69,22 +66,22 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                       pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(), updatePrescriptionDto.getPatientDto(), updatePrescriptionDto.getNotes());
                       sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
                       log.debug(Constants.PRESCRIPTION_CREATED);
-                      return Constants.PRESCRIPTION_CREATED;
+                      return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,Constants.PRESCRIPTION_CREATED),HttpStatus.CREATED);
                     }
-               throw new ResourceNotFoundException(Constants.APPOINTMENT, "id", updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId());
+                   throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
               }
                else
-                   throw new APIException(HttpStatus.BAD_REQUEST,"Prescription cannot be added for other status like completed,follow Up, and to be attended");
+                   throw new APIException("Prescription cannot be added for other status like completed,follow Up, and to be attended");
             }
-             throw new ResourceNotFoundException(Constants.APPOINTMENT,"id", appointId);
+             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
 
     @Override
-    public List<Prescription> getAllPrescriptionByAppointment(Long appointId) {
+    public ResponseEntity<GenericMessage> getAllPrescriptionByAppointment(Long appointId) {
         if(appointmentRepository.getId(appointId) != null){
-            return prescriptionRepository.getAllPrescriptionByAppointment(appointId);
+            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,prescriptionRepository.getAllPrescriptionByAppointment(appointId)),HttpStatus.OK);
         }
-        throw new ResourceNotFoundException(Constants.APPOINTMENT,"id",appointId);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
 
@@ -110,36 +107,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         content = content.replace("[[name]]", patientDto.getPatientName());
         content = content.replace("[[doctorName]]", patientDto.getDoctorName());
 
-        var obj = new JSONObject();
-        obj.put("fromEmail", fromEmail);
-        obj.put("toEmail", toEmail);
-        obj.put("senderName", senderName);
-        obj.put("subject", subject);
-        obj.put("content", content);
-        sendMailer(obj);
-    }
-
-
-    private void sendMailer(JSONObject obj) throws MessagingException, JSONException, UnsupportedEncodingException {
-        try {
-            var message = mailSender.createMimeMessage();
-            var helper = new MimeMessageHelper(message,true);
-            helper.setFrom(obj.get("fromEmail").toString(), obj.get("senderName").toString());
-            helper.setTo(obj.get("toEmail").toString());
-            helper.setText(obj.get("content").toString(), true);
-            helper.setSubject(obj.get("subject").toString());
-            var fileSystemResource=new FileSystemResource("/home/nineleaps/Downloads/prescription/prescription.pdf");
-            helper.addAttachment(fileSystemResource.getFilename(),fileSystemResource);
-            mailSender.send(message);
-            log.info("Mail Sent...\n stopping mail service");
-
-
-        }catch (Exception e)
-        {
-            log.info("Exception!!! Mail service stopped..");
-            throw new ResourceNotFound(e.getMessage());
-        }
-
+        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
     }
 
 

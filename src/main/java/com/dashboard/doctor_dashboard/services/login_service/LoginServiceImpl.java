@@ -36,16 +36,19 @@ public class LoginServiceImpl implements LoginService {
     public boolean addUser(Map<String, Object> loginDetails) {
         boolean flag;
         logger.log(Level.INFO,"email={0}",loginDetails.get("email"));
+        log.info(loginDetails.toString());
 
         var doctorLoginDetails = loginRepo.findByEmailId(loginDetails.get(fields[2]).toString());
         if (doctorLoginDetails == null) {
             var newDoctor = new LoginDetails();
             newDoctor.setName(loginDetails.get(fields[0]).toString());
             if(loginDetails.get(fields[1])!=null && loginDetails.get(fields[1]).equals("nineleaps.com")) {
+                log.debug("Doctor Login...");
                 newDoctor.setDomain(loginDetails.get(fields[1]).toString());
                 newDoctor.setRole("DOCTOR");
             }
             else{
+                log.info("Patient Login...");
                 newDoctor.setDomain("google");
                 newDoctor.setRole("PATIENT");
             }
@@ -53,6 +56,7 @@ public class LoginServiceImpl implements LoginService {
             newDoctor.setProfilePic(loginDetails.get(fields[3]).toString());
             loginRepo.save(newDoctor);
             log.debug("Login:: User Added");
+            log.debug(newDoctor.toString());
             flag = true;
         } else {
             log.debug("Login:: Existing User");
@@ -81,11 +85,11 @@ public class LoginServiceImpl implements LoginService {
             addUser(payload);
             long id = loginRepo.getId(email);
             return loginCreator(id, email, name,loginRepo.getRoleById(id),loginRepo.getProfilePic(id));
-
-        } else {
-            log.debug("Login:: Login Failed..Invalid ID token");
         }
-        return "ID token expired.";
+        else {
+            log.debug("Login:: Login Failed..Invalid ID token");
+            return "ID token expired.";
+        }
     }
 
     @Autowired

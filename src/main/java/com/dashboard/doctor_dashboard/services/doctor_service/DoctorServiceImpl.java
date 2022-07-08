@@ -1,12 +1,11 @@
 package com.dashboard.doctor_dashboard.services.doctor_service;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
+import com.dashboard.doctor_dashboard.Utils.Constants;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
@@ -51,8 +50,7 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
 
-
-        throw new ResourceNotFoundException(Constants.DOCTOR, "id", id);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 
@@ -67,8 +65,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-
-        return null;
+        throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);
     }
 
     @Override
@@ -78,21 +75,21 @@ public class DoctorServiceImpl implements DoctorService {
 
         Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null) {
-
             if(doctorRepository.isIdAvailable(details.getId())==null){
                 if (details.getId() == id && details.getId().equals(doctorLoginId)) {
                     doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
                     log.debug("Doctor Service:: Doctor Added..");
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
-                    return new ResponseEntity<>(genericMessage,HttpStatus.OK);
+                    return new ResponseEntity<>(genericMessage,HttpStatus.CREATED);
                 }
+                throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
             }
-            else if(doctorRepository.isIdAvailable(details.getId())!=null)
-                throw new APIException(HttpStatus.BAD_REQUEST,"update not allowed in this API endpoint.");
+            else
+                throw new APIException("update not allowed in this API endpoint.");
         }
 
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
 
     }
 
@@ -103,15 +100,16 @@ public class DoctorServiceImpl implements DoctorService {
 
         Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
         if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
-                if (details.getId() == id && details.getId().equals(doctorLoginId)) {
+                if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
                     doctorRepository.updateDoctorDb(details.getPhoneNo());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     return new ResponseEntity<>(genericMessage,HttpStatus.OK);
                  }
-                return null;
+
+                throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
         }
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
 
@@ -136,7 +134,7 @@ public class DoctorServiceImpl implements DoctorService {
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage,HttpStatus.OK);
         }
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND_SPECIALITY);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND_SPECIALITY);
     }
 
     @Override
@@ -151,7 +149,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @Override
@@ -166,7 +164,7 @@ public class DoctorServiceImpl implements DoctorService {
             }
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
         }
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     @Override
@@ -192,13 +190,13 @@ public class DoctorServiceImpl implements DoctorService {
                 if(s <= 2)
                 {
                     chart.put(week1, chart.get(week1)+1);
-                } else if (s>=3 && s<=14) {
+                } else if (s<=14) {
                     chart.put(week2,chart.get(week2)+1);
-                } else if (s>=15 && s<=25) {
+                } else if (s<=25) {
                     chart.put(week3,chart.get(week3)+1);
-                } else if (s>=26 && s<=64) {
+                } else if (s<=64) {
                     chart.put(week4,chart.get(week4)+1);
-                } else if (s>=65) {
+                } else {
                     chart.put(week5,chart.get(week5)+1);
                 }
 
@@ -206,7 +204,7 @@ public class DoctorServiceImpl implements DoctorService {
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chart),HttpStatus.OK);
 
         }
-        throw new ResourceNotFound(Constants.DOCTOR_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
 }

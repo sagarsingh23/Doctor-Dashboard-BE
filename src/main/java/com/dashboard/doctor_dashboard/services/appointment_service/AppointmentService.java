@@ -1,8 +1,7 @@
 package com.dashboard.doctor_dashboard.services.appointment_service;
 
-import com.dashboard.doctor_dashboard.entities.Appointment;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientProfileDto;
+import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,25 +11,23 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public interface AppointmentService {
 
-    ResponseEntity<GenericMessage>  addAppointment(Appointment appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
-    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId);
-    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId);
+    ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException;
+    ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long patientId,int pageNo);
+    ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long doctorId,int pageNo);
     ResponseEntity<GenericMessage> getFollowDetails(Long appointId);
 
 
-    PatientProfileDto getAppointmentById(Long appointId);
+    ResponseEntity<GenericMessage> getAppointmentById(Long appointId);
     ResponseEntity<GenericMessage> recentAppointment(Long doctorId);
 
     ResponseEntity<GenericMessage> weeklyDoctorCountChart(Long doctorId);
     ResponseEntity<GenericMessage> weeklyPatientCountChart(Long doctorId);
 
 
-    Map<Long, Map<LocalDate,List<Boolean>>> returnMap();
     ResponseEntity<GenericMessage> totalNoOfAppointment(Long doctorId);
     ResponseEntity<GenericMessage> todayAppointments(Long doctorId);
     ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(Long doctorId);

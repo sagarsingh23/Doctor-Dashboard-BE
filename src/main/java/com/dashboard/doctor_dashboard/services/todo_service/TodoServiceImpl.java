@@ -1,9 +1,11 @@
 package com.dashboard.doctor_dashboard.services.todo_service;
 
-import com.dashboard.doctor_dashboard.entities.Todolist;
-import com.dashboard.doctor_dashboard.entities.dtos.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.model.Todolist;
+import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,14 +19,17 @@ public class TodoServiceImpl implements TodoService {
     @Autowired
     private TodoRepository todoRepository;
 
+    @Autowired
+    private ModelMapper mapper;
+
 
     @Override
-    public ResponseEntity<GenericMessage> addTodo(Todolist todolist) {
+    public ResponseEntity<GenericMessage> addTodo(TodoListDto todolist) {
         var genericMessage = new GenericMessage();
 
-        genericMessage.setData(todoRepository.save(todolist));
+        genericMessage.setData(todoRepository.save(mapper.map(todolist,Todolist.class)));
         genericMessage.setStatus(Constants.SUCCESS);
-        return new ResponseEntity<>(genericMessage, HttpStatus.OK);
+        return new ResponseEntity<>(genericMessage, HttpStatus.CREATED);
     }
 
     @Override
@@ -50,7 +55,7 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public ResponseEntity<GenericMessage> updateTodo(Long id, Todolist todolist) {
+    public ResponseEntity<GenericMessage> updateTodo(Long id, TodoListDto todolist) {
         var genericMessage = new GenericMessage();
 
         Optional<Todolist> value1 = todoRepository.findById(id);
