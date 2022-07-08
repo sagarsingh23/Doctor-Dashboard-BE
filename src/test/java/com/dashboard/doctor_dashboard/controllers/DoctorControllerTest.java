@@ -1,21 +1,27 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFound;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
@@ -26,7 +32,9 @@ import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 class DoctorControllerTest {
 
 
@@ -37,9 +45,16 @@ class DoctorControllerTest {
     private DoctorController doctorController;
 
 
+    MockMvc mockMvc;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(doctorController).build();
+
         System.out.println("setting up");
     }
 
@@ -50,7 +65,7 @@ class DoctorControllerTest {
 
 
     @Test
-    void  getAllDoctors() {
+    void  getAllDoctors() throws Exception {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
         DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
@@ -62,13 +77,13 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> newList = doctorController.getAllDoctors(id);
-        assertThat(newList).isNotNull();
-        assertEquals(list,newList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/get-all/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
-    void throwErrorIfIdNotPresentDbForAllDoctor() {
+    void throwErrorIfIdNotPresentDbForAllDoctor() throws Exception {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
         DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
@@ -77,14 +92,14 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
-            doctorController.getAllDoctors(id);
-        });
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/get-all/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+
 
     }
 
     @Test
-    void getDoctorsByIdIfIdPresent() {
+    void getDoctorsByIdIfIdPresent() throws Exception {
         final Long id = 1L;
         DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
                 "orthology",null,"male", (short) 21,"MBBS",(short)8);
@@ -94,49 +109,49 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.getDoctorById(id)).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> newDetails = doctorController.getDoctorById(1);
-        System.out.println(newDetails);
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
-        assertEquals(doctorDetails,newDetails.getBody().getData());
     }
 
     @Test
-    void throwErrorIfIdNotPresentDb() {
+    void throwErrorIfIdNotPresentDb() throws Exception {
         final Long id = 1L;
         DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
                 "orthology",null,"male", (short) 21,"MBBS",(short)8);
 
         Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
 
-        assertThrows(ResourceNotFound.class,()->{
-            doctorController.getDoctorById(id);
-        });
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
+
 
     }
 
     @Test
-    void addDoctorDetails() {
+    void addDoctorDetails() throws Exception {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
                 "9728330045",(short)6,"MBBS");
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
 
 
         Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
-                Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
+                Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message,HttpStatus.CREATED));
 
 
-        ResponseEntity<GenericMessage> newDoctorDetails = doctorController.addDoctorDetails(1,doctorFormDto,result,request);
-        System.out.println(newDoctorDetails);
-        assertEquals(200,newDoctorDetails.getStatusCodeValue());
-        assertEquals(doctorFormDto,newDoctorDetails.getBody().getData());
+        String content = objectMapper.writeValueAsString(doctorFormDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+
     }
 
     @Test
-    void checkIfAddDoctorDetailsHasError() {
+    void checkIfAddDoctorDetailsHasError() throws Exception {
         BindingResult result = mock(BindingResult.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
@@ -146,45 +161,45 @@ class DoctorControllerTest {
         DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
 
-        Mockito.when(result.hasErrors()).thenReturn(true);
 
-        WebRequest webRequest = mock(WebRequest.class);
+        String content = objectMapper.writeValueAsString(doctorFormDto);
 
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
 
-        assertThrows(ValidationsException.class,()->{
-            doctorController.addDoctorDetails(1,doctorFormDto,result,request);
-        });
 
     }
 
     @Test
-    void throwErrorIfIdMisMatchForAddDoctor() {
+    void throwErrorIfIdMisMatchForAddDoctor() throws Exception {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
                 "9728330045",(short)6,"MBBS");
 
         Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
                 Mockito.any(Long.class),Mockito.any())).thenReturn(null);
 
-        assertThrows(APIException.class,()->{
-            doctorController.addDoctorDetails(1,doctorFormDto,result,request);
-        });
+        String content = objectMapper.writeValueAsString(doctorFormDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
+
 
     }
 
 
 
     @Test
-    void updateDoctorDetails() {
+    void updateDoctorDetails() throws Exception {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
                 "9728330045",(short)6,"MBBS");
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
@@ -194,14 +209,15 @@ class DoctorControllerTest {
                 Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
 
-        ResponseEntity<GenericMessage> newDoctorDetails = doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
-        System.out.println(newDoctorDetails);
-        assertEquals(200,newDoctorDetails.getStatusCodeValue());
-        assertEquals(doctorFormDto,newDoctorDetails.getBody().getData());
+        String content = objectMapper.writeValueAsString(doctorFormDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+
     }
 
     @Test
-    void checkIfUpdateDoctorDetailsHasError() {
+    void checkIfUpdateDoctorDetailsHasError() throws Exception {
         BindingResult result = mock(BindingResult.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
@@ -211,74 +227,65 @@ class DoctorControllerTest {
         DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
                 "9728330045",(short)6,"MBBS");
 
-        Mockito.when(result.hasErrors()).thenReturn(true);
 
-        WebRequest webRequest = mock(WebRequest.class);
+        String content = objectMapper.writeValueAsString(doctorFormDto);
 
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
 
-        assertThrows(ValidationsException.class,()->{
-            doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
-        });
 
     }
 
     @Test
-    void throwErrorIfIdMisMatchForUpdateDoctor() {
+    void throwErrorIfIdMisMatchForUpdateDoctor() throws Exception {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
                 "9728330045",(short)6,"MBBS");
 
         Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
                 Mockito.any(Long.class),Mockito.any())).thenReturn(null);
 
-        assertThrows(APIException.class,()->{
-            doctorController.updateDoctorDetails(1,doctorFormDto,result,request);
-        });
+        String content = objectMapper.writeValueAsString(doctorFormDto);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
+
 
     }
 
     @Test
-    void deleteDoctor() {
-//        DoctorDetails doctorDetails = new DoctorDetails(1L,(short) 26,"orthology","male",
-//                "9728330045",(short)6,"MBBS",null,null,null,1L);
-
-//        doctorDetails.toString();
-
-
+    void deleteDoctor() throws Exception {
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Deleted");
 
         Mockito.when(doctorService.deleteDoctor(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> res = doctorController.deleteDoctor(1);
-
-        assertEquals("Deleted",res.getBody().getData());
-
+        mockMvc.perform(MockMvcRequestBuilders
+                .delete("/api/v1/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
-    void getAllDoctorsBySpecialityTest() {
+    void getAllDoctorsBySpecialityTest() throws Exception {
         final String speciality = "orthology";
-        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
         DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
         DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
-        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
+        List<DoctorListDto> list = new ArrayList<DoctorListDto>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
 
 
         Mockito.when(doctorService.getAllDoctorsBySpeciality(Mockito.any(String.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> getList = doctorController.getAllDoctorsBySpeciality(speciality);
-        assertThat(getList).isNotNull();
-        assertEquals(list,getList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/get-all-doctor/orthology").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
-    void genderChartTest() {
+    void genderChartTest() throws Exception {
 
         final Long id = 1L;
         Map<String,Integer> m = new HashMap<>();
@@ -289,15 +296,15 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.genderChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> getGenderChart = doctorController.gender(id);
-        assertThat(getGenderChart).isNotNull();
-        assertEquals(m,getGenderChart.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/1/gender").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
 
 
     }
 
     @Test
-    void bloodGroupChartTest() {
+    void bloodGroupChartTest() throws Exception {
 
         final Long id = 1L;
         Map<String,Integer> m = new HashMap<>();
@@ -308,15 +315,14 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.bloodGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> getBloodGroupChart = doctorController.bloodGroup(id);
-        assertThat(getBloodGroupChart).isNotNull();
-        assertEquals(m,getBloodGroupChart.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/1/bloodGroup").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
 
     @Test
-    void ageGroupChartTest() {
+    void ageGroupChartTest() throws Exception {
 
         final Long id = 1L;
         Map<String,Integer> m = new HashMap<>();
@@ -329,9 +335,9 @@ class DoctorControllerTest {
 
         Mockito.when(doctorService.ageGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> getAgeGroupChart = doctorController.ageGroup(id);
-        assertThat(getAgeGroupChart).isNotNull();
-        assertEquals(m,getAgeGroupChart.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/doctor/1/ageGroup").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
 
     }
 }

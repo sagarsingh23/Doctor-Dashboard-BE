@@ -4,15 +4,23 @@ import com.dashboard.doctor_dashboard.entities.model.Attributes;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
 import com.dashboard.doctor_dashboard.entities.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -21,18 +29,27 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(MockitoExtension.class)
 class ReceptionistControllerTest {
 
     @Mock
     private ReceptionistService receptionistService;
 
+    MockMvc mockMvc;
+
     @InjectMocks
     private ReceptionistController receptionistController;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
 
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(receptionistController).build();
+
         System.out.println("setting up");
     }
 
@@ -42,7 +59,7 @@ class ReceptionistControllerTest {
     }
 
     @Test
-    void getDoctorNamesTest() {
+    void getDoctorNamesTest() throws Exception {
 
         DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
         DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com","dentist");
@@ -51,58 +68,53 @@ class ReceptionistControllerTest {
         Mockito.when(receptionistService.getDoctorDetails()).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> newList = receptionistController.doctorNames();
-        assertThat(newList).isNotNull();
-        assertEquals(list,newList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/receptionist/doctorNames").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
     @Test
-    void getAppointmentListTest() {
-        final Long doctorId = 1L;
+    void getAppointmentListTest() throws Exception {
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
-        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class))).thenReturn(
+        Mockito.when(receptionistService.getDoctorAppointments(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
 
-        ResponseEntity<GenericMessage> newList = receptionistController.appointmentList(doctorId);
-        assertThat(newList).isNotNull();
-        assertEquals(list,newList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/receptionist/appointmentList/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
     @Test
-    void getAddVitalsTest() {
-        final Long appointId = 1L;
+    void getAddVitalsTest() throws Exception {
         String message = "Vital Successfully updated";
+
         AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
 
         Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(AttributesDto.class),Mockito.any(Long.class))).thenReturn(
-                new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.OK));
+                new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.CREATED));
 
-        ResponseEntity<GenericMessage> newMessage = receptionistController.addVitals(appointId,attributes);
-        assertThat(newMessage).isNotNull();
-        assertEquals(message,newMessage.getBody().getData());
+        String content = objectMapper.writeValueAsString(attributes);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/api/v1/receptionist/addVitals/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
     @Test
-    void getTodayAllAppointmentForClinicStaffTest() {
-
+    void getTodayAllAppointmentForClinicStaffTest() throws Exception {
+        int pageNo = 1;
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         PatientViewDto dto3 = new PatientViewDto(3L, LocalTime.now(),"gokul","gokul@gmail.com"," complete");
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2, dto3));
 
-        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff()).thenReturn(
+        Mockito.when(receptionistService.todayAllAppointmentForClinicStaff(Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,list), HttpStatus.OK));
-
-
-        ResponseEntity<GenericMessage> newList = receptionistController.todayAllAppointmentForClinicStaff();
-        assertThat(newList).isNotNull();
-        assertEquals(list,newList.getBody().getData());
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/v1/receptionist/getAllAppointments?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }
