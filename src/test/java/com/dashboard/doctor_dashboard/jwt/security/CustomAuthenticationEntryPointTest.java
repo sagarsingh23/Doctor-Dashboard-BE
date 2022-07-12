@@ -1,5 +1,6 @@
-package com.dashboard.doctor_dashboard.jwt;
+package com.dashboard.doctor_dashboard.jwt.security;
 
+import com.dashboard.doctor_dashboard.jwt.security.CustomAuthenticationEntryPoint;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
