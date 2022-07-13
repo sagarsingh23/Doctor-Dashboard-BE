@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 
+import com.dashboard.doctor_dashboard.utils.Constants;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,14 +16,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+@NoArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+    private  JwtTokenProvider tokenProvider;
+    private  CustomUserDetailsService customUserDetailsService;
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
+        this.tokenProvider = tokenProvider;
+        this.customUserDetailsService = customUserDetailsService;
+    }
+
+
+    String status = Constants.FAIL;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -43,6 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             // set spring security
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        status = Constants.SUCCESS;
         }
         filterChain.doFilter(request, response);
     }

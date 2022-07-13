@@ -3,8 +3,8 @@ package com.dashboard.doctor_dashboard.jwt.security;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import io.jsonwebtoken.*;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -15,12 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class JwtTokenProvider {
 
-    @Value("${app.jwt-secret}")
-    private String jwtSecret;
-    @Value("${app.jwt-expiration-milliseconds}")
-    private int jwtExpirationInMs;
+    //@Value("${app.jwt-secret}")
+    private String jwtSecret = "encryption";
+    //@Value("${app.jwt-expiration-milliseconds}")
+    private int jwtExpirationInMs = 86400000;
 
     // generate token
     public String generateToken(Authentication authentication, Claims tokenClaims) {
@@ -54,9 +55,7 @@ public class JwtTokenProvider {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             jwtToken= bearerToken.substring(7, bearerToken.length());
-        }else
-            jwtToken=null;
-        if(validateToken(jwtToken)) {
+            validateToken(jwtToken);
             var claims = Jwts.parser()
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(jwtToken)
@@ -64,12 +63,15 @@ public class JwtTokenProvider {
             var mapper = new ModelMapper();
             Claims details = mapper.map(claims.get("DoctorDetails"), Claims.class);
             return details.getDoctorId();
+        }else{
+        throw new APIException("JWT claims string is empty.");
         }
-        return null;
     }
     // validate JWT token
     public boolean validateToken(String token) {
         try {
+            log.info(token);
+            log.info(jwtSecret);
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
         } catch (SignatureException ex) {

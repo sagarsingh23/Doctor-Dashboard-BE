@@ -1,7 +1,8 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
 
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.Constants;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 public class CustomAuthenticationEntryPoint implements AccessDeniedHandler {
 
+    String status = Constants.FAIL;
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
@@ -32,5 +34,6 @@ public class CustomAuthenticationEntryPoint implements AccessDeniedHandler {
 
         response.getWriter().write(mapper.writeValueAsString(genericMessage));
 
+        status = Constants.SUCCESS;
     }
 }
