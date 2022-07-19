@@ -3,8 +3,8 @@ package com.dashboard.doctor_dashboard.services.receptionist;
 import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.model.Attributes;
-import com.dashboard.doctor_dashboard.Utils.Constants;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.Constants;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -26,23 +26,34 @@ import java.util.stream.Collectors;
 @Service
 public class ReceptionistServiceImpl implements ReceptionistService {
 
-    @Autowired
-    private ModelMapper mapper;
+    private  ModelMapper mapper;
+    private  DoctorRepository doctorRepository;
+    private  AppointmentRepository appointmentRepository;
+    private  AttributeRepository attributeRepository;
 
     @Autowired
-    private DoctorRepository doctorRepository;
+    public ReceptionistServiceImpl(ModelMapper mapper, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository) {
+        this.mapper = mapper;
+        this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.attributeRepository = attributeRepository;
+    }
 
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-
-    @Autowired
-    private AttributeRepository attributeRepository;
-
+    /**
+     * This function of service is for getting all the doctor present.
+     * @return ResponseEntity<GenericMessage> with status code 200 and list doctor present in the database.
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorDetails() {
       return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS, doctorRepository.getDoctorDetails()),HttpStatus.OK);
     }
 
+    /**
+     * This function of service is for getting all the appointments of the doctor
+     * @param doctorId
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of appointments for the particular doctor
+     */
     @Override
     public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
         Pageable paging = PageRequest.of(pageNo, 10);
@@ -57,6 +68,11 @@ public class ReceptionistServiceImpl implements ReceptionistService {
     }
 
 
+    /**
+     * This function of service is for getting all the today's appointments present for vitals update.
+     * @param pageNo
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of today appointments
+     */
     @Override
     public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
         List<Appointment> appointments = new ArrayList<>();
@@ -71,6 +87,12 @@ public class ReceptionistServiceImpl implements ReceptionistService {
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS , patientViewDto),HttpStatus.OK);
     }
 
+    /**
+     * This function of service is for adding vitals of patients.
+     * @param vitalsDto which contains fields bloodGroup,bodyTemp,notes and glucose level...
+     * @param appointmentId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addAppointmentVitals(AttributesDto vitalsDto, Long appointmentId) {
         if(appointmentRepository.existsById(appointmentId)){
@@ -81,12 +103,15 @@ public class ReceptionistServiceImpl implements ReceptionistService {
              }
             else
                 throw new APIException("update not allowed in this API endpoint.");
-
         }
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
-
     }
 
+    /**
+     * This function of service converts appointment entity to patientViewDto
+     * @param appointment which contains fields category,dateOfAppointment,symptoms,patientName etc..
+     * @return PatientViewDto which contains appointment appointId,appointmentTime,patientName,patientEmail and status
+     */
     private PatientViewDto mapToDto2(Appointment appointment) {
         return mapper.map(appointment, PatientViewDto.class);
     }

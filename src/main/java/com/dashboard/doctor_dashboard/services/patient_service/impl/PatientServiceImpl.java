@@ -2,11 +2,11 @@ package com.dashboard.doctor_dashboard.services.patient_service.impl;
 
 import com.dashboard.doctor_dashboard.entities.model.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,28 +19,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PatientServiceImpl implements PatientService {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    private  PatientRepository patientRepository;
+    private  AttributeRepository attributeRepository;
+    private  DoctorRepository doctorRepository;
+    private  AppointmentRepository appointmentRepository;
+    private  PrescriptionRepository prescriptionRepository;
+    private  LoginRepo loginRepo;
+    private  ModelMapper mapper;
 
     @Autowired
-    private AttributeRepository attributeRepository;
-
-    @Autowired
-    private DoctorRepository doctorRepository;
-
-    @Autowired
-    private AppointmentRepository appointmentRepository;
-
-    @Autowired
-    private PrescriptionRepository prescriptionRepository;
-
-    @Autowired
-    private LoginRepo loginRepo;
-
-    @Autowired
-    private ModelMapper mapper;
+    public PatientServiceImpl(PatientRepository patientRepository, AttributeRepository attributeRepository, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, PrescriptionRepository prescriptionRepository, LoginRepo loginRepo, ModelMapper mapper) {
+        this.patientRepository = patientRepository;
+        this.attributeRepository = attributeRepository;
+        this.doctorRepository = doctorRepository;
+        this.appointmentRepository = appointmentRepository;
+        this.prescriptionRepository = prescriptionRepository;
+        this.loginRepo = loginRepo;
+        this.mapper = mapper;
+    }
 
 
+    /**
+     * This function of service is for adding patient details.
+     * @param patient
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 201.
+     */
     @Override
     public ResponseEntity<GenericMessage> addPatient(PatientEntityDto patient, Long loginId) {
 
@@ -64,6 +68,11 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
+    /**
+     * This function of service is for getting patient details by login id
+     * @param loginId
+     * @return ResponseEntity<GenericMessage> with status code 200 and patient details
+     */
     @Override
     public ResponseEntity<GenericMessage> getPatientDetailsById(Long loginId) {
         var genericMessage = new GenericMessage();
@@ -80,28 +89,42 @@ public class PatientServiceImpl implements PatientService {
     }
 
 
+    /**
+     * This function of service is for deleting patient by id
+     * @param id
+     * @return ResponseEntity<GenericMessage> with status code 204 and message successfully deleted.
+     */
     @Override
     public ResponseEntity<GenericMessage> deletePatientById(Long id) {
         patientRepository.deleteById(id);
         log.debug("Patient Service:: Patient Deleted Successfully");
-        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.OK);
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,"successfully deleted"),HttpStatus.NO_CONTENT);
     }
 
 
-
+    /**
+     * This function of service converts patient entity to patientEntityDto
+     * @param patient
+     * @return patientEntityDto which contains mobileNo,gender,age etc
+     */
     // convert entity to dto
     private PatientEntityDto mapToDto(Patient patient) {
         return mapper.map(patient, PatientEntityDto.class);
     }
 
 
-
+    /**
+     * This function of service is for updating patient details
+     * @param id
+     * @param patient
+     * @return ResponseEntity<GenericMessage> with status code 200 and message successfully updated.
+     */
     @Override
     public ResponseEntity<GenericMessage> updatePatientDetails(Long id, PatientDetailsUpdateDto patient) {
 
         var genericMessage = new GenericMessage();
-        if (loginRepo.existsById(patient.getPatientId()) && patientRepository.getId(patient.getPatientId())!=null) {
-            patientRepository.updateMobileNo(patient.getMobileNo(),patient.getPatientId());
+        if (loginRepo.existsById(patient.getId()) && patientRepository.getId(patient.getId())!=null) {
+            patientRepository.updateMobileNo(patient.getMobileNo(),patient.getId());
             log.debug("Patient Service:: Patient Updated Successfully..");
             genericMessage.setStatus(Constants.SUCCESS);
             return new ResponseEntity<>(genericMessage, HttpStatus.OK);
@@ -110,6 +133,11 @@ public class PatientServiceImpl implements PatientService {
         }
     }
 
+    /**
+     * This function of service is for getting all notification by patient id
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and list of doctorName and appointId.
+     */
     @Override
     public ResponseEntity<GenericMessage> getNotifications(long patientId) {
         if (loginRepo.existsById(patientId) && patientRepository.getId(patientId)!=null) {
@@ -118,6 +146,12 @@ public class PatientServiceImpl implements PatientService {
         throw new ResourceNotFoundException(Constants.PATIENT_NOT_FOUND);
     }
 
+    /**
+     * This function of service is for getting appointment details by appointmentId and patientId
+     * @param appointmentId
+     * @param patientId
+     * @return ResponseEntity<GenericMessage> with status code 200 and appointment details
+     */
     @Override
     public ResponseEntity<GenericMessage> viewAppointment(Long appointmentId,long patientId){
 
