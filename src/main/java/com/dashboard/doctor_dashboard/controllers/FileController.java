@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
+import com.dashboard.doctor_dashboard.services.file_service.FileStorageService;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.services.patient_service.impl.FileStorageService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.io.IOException;
 public class FileController {
 
 
-    private  FileStorageService storageService;
+    private FileStorageService storageService;
 
     @Autowired
     public FileController(FileStorageService storageService) {
