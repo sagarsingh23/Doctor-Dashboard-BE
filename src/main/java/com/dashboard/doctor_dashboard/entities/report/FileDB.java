@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "files")
+@Table(name = "patient_reports")
 public class FileDB {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

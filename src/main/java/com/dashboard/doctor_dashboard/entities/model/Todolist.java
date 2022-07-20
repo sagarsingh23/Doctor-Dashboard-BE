@@ -18,7 +18,8 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(
-        name = "Todolist"
+        name = "Todolist",
+        indexes = @Index(name = "index_doctorId",columnList = "doctor_id")
 )
 
 public class Todolist {
@@ -26,6 +27,7 @@ public class Todolist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "varchar(50)")
     private String description;
     private Boolean status;
 

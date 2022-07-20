@@ -18,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "doctor_details"
+        name = "doctor_details",
+        indexes = @Index(name = "index_speciality",columnList = "speciality")
 )
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DoctorDetails {
@@ -30,21 +31,20 @@ public class DoctorDetails {
     @Range(min = 24, max = 100, message = "enter age between 24-100")
     private Short age;
 
-    @Column(name = "speciality",nullable = false)
+    @Column(name = "speciality",columnDefinition = "varchar(20)",nullable = false)
     private String speciality;
 
-    @Column(name = "phone_no",nullable = false)
+    @Column(name = "phone_no",columnDefinition = "varchar(10)",nullable = false)
     private String phoneNo;
 
-    @Column(name = "gender",nullable = false)
+    @Column(name = "gender",columnDefinition = "varchar(10)",nullable = false)
     private String gender;
 
     @Column(name = "experience",nullable = false)
     private short exp;
 
-    @Column(name = "degree",nullable = false)
+    @Column(name = "degree",columnDefinition = "varchar(250)",nullable = false)
     private String degree;
-
 
     @CreationTimestamp
     @Column(name = "created_at",nullable = false,updatable = false)

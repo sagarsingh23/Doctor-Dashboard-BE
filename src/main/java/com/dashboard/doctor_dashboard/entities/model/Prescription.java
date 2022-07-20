@@ -13,17 +13,21 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Table(
-        name = "prescriptions"
+        name = "prescriptions",
+        indexes = @Index(name = "index_appointId",columnList = "appointment_id")
 )
 public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long presId;
 
+    @Column(columnDefinition = "varchar(50)")
     private String drugName;
     private Long quantity;
+    @Column(columnDefinition = "varchar(10)")
     private String type;
     private Long days;
+    @Column(columnDefinition = "varchar(10)")
     private String time;
 
     @CreationTimestamp
