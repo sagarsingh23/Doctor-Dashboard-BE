@@ -16,11 +16,25 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 public class MailServiceImpl {
 
-
-    @Autowired
     private JavaMailSender mailSender;
 
-    public void mailServiceHandler(String fromEmail,String toEmail, String senderName, String subject , String content) throws MessagingException, JSONException, UnsupportedEncodingException {
+    @Autowired
+    public MailServiceImpl(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    /**
+     * This Function of service is to send mail service handle object to mailer
+     * @param fromEmail
+     * @param toEmail
+     * @param senderName
+     * @param subject
+     * @param content
+     * @throws MessagingException
+     * @throws JSONException
+     * @throws UnsupportedEncodingException
+     */
+    public void mailServiceHandler(String fromEmail, String toEmail, String senderName, String subject , String content) throws MessagingException, JSONException, UnsupportedEncodingException {
         var obj = new JSONObject();
         obj.put("fromEmail", fromEmail);
         obj.put("toEmail", toEmail);
@@ -31,6 +45,13 @@ public class MailServiceImpl {
     }
 
 
+    /**
+     * This function of service is for sending mail to user.
+     * @param obj which contains fields fromEmail,toEmail,senderName,Subject etc
+     * @throws MessagingException
+     * @throws JSONException
+     * @throws UnsupportedEncodingException
+     */
     private void sendMailer(JSONObject obj) throws MessagingException, JSONException, UnsupportedEncodingException {
 
         try {

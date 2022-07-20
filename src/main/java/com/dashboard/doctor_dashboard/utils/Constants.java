@@ -3,11 +3,14 @@ package com.dashboard.doctor_dashboard.utils;
 @SuppressWarnings("squid:S6126")
 public class Constants {
     public static final String SUCCESS = "success";
-    public static final String FAIL = "fail";
-    public static final String PATIENT = "Patient";
-    public static final String APPOINTMENT = "Appointment";
-    public static final String DOCTOR = "Doctor";
+    public static final String FAIL = "failure";
+
     public static final String DETAILS_MISMATCH = "details provided is not correct";
+
+    public static final String FILE_NAME_PRESENT = "file name is empty";
+    public static final String FILE_UPLOADED = "Uploaded the file successfully: ";
+
+    public static final String REPORT_NOT_FOUND = "No Report Found!! ";
 
 
 
