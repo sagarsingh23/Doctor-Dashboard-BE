@@ -12,4 +12,12 @@ import java.util.List;
 @Getter
 public class ValidationsException extends RuntimeException {
     private final List<String>  messages;
+
+    @Override
+    public String toString() {
+        return "ValidationsException{" +
+                "messages=" + messages +
+                '}';
+    }
+
 }
