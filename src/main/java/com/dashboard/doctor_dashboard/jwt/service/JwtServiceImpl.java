@@ -28,6 +28,7 @@ public class JwtServiceImpl implements JwtService {
         this.jwtTokenProvider = jwtTokenProvider;
     }
 
+
     /**
      * This function of service is for authenticating user and generating token
      * @param login contains fields email,role,profilePic etc
