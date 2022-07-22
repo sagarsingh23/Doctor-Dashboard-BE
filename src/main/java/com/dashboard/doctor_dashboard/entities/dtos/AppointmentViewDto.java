@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -14,17 +17,41 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentViewDto {
+    @NotNull
+    @NotEmpty(message = "name is empty")
     private String name;
+    @NotNull
+    @NotEmpty
     private String email;
+    @NotNull
+    @NotEmpty
     private String gender;
+    @NotNull
+    @NotEmpty
     private String speciality;
 
+    @NotNull
     private short age;
+
+    @NotNull
+    @NotEmpty
     private String bloodGroup;
+
+    @NotNull
+    @Future(message = "Only future dates can be entered ")
     private LocalDate dateOfAppointment;
+
+    @NotNull
     private LocalTime timeOfAppointment;
+
+    @NotNull
     private Attributes attributes;
+
+    @NotNull
+    @NotEmpty
     private String status;
+
+    @NotNull
     private List<Prescription> prescription;
 
     @SuppressWarnings("squid:S107")
