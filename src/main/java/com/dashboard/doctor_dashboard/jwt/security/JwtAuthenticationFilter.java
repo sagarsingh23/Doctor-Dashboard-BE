@@ -19,15 +19,10 @@ import java.io.IOException;
 @NoArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private  JwtTokenProvider tokenProvider;
-    private  CustomUserDetailsService customUserDetailsService;
-
     @Autowired
-    public JwtAuthenticationFilter(JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
-        this.tokenProvider = tokenProvider;
-        this.customUserDetailsService = customUserDetailsService;
-    }
-
+    private  JwtTokenProvider tokenProvider;
+    @Autowired
+    private  CustomUserDetailsService customUserDetailsService;
 
     String status = Constants.FAIL;
 
@@ -38,7 +33,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // get JWT (token) from http request
         String token = getJWTFromRequest(request);
-
         // validate token
         if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
             // get username from token
