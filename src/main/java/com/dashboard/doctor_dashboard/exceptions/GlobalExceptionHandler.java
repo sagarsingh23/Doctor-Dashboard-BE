@@ -1,11 +1,10 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
 import com.dashboard.doctor_dashboard.utils.Constants;
-import com.dashboard.doctor_dashboard.utils.wrapper.ErrorMessage;
 import com.dashboard.doctor_dashboard.utils.wrapper.ErrorDetails;
+import com.dashboard.doctor_dashboard.utils.wrapper.ErrorMessage;
 import com.dashboard.doctor_dashboard.utils.wrapper.ValidationsSchema;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -169,18 +169,18 @@ public class GlobalExceptionHandler {
 
 
     /**
-     * This function of service is call whenever API exception is thrown
+     * This function of service is call whenever MethodArgumentNotValid exception is thrown
      * @param exception MethodArgumentNotValid exception
      * @return ResponseEntity<ErrorMessage> with status code 422
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessage> methodArgumentNotValidException(MethodArgumentNotValidException exception){
-
+        log.error("MethodArgumentNotValidException::"+exception.getMessage());
         List<String> messages = exception.getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.toList());
 
-        log.error("errrrrr"+messages);
+        log.error("Error:"+messages);
         var errorMessage = new ErrorMessage();
         errorMessage.setErrorData(Objects.requireNonNull(messages));
         errorMessage.setErrorStatus(Constants.FAIL);
