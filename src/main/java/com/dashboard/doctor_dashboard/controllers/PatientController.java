@@ -1,10 +1,11 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("api/v1/patient")
+@Slf4j
 public class PatientController {
 
 
@@ -35,6 +37,7 @@ public class PatientController {
     @ApiOperation("This API is used to post or save patient details in database")
     @PostMapping("/{loginId}")
     public ResponseEntity<GenericMessage> addPatientDetails(@Valid @RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
+        log.info("PatientController::addPatientDetails");
         return patientService.addPatient(patient,loginId);
     }
 
@@ -46,6 +49,8 @@ public class PatientController {
     @ApiOperation("This API is used to get appointment details from database")
     @GetMapping("/{patientId}/appointment/{appointmentId}")
     public ResponseEntity<GenericMessage> getAppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId){
+        log.info("PatientController::getAppointmentViewByAppointmentId");
+
         return patientService.viewAppointment(appointmentId,patientId);
     }
 
@@ -56,18 +61,22 @@ public class PatientController {
     @ApiOperation("This API is used to get patient details from database")
     @GetMapping("/patientProfile/{loginId}")
     public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId){
+        log.info("PatientController::patientProfile");
+
         return patientService.getPatientDetailsById(loginId);
     }
 
     /**
      * @param id is used as a path variable
-     * @param patientDetailsUpdateDto consist fields id and mobile number
+     * @param userDetailsUpdateDto consist fields id and mobile number
      * @return patient updated successfully after successful api call
      */
     @ApiOperation("This API is used to update patient details in database")
     @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id,@Valid @RequestBody PatientDetailsUpdateDto patientDetailsUpdateDto) {
-        return patientService.updatePatientDetails(id, patientDetailsUpdateDto);
+    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id,@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto) {
+        log.info("PatientController::updatePatientDetails");
+
+        return patientService.updatePatientDetails(id, userDetailsUpdateDto);
     }
 
     /**
@@ -77,6 +86,8 @@ public class PatientController {
     @ApiOperation("This API is used for deleting patient from patients database")
     @DeleteMapping("/{id}")
     public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
+        log.info("PatientController::deletePatientById");
+
         return patientService.deletePatientById(id);
     }
 
@@ -87,6 +98,8 @@ public class PatientController {
     @ApiOperation("This API is used to get all notification for patient")
     @GetMapping("/{patientId}/getNotifications")
     public ResponseEntity<GenericMessage> getNotifications(@PathVariable("patientId") Long patientId){
+        log.info("PatientController::getNotifications");
+
         return patientService.getNotifications(patientId);
     }
 

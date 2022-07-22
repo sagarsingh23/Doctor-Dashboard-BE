@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,9 +19,13 @@ import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 
 
+/**
+ * AppointmentController
+ */
 @RestController
 @RequestMapping("api/v1/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class AppointmentController {
 
     private AppointmentService appointmentService;
@@ -41,6 +46,7 @@ public class AppointmentController {
     @ApiOperation("Saves the details in appointment table")
     @PostMapping("/patient")
     public ResponseEntity<GenericMessage> addAppointment(@Valid @RequestBody AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
+        log.info("AppointmentController::addAppointment");
         return appointmentService.addAppointment(appointment,request);
     }
 
@@ -52,7 +58,8 @@ public class AppointmentController {
     @ApiOperation("Shows all the available slots of the doctor")
     @GetMapping("/getAvailableSlots/{doctorId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
-         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
+        log.info("AppointmentController::showAvailableSlots");
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
     }
 
     /**
@@ -63,6 +70,7 @@ public class AppointmentController {
     @ApiOperation("Shows all appointments of the patient")
     @GetMapping("/getAllAppointments/patient/{patientId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
+        log.info("AppointmentController::getAllAppointmentByPatientId");
         return appointmentService.getAllAppointmentByPatientId(patientId,pageNo) ;
     }
 
@@ -74,6 +82,8 @@ public class AppointmentController {
     @ApiOperation("Shows all appointments of the doctor")
     @GetMapping("/getAllAppointments/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo) {
+        log.info("AppointmentController::getAllAppointmentByDoctorId");
+
         return appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo) ;
     }
 
@@ -85,6 +95,8 @@ public class AppointmentController {
     @ApiOperation("appointment details of patient for the doctor")
     @GetMapping("/{appointId}/patient")
     public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
+        log.info("AppointmentController::getAppointmentById");
+
         return appointmentService.getAppointmentById(appointId);
     }
 
@@ -95,6 +107,8 @@ public class AppointmentController {
     @ApiOperation("return no of appointment booked for the doctor per week in a month")
     @GetMapping("chart/{doctorId}/weeklyGraphDoctor")
     public ResponseEntity<GenericMessage> weeklyDoctorCountChart(@PathVariable("doctorId") Long doctorId) {
+        log.info("AppointmentController::weeklyDoctorCountChart");
+
         return appointmentService.weeklyDoctorCountChart(doctorId);
     }
 
@@ -105,6 +119,8 @@ public class AppointmentController {
     @ApiOperation("return no of appointment booked by patient per week in a month")
     @GetMapping("chart/{patientId}/weeklyGraphPatient")
     public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("patientId") Long patientId) {
+        log.info("AppointmentController::weeklyPatientCountChart");
+
         return appointmentService.weeklyPatientCountChart(patientId);
     }
 
@@ -116,6 +132,8 @@ public class AppointmentController {
     @ApiOperation("return today's latest 3 recent appointment booked for the doctor")
     @GetMapping("/recentAdded/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
+        log.info("AppointmentController::recentAppointment");
+
         return appointmentService.recentAppointment(doctorId);
     }
 
@@ -127,6 +145,8 @@ public class AppointmentController {
     @ApiOperation("return total no of appointments for the doctor")
     @GetMapping("/chart/{doctorId}/totalPatient")
     public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("doctorId") Long doctorId) {
+        log.info("AppointmentController::totalNoOfAppointment");
+
         return appointmentService.totalNoOfAppointment(doctorId);
     }
 
@@ -137,6 +157,8 @@ public class AppointmentController {
     @ApiOperation("return today's appointment count for the doctor")
     @GetMapping("/chart/{doctorId}/todayAppointments")
     public ResponseEntity<GenericMessage> todayAppointments(@PathVariable("doctorId") Long doctorId) {
+        log.info("AppointmentController::todayAppointments");
+
         return appointmentService.todayAppointments(doctorId);
     }
 
@@ -147,6 +169,8 @@ public class AppointmentController {
     @ApiOperation("returns total no of appointment booked in a week for the doctor")
     @GetMapping("/chart/{doctorId}/totalActivePatient")
     public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
+        log.info("AppointmentController::totalNoOfAppointmentAddedThisWeek");
+
         return appointmentService.totalNoOfAppointmentAddedThisWeek(doctorId);
     }
 
@@ -157,6 +181,8 @@ public class AppointmentController {
     @ApiOperation("returns categories of the appointment booked and it's count according to the id provided ")
     @GetMapping("/{loginId}/category")
     public ResponseEntity<GenericMessage> patientCategoryGraph(@PathVariable("loginId") Long loginId) {
+        log.info("AppointmentController::patientCategoryGraph");
+
         return appointmentService.patientCategoryGraph(loginId);
     }
 
@@ -167,6 +193,8 @@ public class AppointmentController {
     @ApiOperation("returns detail of doctor for which patient is booking appointment again")
     @GetMapping("/{appointId}")
     public ResponseEntity<GenericMessage>getFollowDetails(@PathVariable("appointId") Long appointId){
+        log.info("AppointmentController::getFollowDetails");
+
         return appointmentService.getFollowDetails(appointId);
     }
 

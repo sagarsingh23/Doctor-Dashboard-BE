@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("api/v1/prescription")
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class PrescriptionController {
 
 
@@ -37,6 +39,7 @@ public class PrescriptionController {
     @ApiOperation("This API is used to save or post prescription in the database")
     @PostMapping("/{appointId}")
     public ResponseEntity<GenericMessage> addPrescription(@PathVariable("appointId") Long appointId,@Valid @RequestBody UpdatePrescriptionDto updatePrescriptionDto) throws MessagingException, JSONException, IOException {
+        log.info("PrescriptionController::addPrescription");
         return prescriptionService.addPrescription(appointId,updatePrescriptionDto);
     }
 
@@ -47,6 +50,8 @@ public class PrescriptionController {
     @ApiOperation("This API is used to get all prescription")
     @GetMapping("/{appointId}")
     public ResponseEntity<GenericMessage> getAllPrescription(@PathVariable("appointId") Long appointId) {
+        log.info("PrescriptionController::getAllPrescription");
+
         return prescriptionService.getAllPrescriptionByAppointment(appointId);
     }
 
@@ -57,6 +62,7 @@ public class PrescriptionController {
     @ApiOperation("This API is used for deleting Appointment from Appointment table")
     @DeleteMapping("/{id}")
     public ResponseEntity<GenericMessage> deleteAppointment(@PathVariable("id") Long id) {
+        log.info("PrescriptionController::deleteAppointment");
         return prescriptionService.deleteAppointmentById(id);
     }
 

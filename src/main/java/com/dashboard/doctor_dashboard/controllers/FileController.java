@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.services.file_service.FileStorageService;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
+@Slf4j
 public class FileController {
 
 
@@ -34,6 +36,7 @@ public class FileController {
     @ResponseBody
     @PostMapping("/api/v1/patient/upload/{id}")
     public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) throws IOException {
+        log.info("FileController::uploadFile");
         return storageService.store(file,id);
     }
 
@@ -45,6 +48,7 @@ public class FileController {
     @ApiOperation("This API is responsible for downloading of file")
     @GetMapping("/v1/files/{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id){
-       return storageService.getFile(id);
+        log.info("FileController::getFile");
+        return storageService.getFile(id);
     }
 }
