@@ -143,3 +143,6 @@ JPA buddy
 │   │               ├── V2__info1.sql
 │   │               └── V3__deleteFiles.sql)
 ```
+
+# ER Diagram
+![miCare ER updated](https://user-images.githubusercontent.com/99714712/180491880-fcd3707a-13f2-458a-bb53-96437e3ed0f0.png)
