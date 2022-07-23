@@ -4,6 +4,8 @@ package com.dashboard.doctor_dashboard.utils;
 public class Constants {
     public static final String SUCCESS = "success";
     public static final String FAIL = "failure";
+    public static final String LOGIN = "Login";
+
 
     public static final String DETAILS_MISMATCH = "details provided is not correct";
 
@@ -20,6 +22,8 @@ public class Constants {
 
     //DOCTOR
     public static final String DOCTOR_NOT_FOUND = "doctor not found with the id provided.";
+    public static final String TODO_NOT_FOUND = "todo not found with the id provided.";
+
     public static final String DOCTOR_NOT_FOUND_SPECIALITY = "doctor not found with the speciality provided.";
 
 
