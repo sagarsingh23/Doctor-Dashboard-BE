@@ -1,13 +1,12 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.model.Appointment;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,7 +28,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
 class ReceptionistControllerTest {
 
     @Mock
@@ -57,6 +56,7 @@ class ReceptionistControllerTest {
     }
 
     @Test
+    @DisplayName("View All Doctor Names")
     void getDoctorNamesTest() throws Exception {
 
         DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
@@ -72,6 +72,7 @@ class ReceptionistControllerTest {
     }
 
     @Test
+    @DisplayName("View All Appointment By Doctor")
     void getAppointmentListTest() throws Exception {
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
@@ -86,10 +87,11 @@ class ReceptionistControllerTest {
     }
 
     @Test
+    @DisplayName("Add Vitals")
     void getAddVitalsTest() throws Exception {
         String message = "Vital Successfully updated";
 
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",new Appointment());
 
         Mockito.when(receptionistService.addAppointmentVitals(Mockito.any(AttributesDto.class),Mockito.any(Long.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.CREATED));
@@ -102,6 +104,7 @@ class ReceptionistControllerTest {
     }
 
     @Test
+    @DisplayName("View Today's All Appointment For Clinic Staff")
     void getTodayAllAppointmentForClinicStaffTest() throws Exception {
         int pageNo = 1;
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");

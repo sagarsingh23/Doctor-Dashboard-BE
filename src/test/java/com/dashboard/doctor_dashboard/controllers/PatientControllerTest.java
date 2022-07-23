@@ -2,19 +2,15 @@ package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.model.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +26,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
 class PatientControllerTest {
 
 
@@ -60,9 +56,10 @@ class PatientControllerTest {
 
 
     @Test
+    @DisplayName("Add Patient Details")
     void addPatientTest() throws Exception {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
@@ -81,6 +78,7 @@ class PatientControllerTest {
     }
 
     @Test
+    @DisplayName("View Appointment Details By Appointment Id")
     void getAppointmentViewByAppointmentIdTest() throws Exception {
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral",LocalDate.now(),LocalTime.now(),"completed","B+", (short) 21,"Male");
@@ -97,9 +95,10 @@ class PatientControllerTest {
 
 
     @Test
+    @DisplayName("View Patient Appointment Details")
     void patientProfileTest() throws Exception {
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(patientService.getPatientDetailsById(Mockito.any(Long.class)))
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));
@@ -111,13 +110,14 @@ class PatientControllerTest {
 
 
     @Test
+    @DisplayName("Update Patient Details")
     void updatePatientTest() throws Exception {
         final Long id = 1L;
         String message = "Mobile No. Successfully Updated";
 
-        PatientDetailsUpdateDto updateDto = new PatientDetailsUpdateDto(id,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(id,"9728330045");
 
-        Mockito.when(patientService.updatePatientDetails(Mockito.any(Long.class),Mockito.any(PatientDetailsUpdateDto.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message),HttpStatus.OK));
+        Mockito.when(patientService.updatePatientDetails(Mockito.any(Long.class),Mockito.any(UserDetailsUpdateDto.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message),HttpStatus.OK));
 
         String content = objectMapper.writeValueAsString(updateDto);
 
@@ -128,6 +128,7 @@ class PatientControllerTest {
     }
 
     @Test
+    @DisplayName("Delete Patient Details")
     void deletePatientByIdTest() throws Exception {
         Long id = 1L;
 
@@ -143,6 +144,7 @@ class PatientControllerTest {
     }
 
     @Test
+    @DisplayName("View All Notifications By Patient Id")
     void getNotifications() throws Exception {
         Long appointmentId = 1L;
         NotificationDto notificationDto = new NotificationDto(appointmentId,"Sagar");

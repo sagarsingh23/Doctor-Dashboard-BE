@@ -1,15 +1,13 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.model.Prescription;
-import com.dashboard.doctor_dashboard.Utils.Constants;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.Constants;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,7 +28,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
 class PrescriptionControllerTest {
 
     @Mock
@@ -58,6 +56,7 @@ class PrescriptionControllerTest {
     }
 
     @Test
+    @DisplayName("Add Prescription details")
     void addPrescriptionTest() throws Exception {
         final Long id =1L;
         PatientDto patientDto = new PatientDto("dentist","Dr.pranay","completed","sagar","sagarssn23@gmail.com",21,"male");
@@ -74,10 +73,11 @@ class PrescriptionControllerTest {
     }
 
     @Test
+    @DisplayName("View All Prescription")
     void getALlPrescriptionTest() throws Exception {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -91,6 +91,7 @@ class PrescriptionControllerTest {
     }
 
     @Test
+    @DisplayName("Delete Appointment")
     void deleteAppointmentTest() throws Exception {
         Long id = 1L;
         String message = "Successfully deleted";

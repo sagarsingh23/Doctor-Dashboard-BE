@@ -3,11 +3,13 @@ package com.dashboard.doctor_dashboard.controllers;
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
 import com.dashboard.doctor_dashboard.entities.model.Todolist;
-import com.dashboard.doctor_dashboard.Utils.Constants;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.Constants;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +33,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith(MockitoExtension.class)
 class TodoControllerTest {
 
     MockMvc mockMvc;
@@ -55,10 +56,11 @@ class TodoControllerTest {
     }
 
     @Test
+    @DisplayName("Add Todo")
     void addTodo() throws Exception {
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(1L);
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,doctorDetails);
+        TodoListDto todolist = new TodoListDto("hello",true,doctorDetails);
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
         Mockito.when(todoService.addTodo(Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.CREATED));
@@ -68,6 +70,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @DisplayName("View All Todo By Doctor")
     void getAllTodoByDoctorId() throws Exception {
 
         Todolist todolist1 = new Todolist(1L,"task1",true,null,null,null);
@@ -82,6 +85,7 @@ class TodoControllerTest {
     }
 
     @Test
+    @DisplayName("View Todo By Id")
     void getTodoById() throws Exception {
         Todolist todolist = new Todolist(1L,"hello",true,null,null,null);
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
@@ -93,17 +97,19 @@ class TodoControllerTest {
     }
 
     @Test
+    @DisplayName("Delete Todo")
     void deleteTodo() throws Exception {
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Deleted");
-        Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
+        Mockito.when(todoService.deleteTodoById(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.NO_CONTENT));
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
     }
 
     @Test
+    @DisplayName("Update Todo")
     void updateTodo() throws Exception {
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,new DoctorDetails());
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,todolist);
         String content = objectMapper.writeValueAsString(todolist);
 

@@ -1,15 +1,15 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -33,7 +33,6 @@ import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith(MockitoExtension.class)
 class AppointmentControllerTest {
 
     @Mock
@@ -61,8 +60,9 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Add Appointment")
     void addAppointmentTest() throws Exception {
-        LocalDate localDate = LocalDate.of(2022,07,10);
+        LocalDate localDate  = LocalDate.now().plusDays(1);
         LocalTime localTime = LocalTime.of(10,30);
 
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -71,7 +71,7 @@ class AppointmentControllerTest {
         m.put("message","Successfully created");
 
         AppointmentDto appointment = new AppointmentDto(1L,"dentist",localDate,"fever","sagar","sagarssn23@gmal.com",
-                "pranay", localTime,true,"completed",null,null,null,null);
+                "pranay", localTime,true,"completed",null,null,new Patient(),new DoctorDetails());
 
         Mockito.when(appointmentService.addAppointment(Mockito.any(AppointmentDto.class),Mockito.any(HttpServletRequest.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,m), HttpStatus.CREATED));
@@ -80,12 +80,13 @@ class AppointmentControllerTest {
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
         String content = objectMapper.writeValueAsString(appointment);
-        mockMvc.perform(MockMvcRequestBuilders
+       mockMvc.perform(MockMvcRequestBuilders
                 .post("/api/v1/appointment/patient").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
     @Test
+    @DisplayName("Show Available Slots ")
     void showAvailableSlotsTest() throws Exception {
         String date = "2022-06-28";
         final Long id = 1L;
@@ -100,6 +101,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("All Appointment Of Patient")
     void getAllAppointmentByPatientIdTest() throws Exception {
         final Long patientId = 1L;
         int pageNo = 1;
@@ -123,6 +125,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("All Appointment Of Doctor")
     void getAllAppointmentByDoctorIdTest() throws Exception {
         final Long doctorId = 1L;
         int pageNo = 1;
@@ -145,6 +148,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Total No. of Appointment")
     void getTotalNoOfAppointmentTest() throws Exception {
         final Long doctorId = 1L;
         int totalNoOfAppointment = 4;
@@ -159,6 +163,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Today's Appointment")
     void getTodayAppointmentsTest() throws Exception {
         final Long doctorId = 1L;
         int totalAppointmentToday = 2;
@@ -173,6 +178,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Total No. of Appointment Added This Week")
     void getTotalNoOfAppointmentAddedThisWeekTest() throws Exception {
         final Long doctorId = 1L;
         int totalAppointmentThisWeek = 10;
@@ -187,6 +193,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Patient Category Chart")
     void getPatientCategoryGraphTest() throws Exception {
         Long patientId = 1L;
         List<String> charts = new ArrayList<>();
@@ -203,6 +210,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("View Follow Up Details")
     void getFollowDetailsTest() throws Exception {
         final Long appointId = 1L;
         FollowUpDto followUpDto = new FollowUpDto(1L,"sagar",1L,"dentist","completed");
@@ -217,6 +225,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Weekly Doctor Appointment Chart")
     void weeklyDoctorCountChart() throws Exception {
         final Long doctorId = 1L;
 
@@ -238,6 +247,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Weekly Patient Appointment Chart")
     void weeklyPatientCountChart() throws Exception {
         final Long patientId = 1L;
 
@@ -258,6 +268,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("Recent Appointment")
     void recentAppointment() throws Exception {
         final Long doctorId = 1L;
 
@@ -275,6 +286,7 @@ class AppointmentControllerTest {
     }
 
     @Test
+    @DisplayName("view Appointment details")
     void getAppointmentByIdTest() throws Exception {
         final Long appointId = 1L;
 

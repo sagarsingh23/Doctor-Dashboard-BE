@@ -1,13 +1,12 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.exceptions.GlobalExceptionHandler;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -31,7 +30,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+
 class DoctorControllerTest {
 
 
@@ -50,7 +49,7 @@ class DoctorControllerTest {
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(doctorController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(doctorController).setControllerAdvice(new GlobalExceptionHandler()).build();
 
         System.out.println("setting up");
     }
@@ -62,6 +61,7 @@ class DoctorControllerTest {
 
 
     @Test
+    @DisplayName("View All Doctor")
     void  getAllDoctors() throws Exception {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
@@ -96,6 +96,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("View Doctor Details By Id")
     void getDoctorsByIdIfIdPresent() throws Exception {
         final Long id = 1L;
         DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
@@ -126,6 +127,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("Add Doctor Details")
     void addDoctorDetails() throws Exception {
         BindingResult result = mock(BindingResult.class);
         WebRequest webRequest = mock(WebRequest.class);
@@ -148,65 +150,19 @@ class DoctorControllerTest {
     }
 
     @Test
-    void checkIfAddDoctorDetailsHasError() throws Exception {
-        BindingResult result = mock(BindingResult.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-
-        ObjectError error = new ObjectError("age","age should be between 24-100");
-        result.addError(error);
-
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
-
-
-        String content = objectMapper.writeValueAsString(doctorFormDto);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
-
-
-    }
-
-    @Test
-    void throwErrorIfIdMisMatchForAddDoctor() throws Exception {
-        BindingResult result = mock(BindingResult.class);
-        WebRequest webRequest = mock(WebRequest.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-
-
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
-                "9728330045",(short)6,"MBBS");
-
-        Mockito.when(doctorService.addDoctorDetails(Mockito.any(DoctorFormDto.class),
-                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
-
-        String content = objectMapper.writeValueAsString(doctorFormDto);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/doctor/add-doctor-details/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
-
-
-    }
-
-
-
-    @Test
+    @DisplayName("Update Doctor Details")
     void updateDoctorDetails() throws Exception {
-        BindingResult result = mock(BindingResult.class);
-        WebRequest webRequest = mock(WebRequest.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
 
-        GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
+        GenericMessage message  = new GenericMessage(Constants.SUCCESS,userDetailsUpdateDto);
 
 
-        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
+        Mockito.when(doctorService.updateDoctor(Mockito.any(UserDetailsUpdateDto.class),
                 Mockito.any(Long.class),Mockito.any())).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
 
-        String content = objectMapper.writeValueAsString(doctorFormDto);
+        String content = objectMapper.writeValueAsString(userDetailsUpdateDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
@@ -215,46 +171,19 @@ class DoctorControllerTest {
 
     @Test
     void checkIfUpdateDoctorDetailsHasError() throws Exception {
-        BindingResult result = mock(BindingResult.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-
-        ObjectError error = new ObjectError("age","age should be between 24-100");
-        result.addError(error);
-
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(null,"97283300");
 
 
-        String content = objectMapper.writeValueAsString(doctorFormDto);
+        String content = objectMapper.writeValueAsString(userDetailsUpdateDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
-
-
     }
 
-    @Test
-    void throwErrorIfIdMisMatchForUpdateDoctor() throws Exception {
-        BindingResult result = mock(BindingResult.class);
-        WebRequest webRequest = mock(WebRequest.class);
-        HttpServletRequest request = mock(HttpServletRequest.class);
 
-
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
-                "9728330045",(short)6,"MBBS");
-
-        Mockito.when(doctorService.updateDoctor(Mockito.any(DoctorFormDto.class),
-                Mockito.any(Long.class),Mockito.any())).thenReturn(null);
-
-        String content = objectMapper.writeValueAsString(doctorFormDto);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isMethodNotAllowed());
-
-
-    }
 
     @Test
+    @DisplayName("Delete Doctor Details")
     void deleteDoctor() throws Exception {
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,"Deleted");
 
@@ -265,6 +194,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("View All Doctor By Speciality")
     void getAllDoctorsBySpecialityTest() throws Exception {
         final String speciality = "orthology";
         DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
@@ -282,6 +212,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("Gender Chart")
     void genderChartTest() throws Exception {
 
         final Long id = 1L;
@@ -301,6 +232,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("Blood Group Chart")
     void bloodGroupChartTest() throws Exception {
 
         final Long id = 1L;
@@ -319,6 +251,7 @@ class DoctorControllerTest {
     }
 
     @Test
+    @DisplayName("Age Group Chart")
     void ageGroupChartTest() throws Exception {
 
         final Long id = 1L;
