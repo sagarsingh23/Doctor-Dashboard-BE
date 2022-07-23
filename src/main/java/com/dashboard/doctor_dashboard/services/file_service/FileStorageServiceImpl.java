@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
+/**
+ * FileStorageServiceImpl
+ */
 @Service
 @Slf4j
 public class FileStorageServiceImpl implements FileStorageService {
@@ -35,25 +40,25 @@ public class FileStorageServiceImpl implements FileStorageService {
      * @param id
      * @return ResponseEntity<GenericMessage> with status code 201.
      */
-    public ResponseEntity<GenericMessage> store(MultipartFile file, Long id) {
+    public ResponseEntity<GenericMessage> store(MultipartFile file, Long id) throws IOException {
+        log.info("inside: FileServiceStorageImpl::store");
+
         var message = "";
         if (appointmentRepository.getId(id) == null) {
+            log.info("exit: FileServiceStorageImpl::store - Appointment Not Found:"+Constants.APPOINTMENT_NOT_FOUND);
             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
         }
         String value = file.getOriginalFilename();
-        if(value == null){
+        if(value == null){                                                                         //check if file has name or not
+            log.info("exit: FileServiceStorageImpl::store - File Not Present:"+Constants.FILE_NAME_PRESENT);
             throw new ResourceNotFoundException(Constants.FILE_NAME_PRESENT);
         }
-        try {
-            var fileName = StringUtils.cleanPath(value);
-            var fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
-            fileDBRepository.save(fileDB);
-            message = Constants.FILE_UPLOADED + file.getOriginalFilename();
-            return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message),HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Error:"+e.getMessage());
-        }
+        var fileName = StringUtils.cleanPath(value);
+        var fileDB = new FileDB(fileName, file.getContentType(), file.getBytes(), id);
+        fileDBRepository.save(fileDB);
+        message = Constants.FILE_UPLOADED + file.getOriginalFilename();
+        log.info("exit: FileServiceStorageImpl::store");
+        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message),HttpStatus.CREATED);
     }
 
 
@@ -63,12 +68,16 @@ public class FileStorageServiceImpl implements FileStorageService {
      * @return ResponseEntity<byte[]> with status code 200 and Blob object of file.
      */
     public ResponseEntity<byte[]> getFile(Long id) {
+        log.info("inside: FileServiceStorageImpl::getFile");
         try {
             var fileDB = fileDBRepository.findByAppointmentId(id);
-             return ResponseEntity.ok()
+            log.info("exit: FileServiceStorageImpl::getFile");
+
+            return ResponseEntity.ok()
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                     .body(fileDB.getDataReport());
         } catch (Exception e) {
+            log.info("exit: FileServiceStorageImpl::getFile"+Constants.REPORT_NOT_FOUND);
             throw new ResourceNotFoundException(Constants.REPORT_NOT_FOUND);
         }
     }
