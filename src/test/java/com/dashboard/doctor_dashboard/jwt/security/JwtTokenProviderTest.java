@@ -4,6 +4,7 @@ import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.jwt.entities.Claims;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import org.mockito.InjectMocks;
@@ -11,12 +12,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.core.Authentication;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import javax.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+
 
 class JwtTokenProviderTest {
 
@@ -26,6 +31,8 @@ class JwtTokenProviderTest {
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        ReflectionTestUtils.setField(jwtTokenProvider, "jwtSecret", "encryption");
+        ReflectionTestUtils.setField(jwtTokenProvider, "jwtExpirationInMs", 86400000);
     }
 
     @Test
@@ -210,7 +217,8 @@ class JwtTokenProviderTest {
 
     @Test
     void validateToken_ThrowErrorForUnsupportedException(){
-        String token4 = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWdhcnNzbjIzQGdtYWlsLmNvbSIsIkRvY3RvckRldGFpbHMiOnsiZG9jdG9ySWQiOjUsImRvY3Rvck5hbWUiOiJTYWdhciIsImRvY3RvckVtYWlsIjoic2FnYXJzc24yM0BnbWFpbC5jb20iLCJyb2xlIjoiUEFUSUVOVCIsInByb2ZpbGVQaWMiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS9BSXRidm1tWWhFR1pnM3BkbW91MzFQajN3cEljWG5XMDZpbXRKMjR0TFRaTj1zOTYtYyJ9LCJyb2xlIjoiUEFUSUVOVCIsImV4cCI6MTY1NzYyNTcyNywiaWF0IjoxNjU3NTM5MzI3fQ.";
+        String token4 = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzYWdhcjI0IiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6MSwiZG9jdG9yTmFtZSI6InNhZ2FyMjQiLCJkb2N0b3JFbWFpbCI6InNhZ2FyLnNpbmdoQG5pbmVsZWFwcy5jb20iLCJyb2xlIjoiRE9DVE9SIiwicHJvZmlsZVBpYyI6InByb2ZpbGVQaWMifSwicm9sZSI6IkRPQ1RPUiIsImV4cCI6MTY2MDIzODAyNywiaWF0IjoxNjU3NjQ2MDI3fQ.";
+
         APIException apiException = assertThrows(APIException.class,()->{
             jwtTokenProvider.validateToken(token4);
         });

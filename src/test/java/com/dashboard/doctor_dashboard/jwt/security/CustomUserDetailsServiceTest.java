@@ -5,6 +5,7 @@ import com.dashboard.doctor_dashboard.jwt.security.CustomUserDetailsService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,6 +21,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
 
 class CustomUserDetailsServiceTest {
 
@@ -48,7 +50,7 @@ class CustomUserDetailsServiceTest {
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(role));
 
-        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,null,null,null);
+        LoginDetails loginDetails=new LoginDetails(1L,"Pranay","pranay@gmail.com","nineleaps","profilePic1",role,false,null,null,null);
 
         Mockito.when(loginRepo.findByNameOrEmailId(Mockito.any(String.class),Mockito.any(String.class))).thenReturn(Optional.of(loginDetails));
 
