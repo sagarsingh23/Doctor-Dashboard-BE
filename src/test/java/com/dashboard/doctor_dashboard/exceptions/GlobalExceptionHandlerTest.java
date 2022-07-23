@@ -1,21 +1,24 @@
 package com.dashboard.doctor_dashboard.exceptions;
 
-import com.dashboard.doctor_dashboard.Utils.wrapper.ErrorDetails;
-import com.dashboard.doctor_dashboard.Utils.wrapper.ErrorMessage;
-import com.dashboard.doctor_dashboard.Utils.wrapper.ValidationsSchema;
+import com.dashboard.doctor_dashboard.utils.wrapper.ErrorDetails;
+import com.dashboard.doctor_dashboard.utils.wrapper.ErrorMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.ValidationsSchema;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+
 
 class GlobalExceptionHandlerTest {
 
@@ -61,6 +64,7 @@ class GlobalExceptionHandlerTest {
     void processException() {
         WebRequest request = mock(WebRequest.class);
         List<String> message = new ArrayList<>(Arrays.asList("errorMessage1", "errorMessage2", "errorMessage3"));
+
         ValidationsSchema schema = new ValidationsSchema(new Date(), message, request.getDescription(false));
         ResponseEntity<ErrorMessage> response = globalExceptionHandler.processException(new ValidationsException(message), request);
         Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, response.getStatusCode());
@@ -77,12 +81,13 @@ class GlobalExceptionHandlerTest {
     }
 
 //    @Test
-//    void validation() {
+//    void methodArgumentNotValid() {
 //        WebRequest request = mock(WebRequest.class);
-//        Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
-//        ErrorDetails details = new ErrorDetails(new Date(), "test for validation exception", request.getDescription(false));
+////        Set<ConstraintViolation<?>> constraintViolations = new HashSet<>();
+//        List<String> message = new ArrayList<>(Arrays.asList("errorMessage1", "errorMessage2", "errorMessage3"));
+//        ErrorDetails details = new ErrorDetails(new Date(), "test for MethodArgumentNotValid exception", null);
 //
-//         ResponseEntity<ErrorMessage> response = globalExceptionHandler.validation(new ConstraintViolationException(details.getMessage(),constraintViolations),request);
+//         ResponseEntity<ErrorMessage> response = globalExceptionHandler.methodArgumentNotValidException(new MethodArgumentNotValidException(message,));
 //        Assertions.assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,response.getStatusCode());
 //    }
 
