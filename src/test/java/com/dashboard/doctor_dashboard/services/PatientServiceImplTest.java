@@ -3,11 +3,11 @@ package com.dashboard.doctor_dashboard.services;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.model.Patient;
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.*;
-import com.dashboard.doctor_dashboard.services.patient_service.impl.PatientServiceImpl;
+import com.dashboard.doctor_dashboard.services.patient_service.PatientServiceImpl;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -72,7 +72,7 @@ class PatientServiceImplTest {
     @Test
     void addPatientTest_Success() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
@@ -94,7 +94,7 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInDatabaseForAddDoctor() {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
@@ -115,7 +115,7 @@ class PatientServiceImplTest {
         patient.setBloodGroup("A+");
         patient.setAlternateMobileNo("900011112");
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto(1L,"9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class))).thenReturn(loginId);
         Mockito.when(patientRepository.getPatientByLoginId(loginId)).thenReturn(patient);
@@ -140,15 +140,15 @@ class PatientServiceImplTest {
     @Test
     void updatePatientDetails_Success() {
         final Long id = 1L;
-        PatientDetailsUpdateDto updateDto = new PatientDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(1L,"9728330045");
 
-        Mockito.when(loginRepo.existsById(updateDto.getPatientId())).thenReturn(true);
-        Mockito.when(patientRepository.getId(updateDto.getPatientId())).thenReturn(id);
+        Mockito.when(loginRepo.existsById(updateDto.getId())).thenReturn(true);
+        Mockito.when(patientRepository.getId(updateDto.getId())).thenReturn(id);
 
         patientService.updatePatientDetails(id,updateDto);
         patientService.updatePatientDetails(id,updateDto);
 
-        verify(patientRepository,times(2)).updateMobileNo(updateDto.getMobileNo(),updateDto.getPatientId());
+        verify(patientRepository,times(2)).updateMobileNo(updateDto.getMobileNo(),updateDto.getId());
 
 
     }
@@ -157,7 +157,7 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInLoginDetailsDBForUpdatePatient() {
         final Long id = 1L;
-        PatientDetailsUpdateDto updateDto = new PatientDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(1L,"9728330045");
 
         Mockito.when(loginRepo.existsById(Mockito.any(Long.class))).thenReturn(false);
 
@@ -169,10 +169,10 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInPatientDetailsDBForUpdatePatient() {
         final Long id = 1L;
-        PatientDetailsUpdateDto updateDto = new PatientDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(1L,"9728330045");
 
         Mockito.when(loginRepo.existsById(Mockito.any(Long.class))).thenReturn(true);
-        Mockito.when(patientRepository.getId(updateDto.getPatientId())).thenReturn(null);
+        Mockito.when(patientRepository.getId(updateDto.getId())).thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,() -> {
             patientService.updatePatientDetails(id,updateDto);
@@ -182,10 +182,10 @@ class PatientServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInDBForUpdatePatient() {
         final Long id = 1L;
-        PatientDetailsUpdateDto updateDto = new PatientDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(1L,"9728330045");
 
         Mockito.when(loginRepo.existsById(Mockito.any(Long.class))).thenReturn(false);
-        Mockito.when(patientRepository.getId(updateDto.getPatientId())).thenReturn(null);
+        Mockito.when(patientRepository.getId(updateDto.getId())).thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,() -> {
             patientService.updatePatientDetails(id,updateDto);
@@ -270,7 +270,7 @@ class PatientServiceImplTest {
         Long doctorId = 1L;
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
 
@@ -296,7 +296,7 @@ class PatientServiceImplTest {
         Long loginId = 1L;
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
 
@@ -335,7 +335,7 @@ class PatientServiceImplTest {
         Long loginId = 1L;
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
 
@@ -356,7 +356,7 @@ class PatientServiceImplTest {
         Long loginId = 1L;
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
 
@@ -376,7 +376,7 @@ class PatientServiceImplTest {
         Long patientId = 1L;
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral", LocalDate.now(), LocalTime.now(),"completed","B+", (short) 21,"Male");
 

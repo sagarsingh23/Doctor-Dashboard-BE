@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
 import com.dashboard.doctor_dashboard.entities.model.Prescription;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -13,8 +13,8 @@ import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
 import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionServiceImpl;
-import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
-import com.dashboard.doctor_dashboard.Utils.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.utils.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,10 +90,10 @@ class PrescriptionServiceImplTest {
         String message = "prescription added";
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -119,10 +119,10 @@ class PrescriptionServiceImplTest {
         String message = "prescription added";
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -149,10 +149,10 @@ class PrescriptionServiceImplTest {
         String message = "prescription added";
 
         Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -175,10 +175,10 @@ class PrescriptionServiceImplTest {
         String message = "prescription added";
 
         Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -197,8 +197,8 @@ class PrescriptionServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInAppointmentDBForAddPrescription() throws MessagingException, JSONException, IOException {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -223,8 +223,8 @@ class PrescriptionServiceImplTest {
     @Test
     void getAllPrescriptionByAppointment_SUCCESS() {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 

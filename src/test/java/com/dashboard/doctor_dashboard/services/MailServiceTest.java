@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
-import com.dashboard.doctor_dashboard.Utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

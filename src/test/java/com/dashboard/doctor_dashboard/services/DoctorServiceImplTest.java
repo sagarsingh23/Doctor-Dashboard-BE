@@ -1,14 +1,14 @@
 package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.services.doctor_service.DoctorServiceImpl;
-import com.dashboard.doctor_dashboard.Utils.Constants;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -244,17 +244,17 @@ class DoctorServiceImplTest {
         Long id = 1L;
         Long doctorLoginId = 1L;
         Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
-                .thenReturn(doctorFormDto.getId());
-        doctorService.updateDoctor(doctorFormDto,id,request);
-        doctorService.updateDoctor(doctorFormDto,id,request);
+        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
+                .thenReturn(userDetailsUpdateDto.getId());
+        doctorService.updateDoctor(userDetailsUpdateDto,id,request);
+        doctorService.updateDoctor(userDetailsUpdateDto,id,request);
 
         verify(doctorRepository,times(2))
-                .updateDoctorDb(doctorFormDto.getPhoneNo());
+                .updateDoctorDb(userDetailsUpdateDto.getMobileNo());
 
     }
 
@@ -268,15 +268,14 @@ class DoctorServiceImplTest {
         long id = 1L;
         Long doctorLoginId = 1L;
         Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(4L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(4L,"9728330045");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
-                .thenReturn(doctorFormDto.getId());
+        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
+                .thenReturn(userDetailsUpdateDto.getId());
 
         assertThrows(ResourceNotFoundException.class,()->{
-           doctorService.updateDoctor(doctorFormDto,id,request);
+           doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
 
     }
@@ -286,15 +285,15 @@ class DoctorServiceImplTest {
         long id = 3L;
         Long doctorLoginId = 4L;
         Long loginId = 3L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(5L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(5L,"9728330045");
+
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
-                .thenReturn(doctorFormDto.getId());
+        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
+                .thenReturn(userDetailsUpdateDto.getId());
 
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id,request);
+            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
 
     }
@@ -305,15 +304,15 @@ class DoctorServiceImplTest {
         long id = 6L;
         Long doctorLoginId = 4L;
         Long loginId = 6L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(6L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(6L,"9728330045");
+
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
-                .thenReturn(doctorFormDto.getId());
+        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
+                .thenReturn(userDetailsUpdateDto.getId());
 
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id,request);
+            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
 
     }
@@ -323,15 +322,14 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(id))
                 .thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id,request);
+            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
     }
 
@@ -340,8 +338,7 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class)))
@@ -350,7 +347,7 @@ class DoctorServiceImplTest {
                 .thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id,request);
+            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
     }
 
@@ -359,8 +356,7 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(id))
@@ -369,7 +365,7 @@ class DoctorServiceImplTest {
                 .thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(doctorFormDto,id,request);
+            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
         });
     }
 

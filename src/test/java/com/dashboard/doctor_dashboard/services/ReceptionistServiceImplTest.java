@@ -4,7 +4,7 @@ import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -94,7 +94,7 @@ class ReceptionistServiceImplTest {
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));
 
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<Appointment> appointmentList = new ArrayList<>(Arrays.asList(appointment,appointment));
         Page<Appointment> list1=new PageImpl<>(appointmentList);
@@ -131,7 +131,7 @@ class ReceptionistServiceImplTest {
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
-                "pranay", LocalTime.now(),true,"completed",null,null,null,true,2L,null,null,null,null);
+                "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1,dto1,dto1));
         List<Appointment> appointmentList = new ArrayList<>(Arrays.asList(appointment,appointment));
@@ -151,7 +151,7 @@ class ReceptionistServiceImplTest {
     void addAppointmentVitals_SUCCESS() {
         final Long appointId = 1L;
         String message = "successful";
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",null);
 
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(true);
@@ -166,7 +166,7 @@ class ReceptionistServiceImplTest {
     @Test
     void throwErrorIFIdNotPresentInAppointmentDbForAppointmentVitals() {
         final Long appointId = 1L;
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",null);
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(false);
 
@@ -180,7 +180,7 @@ class ReceptionistServiceImplTest {
     void throwErrorIFIdNotPresentInAttributeDbForAppointmentVitals() {
         final Long appointId = 1L;
         String message = "successful";
-        AttributesDto attributes = new AttributesDto(1L,"120/80",100L,99D,"mri check",null);
+        AttributesDto attributes = new AttributesDto("120/80",100L,99D,"mri check",null);
 
 
         Mockito.when(appointmentRepository.existsById(appointId)).thenReturn(true);

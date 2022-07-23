@@ -2,7 +2,9 @@ package com.dashboard.doctor_dashboard.services;
 
 import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.entities.model.Todolist;
-import com.dashboard.doctor_dashboard.Utils.wrapper.GenericMessage;
+import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
+import com.dashboard.doctor_dashboard.utils.Constants;
+import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
 import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;
@@ -54,7 +56,7 @@ class TodoServiceImplTest {
 
     @Test
     void testAddList() {
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
         Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
 
 
@@ -117,7 +119,7 @@ class TodoServiceImplTest {
     void updateList() {
         final Long id = 1L;
 
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
         Todolist todolist1 = new Todolist(1L,"hello",true,null,null,null);
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.of(todolist1));
@@ -133,13 +135,15 @@ class TodoServiceImplTest {
     @Test
     void checkIfIdNotPresentInDBForUpdateList() {
         final Long id = 1L;
-        TodoListDto todolist = new TodoListDto(1L,"hello",true,null);
+        TodoListDto todolist = new TodoListDto("hello",true,null);
 
         Mockito.when(todoRepository.findById(id)).thenReturn(Optional.empty());
 
-        ResponseEntity<GenericMessage> newTodo = todoService.updateTodo(id,todolist);
-
-        assertThat(newTodo).isNull();
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,()->todoService.updateTodo(id,todolist));
+        assertAll(
+                ()->assertThat(exception).isNotNull(),
+                ()->assertEquals(Constants.TODO_NOT_FOUND,exception.getMessage())
+        );
     }
 
     @Test
