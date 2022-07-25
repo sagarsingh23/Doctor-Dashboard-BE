@@ -61,9 +61,9 @@ public class ReceptionistServiceImpl implements ReceptionistService {
      * @return ResponseEntity<GenericMessage> with status code 200 and list of appointments for the particular doctor
      */
     @Override
-    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo) {
+    public ResponseEntity<GenericMessage> getDoctorAppointments(Long doctorId,int pageNo,int pageSize) {
         log.info("inside: ReceptionistServiceImpl::getDoctorAppointments");
-        Pageable paging = PageRequest.of(pageNo, 10);
+        Pageable paging = PageRequest.of(pageNo, pageSize);
         if(doctorRepository.isIdAvailable(doctorId) != null) {
             List<Appointment> appointmentList = appointmentRepository.receptionistDoctorAppointment(doctorId,paging).toList();
 
@@ -83,10 +83,10 @@ public class ReceptionistServiceImpl implements ReceptionistService {
      * @return ResponseEntity<GenericMessage> with status code 200 and list of today appointments
      */
     @Override
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo) {
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(int pageNo,int pageSize) {
         log.info("inside: ReceptionistServiceImpl::todayAllAppointmentForClinicStaff");
         List<Appointment> appointments = new ArrayList<>();
-        Pageable paging = PageRequest.of(pageNo, 10);
+        Pageable paging = PageRequest.of(pageNo, pageSize);
         List<Appointment> appointmentList1 = appointmentRepository.todayAllAppointmentForClinicStaff1(paging).toList();
         List<Appointment> appointmentList2 = appointmentRepository.todayAllAppointmentForClinicStaff2(paging).toList();
         appointments.addAll(appointmentList1);

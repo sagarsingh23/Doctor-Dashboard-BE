@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -129,13 +130,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         var senderName = "meCare Application";
         var subject = "Prescription Updated";
 
-        String content = Constants.MAIL_PRESCRIPTION;
-
-        content = content.replace("[[name]]", patientDto.getPatientName());
-        content = content.replace("[[doctorName]]", patientDto.getDoctorName());
+        var context =  new Context();              // here we are making an object of context and setting up all the values required for mail
+        context.setVariable("name", patientDto.getPatientName());
+        context.setVariable("doctorName", patientDto.getDoctorName());
 
         log.info("exit: PrescriptionServiceImpl::sendEmailToUserAfterPrescription");
-        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
+        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,"Prescription",context);
     }
 
 

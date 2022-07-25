@@ -26,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
@@ -212,12 +213,12 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return It returns a ResponseEntity<GenericMessage> with status code 201.
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo){
+    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(Long loginId, int pageNo,int pageSize){
         log.info("inside: appointment service::getAllAppointmentByPatientId");
         var genericMessage = new GenericMessage();
         List<PatientAppointmentListDto> today = new ArrayList<>();
         Map<String,List<PatientAppointmentListDto>> m = new HashMap<>();
-        Pageable paging= PageRequest.of(pageNo, 10);
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Long patientId=patientRepository.getId(loginId);
         if(patientId != null) {
@@ -252,14 +253,14 @@ public class AppointmentServiceImpl implements AppointmentService {
      * @return It returns a ResponseEntity<GenericMessage> with status code 200 .
      */
     @Override
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo) {
+    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(Long loginId,int pageNo,int pageSize) {
         log.info("inside: appointment service::allAppointmentByDoctorId");
 
         var genericMessage = new GenericMessage();
         List<DoctorAppointmentListDto> today = new ArrayList<>();
         Map<String,List<DoctorAppointmentListDto>> m = new HashMap<>();
         Long doctorId = doctorRepository.isIdAvailable(loginId);
-        Pageable paging= PageRequest.of(pageNo, 10);
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
 
         if(doctorId != null) {
@@ -613,20 +614,16 @@ public class AppointmentServiceImpl implements AppointmentService {
         var senderName = "meCare Team";
         var subject = "Appointment Confirmed";
 
-        String content = Constants.MAIL_APPOINTMENT;      // here Mail Appointment contains Html Content
-
-        content = content.replace("[[name]]", appointment.getPatientName());
-        content = content.replace("[[doctorName]]", appointment.getDoctorName());
-
-        content = content.replace("[[doctorEmail]]", doctorEmail);
-        content = content.replace("[[speciality]]", appointment.getCategory());
-
-        content = content.replace("[[dateOfAppointment]]",pdFGeneratorService.formatDate(appointment.getDateOfAppointment().toString()));
-
-        content = content.replace("[[appointmentTime]]", appointment.getAppointmentTime().toString());
+         var context =  new Context();              // here we are making an object of context and setting up all the values required for mail
+         context.setVariable("name", appointment.getPatientName());
+         context.setVariable("doctorName", appointment.getDoctorName());
+         context.setVariable("doctorEmail", doctorEmail);
+         context.setVariable("speciality", appointment.getCategory());
+         context.setVariable("dateOfAppointment",pdFGeneratorService.formatDate(appointment.getDateOfAppointment().toString()));
+         context.setVariable("appointmentTime", appointment.getAppointmentTime().toString());
 
         log.info("exit: appointment service::sendEmailToUser");
-        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
+        mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,"BookAppointment",context);
     }
 
     /**
