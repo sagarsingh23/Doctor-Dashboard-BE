@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
@@ -21,6 +23,8 @@ import java.util.List;
         name = "doctor_details",
         indexes = @Index(name = "index_speciality",columnList = "speciality")
 )
+@SQLDelete(sql = "UPDATE doctor_details SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class DoctorDetails {
     @Id
@@ -53,6 +57,8 @@ public class DoctorDetails {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    private boolean deleted = Boolean.FALSE;
 
 
 

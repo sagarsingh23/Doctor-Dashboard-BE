@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -81,6 +83,8 @@ public class Appointment {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    private boolean deleted = Boolean.FALSE;
 
     @Column
     private Boolean isBookedAgain;

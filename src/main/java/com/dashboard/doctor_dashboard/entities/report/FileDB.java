@@ -2,9 +2,12 @@ package com.dashboard.doctor_dashboard.entities.report;
 
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -17,6 +20,7 @@ public class FileDB {
     private String name;
     private String type;
     @Lob
+    @NotNull
     private byte[] dataReport;
 
     @Column(unique = true)
@@ -30,10 +34,11 @@ public class FileDB {
     @Column(name = "updated_at")
     private Date updatedAt;
 
+
     public FileDB() {
     }
 
-    public FileDB(String name, String type, byte[] dataReport, Long appointmentId) {
+    public FileDB(String name, String type,  byte[] dataReport, Long appointmentId) {
         this.name = name;
         this.type = type;
         this.dataReport = dataReport;
@@ -80,4 +85,5 @@ public class FileDB {
     public void setDataReport(byte[] dataReport) {
         this.dataReport = dataReport;
     }
+
 }
