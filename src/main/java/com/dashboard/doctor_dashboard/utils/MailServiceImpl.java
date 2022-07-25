@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.ITemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import java.io.UnsupportedEncodingException;
@@ -18,9 +20,12 @@ public class MailServiceImpl {
 
     private JavaMailSender mailSender;
 
+    private ITemplateEngine templateEngine;
+
     @Autowired
-    public MailServiceImpl(JavaMailSender mailSender) {
+    public MailServiceImpl(JavaMailSender mailSender,ITemplateEngine templateEngine) {
         this.mailSender = mailSender;
+        this.templateEngine = templateEngine;
     }
 
     /**
@@ -34,14 +39,13 @@ public class MailServiceImpl {
      * @throws JSONException
      * @throws UnsupportedEncodingException
      */
-    public void mailServiceHandler(String fromEmail, String toEmail, String senderName, String subject , String content) throws MessagingException, JSONException, UnsupportedEncodingException {
+    public void mailServiceHandler(String fromEmail, String toEmail, String senderName, String subject , String fileName, Context content) throws MessagingException, JSONException, UnsupportedEncodingException {
         var obj = new JSONObject();
         obj.put("fromEmail", fromEmail);
         obj.put("toEmail", toEmail);
         obj.put("senderName", senderName);
         obj.put("subject", subject);
-        obj.put("content", content);
-        sendMailer(obj);
+        sendMailer(obj,fileName,content);
     }
 
 
@@ -52,17 +56,17 @@ public class MailServiceImpl {
      * @throws JSONException
      * @throws UnsupportedEncodingException
      */
-    private void sendMailer(JSONObject obj) throws MessagingException, JSONException, UnsupportedEncodingException {
+    private void sendMailer(JSONObject obj,String fileName,Context content) throws MessagingException, JSONException, UnsupportedEncodingException {
 
         try {
             var message = mailSender.createMimeMessage();
             var helper = new MimeMessageHelper(message);
             helper.setFrom(obj.get("fromEmail").toString(), obj.get("senderName").toString());
             helper.setTo(obj.get("toEmail").toString());
-            helper.setText(obj.get("content").toString(), true);
+            helper.setText(templateEngine.process(fileName,  content), true);
             helper.setSubject(obj.get("subject").toString());
             mailSender.send(message);
-            log.info(" Appointment Mail Service Stopped!!");
+            log.info("Mail Service Stopped!!");
 
         }catch (Exception e)
         {
