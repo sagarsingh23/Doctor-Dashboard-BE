@@ -65,7 +65,7 @@ class FileControllerTest {
 
         Mockito.when(fileStorage.store(Mockito.any(MultipartFile.class),Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,value),HttpStatus.CREATED));
 
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/patient/upload/1")
+        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/files/patient/1/upload")
                         .file(file).contentType(MediaType.MULTIPART_FORM_DATA)
                 ).andExpect(status().isCreated());
 
@@ -73,53 +73,6 @@ class FileControllerTest {
 
 
 
-
-//    @Test
-//    void throwErrorIfFileNotStoredInDb() throws Exception {
-//        final Long id = 1L;
-//        FileDB fileDB = new FileDB();
-//        fileDB.setDataReport(null);
-//        fileDB.setId(id);
-//        fileDB.setType(".png");
-//        fileDB.setName("file1");
-//        fileDB.setAppointmentId(id);
-//
-//        MockMultipartFile file = new MockMultipartFile(
-//                "file",
-//                "hello.txt",
-//                MediaType.TEXT_PLAIN_VALUE,
-//                "Hello, World!".getBytes()
-//        );
-//
-//        String value = "Successful";
-//        ResponseEntity<ResponseMessage> message = ResponseEntity.status(HttpStatus.OK)
-//                .body(new ResponseMessage(value));
-//
-//        String content = objectMapper.writeValueAsString(file.getBytes());
-//
-//        mockMvc.perform(MockMvcRequestBuilders.multipart("/api/v1/patient/upload/1")
-//                .file(file).contentType(MediaType.MULTIPART_FORM_DATA)
-//                .content(content)).andExpect(status().isBadRequest());
-//    }
-//
-//    @Test
-//    void throwsException() throws IOException {
-//        final Long id = 1L;
-//
-//        MultipartFile file = new MockMultipartFile(
-//                "file",
-//                "hello.txt",
-//                MediaType.TEXT_PLAIN_VALUE,
-//                "Hello, World!".getBytes()
-//        );
-//
-//        Mockito.when(fileStorageService.store(file,id)).thenThrow(IOException.class);
-//
-//        ResponseEntity<GenericMessage> response = fileController.uploadFile(file,id);
-//        assertEquals(HttpStatus.EXPECTATION_FAILED,response.getStatusCode());
-//    }
-//
-//
     @Test
     @DisplayName("Download File")
     void testGetFileById() throws Exception {
@@ -139,7 +92,7 @@ class FileControllerTest {
         Mockito.when(fileStorage.getFile(id)).thenReturn(bytes);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/files/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/files/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 }

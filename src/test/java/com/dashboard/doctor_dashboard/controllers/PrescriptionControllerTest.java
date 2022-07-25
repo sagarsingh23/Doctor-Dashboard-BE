@@ -76,8 +76,8 @@ class PrescriptionControllerTest {
     @DisplayName("View All Prescription")
     void getALlPrescriptionTest() throws Exception {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 

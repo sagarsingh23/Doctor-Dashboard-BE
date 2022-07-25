@@ -73,7 +73,7 @@ class PatientControllerTest {
         String content = objectMapper.writeValueAsString(patientEntityDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/api/v1/patient/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+                .post("/api/v1/patient/on-boarding/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
 
     }
 
@@ -104,7 +104,7 @@ class PatientControllerTest {
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/patient/patientProfile/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/patient/patient-profile/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -152,6 +152,6 @@ class PatientControllerTest {
         Mockito.when(patientService.getNotifications(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,notificationDto),HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/patient/1/getNotifications").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/patient/1/notifications").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

@@ -95,7 +95,7 @@ class AppointmentControllerTest {
         Mockito.when(appointmentService.checkSlots(Mockito.any(LocalDate.class),Mockito.any(Long.class))).thenReturn(timesSlots);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/getAvailableSlots/1/2022-07-12").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/available-slots/1/2022-07-12").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -105,6 +105,8 @@ class AppointmentControllerTest {
     void getAllAppointmentByPatientIdTest() throws Exception {
         final Long patientId = 1L;
         int pageNo = 1;
+        int pageSize = 11;
+
         Map<String, List<PatientAppointmentListDto>> map =new HashMap<>();
         PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
         PatientAppointmentListDto dto2 = new PatientAppointmentListDto(1L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
@@ -114,11 +116,11 @@ class AppointmentControllerTest {
         map.put("today",dto);
         map.put("upcoming",dto);
 
-        Mockito.when(appointmentService.getAllAppointmentByPatientId(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(appointmentService.getAllAppointmentByPatientId(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,map), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/getAllAppointments/patient/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/all-appointments/patient/1?pageNo=0").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
 
@@ -138,11 +140,11 @@ class AppointmentControllerTest {
         map.put("today",dto);
         map.put("upcoming",dto);
 
-        Mockito.when(appointmentService.getAllAppointmentByDoctorId(Mockito.any(Long.class),Mockito.any(Integer.class))).thenReturn(
+        Mockito.when(appointmentService.getAllAppointmentByDoctorId(Mockito.any(Long.class),Mockito.any(Integer.class),Mockito.any(Integer.class))).thenReturn(
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,map), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/getAllAppointments/doctor/1?pageNo=1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/all-appointments/doctor/1?pageNo=1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -157,7 +159,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,totalNoOfAppointment), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/chart/1/totalPatient").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/chart/1/total-patient").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -172,7 +174,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,totalAppointmentToday), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/chart/1/todayAppointments").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/chart/1/today-appointments").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -187,7 +189,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,totalAppointmentThisWeek), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/chart/1/totalActivePatient").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/chart/1/appointments-this-week").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -240,7 +242,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chartsDoctor), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/chart/1/weeklyGraphDoctor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/chart/1/weekly-graph-doctor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
 
@@ -262,7 +264,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,chartsPatient), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/chart/1/weeklyGraphPatient").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/chart/1/weekly-graph-patient").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -280,7 +282,7 @@ class AppointmentControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,dto), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/appointment/recentAdded/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/appointment/recent-added/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }

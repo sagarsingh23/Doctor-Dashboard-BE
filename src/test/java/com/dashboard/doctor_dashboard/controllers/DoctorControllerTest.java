@@ -165,7 +165,7 @@ class DoctorControllerTest {
         String content = objectMapper.writeValueAsString(userDetailsUpdateDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+                .put("/api/v1/doctor/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -177,7 +177,7 @@ class DoctorControllerTest {
         String content = objectMapper.writeValueAsString(userDetailsUpdateDto);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/doctor/update/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
+                .put("/api/v1/doctor/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isUnprocessableEntity());
     }
 
 
@@ -245,7 +245,7 @@ class DoctorControllerTest {
         Mockito.when(doctorService.bloodGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/doctor/1/bloodGroup").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/doctor/1/blood-group").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
@@ -266,7 +266,7 @@ class DoctorControllerTest {
         Mockito.when(doctorService.ageGroupChart(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/doctor/1/ageGroup").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/api/v1/doctor/1/age-group").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }
