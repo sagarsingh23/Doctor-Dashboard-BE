@@ -35,7 +35,7 @@ public class PatientController {
      * @return patient added successfully after successful api call
      */
     @ApiOperation("This API is used to post or save patient details in database")
-    @PostMapping("/{loginId}")
+    @PostMapping("/on-boarding/{loginId}")
     public ResponseEntity<GenericMessage> addPatientDetails(@Valid @RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
         log.info("PatientController::addPatientDetails");
         return patientService.addPatient(patient,loginId);
@@ -48,7 +48,7 @@ public class PatientController {
      */
     @ApiOperation("This API is used to get appointment details from database")
     @GetMapping("/{patientId}/appointment/{appointmentId}")
-    public ResponseEntity<GenericMessage> getAppointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId){
+    public ResponseEntity<GenericMessage> appointmentViewByAppointmentId(@PathVariable("patientId") long patientId, @PathVariable("appointmentId") long appointmentId){
         log.info("PatientController::getAppointmentViewByAppointmentId");
 
         return patientService.viewAppointment(appointmentId,patientId);
@@ -59,7 +59,7 @@ public class PatientController {
      * @return patient details from patient database
      */
     @ApiOperation("This API is used to get patient details from database")
-    @GetMapping("/patientProfile/{loginId}")
+    @GetMapping("/patient-profile/{loginId}")
     public ResponseEntity<GenericMessage> patientProfile(@PathVariable("loginId") Long loginId){
         log.info("PatientController::patientProfile");
 
@@ -73,7 +73,7 @@ public class PatientController {
      */
     @ApiOperation("This API is used to update patient details in database")
     @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage> updatePatientDetails(@PathVariable("id") Long id,@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto) {
+    public ResponseEntity<GenericMessage> editPatientDetails(@PathVariable("id") Long id,@Valid @RequestBody UserDetailsUpdateDto userDetailsUpdateDto) {
         log.info("PatientController::updatePatientDetails");
 
         return patientService.updatePatientDetails(id, userDetailsUpdateDto);
@@ -96,8 +96,8 @@ public class PatientController {
      * @return list of notifications for the patient
      */
     @ApiOperation("This API is used to get all notification for patient")
-    @GetMapping("/{patientId}/getNotifications")
-    public ResponseEntity<GenericMessage> getNotifications(@PathVariable("patientId") Long patientId){
+    @GetMapping("/{patientId}/notifications")
+    public ResponseEntity<GenericMessage> notifications(@PathVariable("patientId") Long patientId){
         log.info("PatientController::getNotifications");
 
         return patientService.getNotifications(patientId);

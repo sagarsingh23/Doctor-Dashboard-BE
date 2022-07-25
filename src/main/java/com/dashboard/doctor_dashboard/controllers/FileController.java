@@ -16,6 +16,7 @@ import java.io.IOException;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
+@RequestMapping("api/v1/files/")
 public class FileController {
 
 
@@ -34,7 +35,7 @@ public class FileController {
      */
     @ApiOperation("This controller is for handling the API call to upload a file")
     @ResponseBody
-    @PostMapping("/api/v1/patient/upload/{id}")
+    @PostMapping("patient/{id}/upload")
     public ResponseEntity<GenericMessage> uploadFile(@RequestParam MultipartFile file, @PathVariable("id") Long id) throws IOException {
         log.info("FileController::uploadFile");
         return storageService.store(file,id);
@@ -46,7 +47,7 @@ public class FileController {
      * @return download file
      */
     @ApiOperation("This API is responsible for downloading of file")
-    @GetMapping("/v1/files/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<byte[]> getFile(@PathVariable Long id){
         log.info("FileController::getFile");
         return storageService.getFile(id);

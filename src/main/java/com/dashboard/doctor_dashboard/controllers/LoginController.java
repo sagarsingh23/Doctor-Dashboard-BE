@@ -63,7 +63,7 @@ public class LoginController {
      */
     @ApiOperation("This API is used for deleting user from login details")
     @DeleteMapping(value = "/user/login/delete/{id}")
-    public String deleteDoctorById(@PathVariable("id") long id ){
+    public String deleteUserById(@PathVariable("id") long id ){
         log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);
     }

@@ -49,7 +49,7 @@ public class PrescriptionController {
      */
     @ApiOperation("This API is used to get all prescription")
     @GetMapping("/{appointId}")
-    public ResponseEntity<GenericMessage> getAllPrescription(@PathVariable("appointId") Long appointId) {
+    public ResponseEntity<GenericMessage> allPrescription(@PathVariable("appointId") Long appointId) {
         log.info("PrescriptionController::getAllPrescription");
 
         return prescriptionService.getAllPrescriptionByAppointment(appointId);

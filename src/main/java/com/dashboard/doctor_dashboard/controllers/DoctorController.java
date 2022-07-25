@@ -36,7 +36,7 @@ public class DoctorController {
      */
     @ApiOperation("get all doctor")
     @GetMapping("/get-all/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllDoctors(@PathVariable("doctorId") Long id) {
+    public ResponseEntity<GenericMessage> allDoctors(@PathVariable("doctorId") Long id) {
 
         log.info("DoctorController::getAllDoctors");
         ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
@@ -51,7 +51,7 @@ public class DoctorController {
      */
     @ApiOperation("return doctor details on the basis of id provided")
     @GetMapping("/id/{id}")
-    public ResponseEntity<GenericMessage> getDoctorById(@PathVariable("id") long id) {
+    public ResponseEntity<GenericMessage> doctorById(@PathVariable("id") long id) {
         log.info("DoctorController::getDoctorById");
 
         if (doctorService.getDoctorById(id) != null)
@@ -81,8 +81,8 @@ public class DoctorController {
      */
 
     @ApiOperation("return a string updated successfully after updating all the fields in database")
-    @PutMapping("/update/{id}")
-    public ResponseEntity<GenericMessage>  updateDoctorDetails(@Valid @RequestBody UserDetailsUpdateDto details, @PathVariable("id") long id, HttpServletRequest request) {
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericMessage>  editDoctorDetails(@Valid @RequestBody UserDetailsUpdateDto details, @PathVariable("id") long id, HttpServletRequest request) {
         log.info("DoctorController:: updateDoctorDetails");
         return doctorService.updateDoctor(details,id,request);
     }
@@ -105,7 +105,7 @@ public class DoctorController {
      */
     @ApiOperation("return all the doctor present in the database according the speciality provided")
     @GetMapping("/get-all-doctor/{speciality}")
-    public ResponseEntity<GenericMessage> getAllDoctorsBySpeciality(@PathVariable("speciality") String speciality) {
+    public ResponseEntity<GenericMessage> allDoctorsBySpeciality(@PathVariable("speciality") String speciality) {
         log.info("DoctorController::getAllDoctorsBySpeciality");
 
         return doctorService.getAllDoctorsBySpeciality(speciality);
@@ -117,7 +117,7 @@ public class DoctorController {
      */
     @ApiOperation("return genders of the patients for doctor,and it's count for gender chart")
     @GetMapping("/{doctorId}/gender")
-    public ResponseEntity<GenericMessage> genderChart(@PathVariable("doctorId") Long doctorId) {
+    public ResponseEntity<GenericMessage> gender(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController::genderChart");
 
         return doctorService.genderChart(doctorId);
@@ -128,8 +128,8 @@ public class DoctorController {
      * @return Blood groups of the patients for doctor,and it's count for blood group chart
      */
     @ApiOperation("return Blood groups of the patients for doctor,and it's count for blood group chart")
-    @GetMapping("/{doctorId}/bloodGroup")
-    public ResponseEntity<GenericMessage> bloodGroupChart(@PathVariable("doctorId") Long doctorId) {
+    @GetMapping("/{doctorId}/blood-group")
+    public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController::bloodGroupChart");
 
         return doctorService.bloodGroupChart(doctorId);
@@ -140,7 +140,7 @@ public class DoctorController {
      * @return age groups of the patients for doctor,and it's count for age group chart
      */
     @ApiOperation("return age groups of the patients for doctor,and it's count for age group chart")
-    @GetMapping("/{doctorId}/ageGroup")
+    @GetMapping("/{doctorId}/age-group")
     public ResponseEntity<GenericMessage> ageGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController::ageGroup");
 

@@ -56,7 +56,7 @@ public class AppointmentController {
      * @return all the available slots present for doctor on selected date.
      */
     @ApiOperation("Shows all the available slots of the doctor")
-    @GetMapping("/getAvailableSlots/{doctorId}/{date}")
+    @GetMapping("/available-slots/{doctorId}/{date}")
     public ResponseEntity<GenericMessage> showAvailableSlots(@PathVariable String  date,@PathVariable("doctorId") Long doctorId){
         log.info("AppointmentController::showAvailableSlots");
         return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,appointmentService.checkSlots(LocalDate.parse(date),doctorId)),HttpStatus.OK);
@@ -68,10 +68,10 @@ public class AppointmentController {
      * @return all appointments of the patient.
      */
     @ApiOperation("Shows all appointments of the patient")
-    @GetMapping("/getAllAppointments/patient/{patientId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo) {
-        log.info("AppointmentController::getAllAppointmentByPatientId");
-        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo) ;
+    @GetMapping("/all-appointments/patient/{patientId}")
+    public ResponseEntity<GenericMessage> allAppointmentByPatientId(@PathVariable("patientId") Long patientId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info("AppointmentController:: allAppointmentByPatientId");
+        return appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize) ;
     }
 
     /**
@@ -80,11 +80,10 @@ public class AppointmentController {
      * @return all appointments of the doctor.
      */
     @ApiOperation("Shows all appointments of the doctor")
-    @GetMapping("/getAllAppointments/doctor/{doctorId}")
-    public ResponseEntity<GenericMessage> getAllAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo) {
-        log.info("AppointmentController::getAllAppointmentByDoctorId");
-
-        return appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo) ;
+    @GetMapping("/all-appointments/doctor/{doctorId}")
+    public ResponseEntity<GenericMessage> allAppointmentByDoctorId(@PathVariable("doctorId") Long doctorId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize) {
+        log.info("AppointmentController:: allAppointmentByDoctorId");
+        return appointmentService.getAllAppointmentByDoctorId(doctorId, pageNo,pageSize );
     }
 
 
@@ -94,7 +93,7 @@ public class AppointmentController {
      */
     @ApiOperation("appointment details of patient for the doctor")
     @GetMapping("/{appointId}/patient")
-    public ResponseEntity<GenericMessage> getAppointmentById(@PathVariable("appointId") Long appointId) {
+    public ResponseEntity<GenericMessage> appointmentById(@PathVariable("appointId") Long appointId) {
         log.info("AppointmentController::getAppointmentById");
 
         return appointmentService.getAppointmentById(appointId);
@@ -105,7 +104,7 @@ public class AppointmentController {
      * @return no of appointment booked for the doctor per week in a month.
      */
     @ApiOperation("return no of appointment booked for the doctor per week in a month")
-    @GetMapping("chart/{doctorId}/weeklyGraphDoctor")
+    @GetMapping("chart/{doctorId}/weekly-graph-doctor")
     public ResponseEntity<GenericMessage> weeklyDoctorCountChart(@PathVariable("doctorId") Long doctorId) {
         log.info("AppointmentController::weeklyDoctorCountChart");
 
@@ -117,7 +116,7 @@ public class AppointmentController {
      * @return no of appointment booked by patient per week in a month.
      */
     @ApiOperation("return no of appointment booked by patient per week in a month")
-    @GetMapping("chart/{patientId}/weeklyGraphPatient")
+    @GetMapping("chart/{patientId}/weekly-graph-patient")
     public ResponseEntity<GenericMessage> weeklyPatientCountChart(@PathVariable("patientId") Long patientId) {
         log.info("AppointmentController::weeklyPatientCountChart");
 
@@ -130,7 +129,7 @@ public class AppointmentController {
      * @return today's latest 3 recent appointment booked for the doctor.
      */
     @ApiOperation("return today's latest 3 recent appointment booked for the doctor")
-    @GetMapping("/recentAdded/doctor/{doctorId}")
+    @GetMapping("/recent-added/doctor/{doctorId}")
     public ResponseEntity<GenericMessage> recentAppointment(@PathVariable("doctorId") Long doctorId) {
         log.info("AppointmentController::recentAppointment");
 
@@ -143,7 +142,7 @@ public class AppointmentController {
      * @return total no of appointments for the doctor.
      */
     @ApiOperation("return total no of appointments for the doctor")
-    @GetMapping("/chart/{doctorId}/totalPatient")
+    @GetMapping("/chart/{doctorId}/total-patient")
     public ResponseEntity<GenericMessage> totalNoOfAppointment(@PathVariable("doctorId") Long doctorId) {
         log.info("AppointmentController::totalNoOfAppointment");
 
@@ -155,7 +154,7 @@ public class AppointmentController {
      * @return today's appointment count for the doctor.
      */
     @ApiOperation("return today's appointment count for the doctor")
-    @GetMapping("/chart/{doctorId}/todayAppointments")
+    @GetMapping("/chart/{doctorId}/today-appointments")
     public ResponseEntity<GenericMessage> todayAppointments(@PathVariable("doctorId") Long doctorId) {
         log.info("AppointmentController::todayAppointments");
 
@@ -167,7 +166,7 @@ public class AppointmentController {
      * @return total no of appointment booked in a week for the doctor.
      */
     @ApiOperation("returns total no of appointment booked in a week for the doctor")
-    @GetMapping("/chart/{doctorId}/totalActivePatient")
+    @GetMapping("/chart/{doctorId}/appointments-this-week")
     public ResponseEntity<GenericMessage> totalNoOfAppointmentAddedThisWeek(@PathVariable("doctorId") Long doctorId) {
         log.info("AppointmentController::totalNoOfAppointmentAddedThisWeek");
 

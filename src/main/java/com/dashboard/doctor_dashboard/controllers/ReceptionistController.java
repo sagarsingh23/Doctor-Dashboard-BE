@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
 import io.swagger.annotations.ApiOperation;
@@ -29,7 +30,7 @@ public class ReceptionistController {
      * @return This API is responsible for returning all the doctor names present in the database
      */
     @ApiOperation("return list of the doctor names present in the database")
-    @GetMapping("/doctorNames")
+    @GetMapping("/doctor-names")
     public ResponseEntity<GenericMessage> doctorNames(){
         log.info("ReceptionistController::doctorNames");
         return receptionistService.getDoctorDetails();
@@ -41,11 +42,11 @@ public class ReceptionistController {
      * @return list of the today's appointments for the doctor
      */
     @ApiOperation("return list of the today's appointments for the doctor")
-    @GetMapping("/appointmentList/{doctorId}")
-    public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo){
-        log.info("ReceptionistController::appointmentList");
+    @GetMapping("/appointment-list/{doctorId}")
+    public ResponseEntity<GenericMessage> appointmentList(@PathVariable("doctorId") long doctorId,@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
+        log.info("ReceptionistController:: appointmentList");
 
-        return receptionistService.getDoctorAppointments(doctorId,pageNo);
+        return receptionistService.getDoctorAppointments(doctorId,pageNo,pageSize);
     }
 
 
@@ -55,7 +56,7 @@ public class ReceptionistController {
      * @return Vitals updated message after updating vitals in the database
      */
     @ApiOperation("API to update patient vitals")
-    @PostMapping("/addVitals/{appointmentId}")
+    @PostMapping("/vitals/{appointmentId}")
     public ResponseEntity<GenericMessage> addVitals(@PathVariable("appointmentId") Long appointmentId, @Valid @RequestBody AttributesDto vitalsDto){
         log.info("ReceptionistController::addVitals");
 
@@ -67,11 +68,11 @@ public class ReceptionistController {
      * @return All the today's to be attended appointment present in the database
      */
     @ApiOperation("return All the today's to be attended appointment present in the database")
-    @GetMapping("/getAllAppointments")
-    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo){
-        log.info("ReceptionistController::todayAllAppointmentForClinicStaff");
+    @GetMapping("/all-appointments")
+    public ResponseEntity<GenericMessage> todayAllAppointmentForClinicStaff(@RequestParam("pageNo") int pageNo,@RequestParam(value = "pageSize",defaultValue = Constants.DEFAULT_PAGE_SIZE) int pageSize){
+        log.info("ReceptionistController:: todayAllAppointmentForClinicStaff");
 
-        return receptionistService.todayAllAppointmentForClinicStaff(pageNo);
+        return receptionistService.todayAllAppointmentForClinicStaff(pageNo,pageSize);
     }
 
 }

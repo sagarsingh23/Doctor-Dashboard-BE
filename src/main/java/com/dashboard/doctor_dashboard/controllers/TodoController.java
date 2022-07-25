@@ -57,7 +57,7 @@ public class TodoController {
      */
     @ApiOperation("Show todo details on the basis of id provided")
     @GetMapping("/{id}")
-    public ResponseEntity<GenericMessage> getTodoById(@PathVariable("id") Long id) {
+    public ResponseEntity<GenericMessage> todoById(@PathVariable("id") Long id) {
         log.info("TodoController::getTodoById");
 
         return todoService.getTodoById(id);
