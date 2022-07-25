@@ -33,6 +33,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -141,7 +142,7 @@ class AppointmentServiceImplTest {
         Mockito.when(mapper.map(appointment,Appointment.class)).thenReturn(appointment1);
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
         Mockito.doReturn(appointment1).when(appointmentRepository).save(Mockito.any(Appointment.class));
-        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         Mockito.when(loginRepo.email(appointment.getDoctorDetails().getId())).thenReturn("pranay23@gmail.com");
@@ -469,7 +470,7 @@ class AppointmentServiceImplTest {
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
 
 
-        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         Mockito.when(loginRepo.email(appointment1.getDoctorDetails().getId())).thenReturn("pranay23@gmail.com");
@@ -539,7 +540,7 @@ class AppointmentServiceImplTest {
         Mockito.when(appointmentRepository.getAppointmentById(Mockito.any(Long.class))).thenReturn(appointment1);
         Mockito.when(pdFGeneratorService.dateHandler(Mockito.any(LocalDate.class))).thenReturn(true);
 
-        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         Mockito.when(loginRepo.email(appointment.getDoctorDetails().getId())).thenReturn("pranay23@gmail.com");
@@ -950,8 +951,10 @@ class AppointmentServiceImplTest {
     void getAllAppointmentByPatientId_SUCCESS() {
         final Long patientId = 1L;
         int pageNo = 2;
+        int pageSize = 11;
 
-        Pageable paging= PageRequest.of(pageNo, 10);
+
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Map<String, List<PatientAppointmentListDto>> getAllAppointment =new HashMap<>();
         PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
@@ -973,7 +976,7 @@ class AppointmentServiceImplTest {
         Mockito.when(appointmentRepository.upcomingAppointment(patientId,paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,PatientAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
     }
@@ -982,10 +985,12 @@ class AppointmentServiceImplTest {
     void throwErrorIfIdNotFoundInPatientDbForAllAppointmentPatient(){
         final Long patientId = 1L;
         int pageNo = 2;
+        int pageSize = 11;
+
         Mockito.when(patientRepository.getId(patientId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByPatientId(patientId,pageNo);
+            appointmentService.getAllAppointmentByPatientId(patientId,pageNo,pageSize);
         });
         assertEquals(Constants.PATIENT_NOT_FOUND,resourceNotFoundException.getMessage());
 
@@ -996,8 +1001,9 @@ class AppointmentServiceImplTest {
 
         final Long doctorId = 1L;
         int pageNo = 2;
+        int pageSize = 11;
 
-        Pageable paging= PageRequest.of(pageNo, 10);
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Map<String, List<DoctorAppointmentListDto>> getAllAppointment =new HashMap<>();
         DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
@@ -1021,7 +1027,7 @@ class AppointmentServiceImplTest {
         Mockito.when(appointmentRepository.upcomingDoctorAppointment(doctorId,paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,DoctorAppointmentListDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
+        ResponseEntity<GenericMessage> newAppointmentList = appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo,pageSize);
         assertThat(newAppointmentList).isNotNull();
         assertEquals(getAllAppointment,newAppointmentList.getBody().getData());
 
@@ -1031,11 +1037,12 @@ class AppointmentServiceImplTest {
     void throwErrorIfIdNotFoundInDoctorDbForAllAppointmentDoctor(){
         final Long doctorId = 1L;
         int pageNo = 2;
+        int pageSize = 11;
 
         Mockito.when(doctorRepository.isIdAvailable(doctorId)).thenReturn(null);
 
         ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,() -> {
-            appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo);
+            appointmentService.getAllAppointmentByDoctorId(doctorId,pageNo,pageSize);
         });
         assertEquals(Constants.DOCTOR_NOT_FOUND,resourceNotFoundException.getMessage());
 

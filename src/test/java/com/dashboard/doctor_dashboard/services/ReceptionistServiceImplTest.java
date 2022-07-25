@@ -87,7 +87,8 @@ class ReceptionistServiceImplTest {
 
         final Long doctorId = 1L;
         int pageNo = 2;
-        Pageable paging= PageRequest.of(pageNo, 10);
+        int pageSize = 11;
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
@@ -104,7 +105,7 @@ class ReceptionistServiceImplTest {
         Mockito.when(appointmentRepository.receptionistDoctorAppointment(doctorId,paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,PatientViewDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newList = receptionistService.getDoctorAppointments(doctorId,pageNo);
+        ResponseEntity<GenericMessage> newList = receptionistService.getDoctorAppointments(doctorId,pageNo,pageSize);
         System.out.println(newList);
         assertThat(newList).isNotNull();
         assertEquals(list, Objects.requireNonNull(newList.getBody()).getData());
@@ -115,18 +116,21 @@ class ReceptionistServiceImplTest {
     void throwErrorIfIdNotPresentInDoctorDbForDoctorAppointment() {
         final Long doctorId = 1L;
         int pageNo = 2;
+        int pageSize = 11;
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
         assertThrows(ResourceNotFoundException.class,()->{
-            receptionistService.getDoctorAppointments(doctorId,pageNo);
+            receptionistService.getDoctorAppointments(doctorId,pageNo,pageSize);
         });
     }
 
     @Test
     void todayAllAppointmentForClinicStaff_SUCCESS() {
         int pageNo = 2;
-        Pageable paging= PageRequest.of(pageNo, 10);
+        int pageSize = 11;
+
+        Pageable paging= PageRequest.of(pageNo, pageSize);
 
 
         PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
@@ -142,7 +146,7 @@ class ReceptionistServiceImplTest {
         Mockito.when(appointmentRepository.todayAllAppointmentForClinicStaff2(paging)).thenReturn(list1);
         Mockito.when(mapper.map(appointment,PatientViewDto.class)).thenReturn(dto1);
 
-        ResponseEntity<GenericMessage> newList = receptionistService.todayAllAppointmentForClinicStaff(pageNo);
+        ResponseEntity<GenericMessage> newList = receptionistService.todayAllAppointmentForClinicStaff(pageNo,pageSize);
         assertThat(newList).isNotNull();
         assertEquals(list,newList.getBody().getData());
     }

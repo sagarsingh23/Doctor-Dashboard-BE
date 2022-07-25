@@ -26,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -92,8 +93,8 @@ class PrescriptionServiceImplTest {
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -102,7 +103,7 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
-        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doNothing().when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         ResponseEntity<GenericMessage> newMessage = prescriptionService.addPrescription(appointId,details);
@@ -121,8 +122,8 @@ class PrescriptionServiceImplTest {
         Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -131,7 +132,7 @@ class PrescriptionServiceImplTest {
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
         Mockito.when(appointmentRepository.checkStatus(appointId)).thenReturn(details.getStatus());
-        Mockito.doThrow(new MailErrorException("Mail Error")).when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString());
+        Mockito.doThrow(new MailErrorException("Mail Error")).when(mailService).mailServiceHandler(anyString(),anyString(),anyString(),anyString(),anyString(),Mockito.any(Context.class));
 
 
         MailErrorException mailErrorException = assertThrows(MailErrorException.class,()->{
@@ -151,8 +152,8 @@ class PrescriptionServiceImplTest {
         Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -177,8 +178,8 @@ class PrescriptionServiceImplTest {
         Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,appointment);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,appointment);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,appointment);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -197,8 +198,8 @@ class PrescriptionServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInAppointmentDBForAddPrescription() throws MessagingException, JSONException, IOException {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
@@ -223,8 +224,8 @@ class PrescriptionServiceImplTest {
     @Test
     void getAllPrescriptionByAppointment_SUCCESS() {
         final Long appointId = 1L;
-        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,false,null);
-        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,false,null);
+        Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,null);
+        Prescription prescription2 = new Prescription(2L,"dolo",5L,"before food",5L,"morning",null,null,null);
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
