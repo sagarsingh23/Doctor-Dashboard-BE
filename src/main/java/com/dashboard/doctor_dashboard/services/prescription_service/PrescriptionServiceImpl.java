@@ -22,6 +22,9 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * PrescriptionServiceImpl
+ */
 @Service
 @Slf4j
 public class PrescriptionServiceImpl implements PrescriptionService   {
@@ -52,7 +55,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
      */
     @Override
     public ResponseEntity<GenericMessage> addPrescription(Long appointId, UpdatePrescriptionDto updatePrescriptionDto) throws IOException, MessagingException, JSONException {
-
+      log.info("inside: PrescriptionServiceImpl:: addPrescription");
            if (appointmentRepository.getId(appointId) != null) {
                if(appointmentRepository.checkStatus(appointId).equals("Vitals updated")){
                     if (appointId.equals(updatePrescriptionDto.getPrescriptions().get(0).getAppointment().getAppointId())) {
@@ -63,14 +66,18 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
                       pdFGeneratorService.generatePdf(updatePrescriptionDto.getPrescriptions(), updatePrescriptionDto.getPatientDto(), updatePrescriptionDto.getNotes());
                       sendEmailToUserAfterPrescription(updatePrescriptionDto.getPatientDto());
                       log.debug(Constants.PRESCRIPTION_CREATED);
-                      return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,Constants.PRESCRIPTION_CREATED),HttpStatus.CREATED);
+                      log.info("inside: PrescriptionServiceImpl:: addPrescription");
+                        return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,Constants.PRESCRIPTION_CREATED),HttpStatus.CREATED);
                     }
+                   log.info("inside: PrescriptionServiceImpl:: addPrescription inner"+Constants.APPOINTMENT_NOT_FOUND);
                    throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
               }
                else
-                   throw new APIException("Prescription cannot be added for other status like completed,follow Up, and to be attended");
+                   log.info("exit: PrescriptionServiceImpl:: addPrescription -- API exception");
+               throw new APIException("Prescription cannot be added for other status like completed,follow Up, and to be attended");
             }
-             throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
+        log.info("exit: PrescriptionServiceImpl:: addPrescription"+Constants.APPOINTMENT_NOT_FOUND);
+        throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
     }
 
     /**
@@ -80,9 +87,12 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
      */
     @Override
     public ResponseEntity<GenericMessage> getAllPrescriptionByAppointment(Long appointId) {
+        log.info("inside: PrescriptionServiceImpl:: getAllPrescriptionByAppointment");
         if(appointmentRepository.getId(appointId) != null){
+            log.info("exit: PrescriptionServiceImpl:: getAllPrescriptionByAppointment");
             return new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,prescriptionRepository.getAllPrescriptionByAppointment(appointId)),HttpStatus.OK);
         }
+        log.info("exit: PrescriptionServiceImpl:: getAllPrescriptionByAppointment"+Constants.APPOINTMENT_NOT_FOUND);
         throw new ResourceNotFoundException(Constants.APPOINTMENT_NOT_FOUND);
 
     }
@@ -94,10 +104,13 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
      */
     @Override
     public ResponseEntity<GenericMessage> deleteAppointmentById(Long id) {
+        log.info("inside: PrescriptionServiceImpl:: deleteAppointmentById");
+
         var genericMessage = new GenericMessage();
         prescriptionRepository.deleteById(id);
         genericMessage.setData("successfully deleted");
         genericMessage.setStatus(Constants.SUCCESS);
+        log.info("exit: PrescriptionServiceImpl:: deleteAppointmentById");
         return new ResponseEntity<>(genericMessage, HttpStatus.NO_CONTENT);
     }
 
@@ -121,6 +134,7 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
         content = content.replace("[[name]]", patientDto.getPatientName());
         content = content.replace("[[doctorName]]", patientDto.getDoctorName());
 
+        log.info("exit: PrescriptionServiceImpl::sendEmailToUserAfterPrescription");
         mailService.mailServiceHandler(fromEmail,toEmail,senderName,subject,content);
     }
 
