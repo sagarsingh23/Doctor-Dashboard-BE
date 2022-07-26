@@ -4,9 +4,11 @@ Description
 Technology is constantly changing the way we live our lives, from living in the metaverse to getting a prescription on a smartphone app, our lives are transforming fast. My Care an interactive Appointment booking system serves right from booking an appointment to tracking down the performance of the patient and manage the appointment flow. The flow of it helps the patient, doctor and a Patient care technician to easily track down the respective details of the Patient Appointment ,Patient details which include various vitals such as the Blood Group , Blood Pressure, Glucose level and the Temperature which is updated by the Patient care assistant and which can be reviewed by the doctor . The doctor would be able to assist the patient accordingly from the details updated.
 The Patient will be able to book and reserve his appointment with the respective doctor for the diagnosed category within a week. The patient status right from the booking until the doctor completes and if its a follow is visible on the dashboard , there's section for the doctor where the previous prescription for the respective patient is visible. My Care includes all the necessary section to track the patient details right from booking the appointment to prescribing a medicine and assisting the patient.
 
+
+
 # Technologies
 
-### Project is created with:
+## Project is created with:
 ```
 Spring Boot
 java 17
@@ -146,3 +148,24 @@ JPA buddy
 
 # ER Diagram
 ![miCare ER updated](https://user-images.githubusercontent.com/99714712/180491880-fcd3707a-13f2-458a-bb53-96437e3ed0f0.png)
+
+# Steps To Run Code
+### Cloning git repository:
+
+1. Goto
+https://github.com/nineleaps-training/Doctor-Dashboard-BE/tree/login_jwt_all_tables
+2. Above the list of files, click Code.
+3. To clone the repository using HTTPS, under "Clone with HTTPS", copy link. To clone the
+repository using an SSH key, including a certificate issued by your organization's SSH
+certificate authority, click Use SSH, then copy the link. To clone a repository using GitHub
+CLI, click Use GitHub CLI, then copy the link.4. Open Terminal.
+5. Change the current working directory to the location where you want the cloned directory.
+6. Type git clone, and then paste the URL you copied earlier.
+$ git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY
+7. Press Enter to create your local clone.
+
+### Opening project in Intellij:
+
+1. From the main menu, select File then click on Open navigate to the project file.
+2. Navigate to DashboardApplication.java under src/main/java/com/dashboard then click on
+Run at the top.
