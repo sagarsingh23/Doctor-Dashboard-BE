@@ -31,10 +31,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
+//        System.out.println("request "+request.getInputStream());
         // get JWT (token) from http request
         String token = getJWTFromRequest(request);
         // validate token
-        if (StringUtils.hasText(token) && tokenProvider.validateToken(token)) {
+        if (StringUtils.hasText(token) && tokenProvider.validateToken(token,request)) {
             // get username from token
             String username = tokenProvider.getUsernameFromJWT(token);
             // load user associated with token
