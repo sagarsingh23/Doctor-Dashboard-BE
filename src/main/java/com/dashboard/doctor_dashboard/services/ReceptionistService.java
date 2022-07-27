@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.services.receptionist;
+package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

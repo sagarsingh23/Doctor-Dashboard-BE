@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.services.appointment_service;
+package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
+import com.dashboard.doctor_dashboard.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.services.todo_service;
+package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
