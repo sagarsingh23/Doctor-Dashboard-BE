@@ -96,6 +96,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .headers()
+                .xssProtection()                                                                                 //              XSS protection
+                .and()
+                .contentSecurityPolicy("script-src 'self'")
+                .and().and()
                 .cors().and()
                 .csrf().disable()
                 .exceptionHandling()
@@ -112,6 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
                 .and()
                 .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
+
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
