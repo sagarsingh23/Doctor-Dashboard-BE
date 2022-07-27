@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.services.file_service.FileStorageService;
+import com.dashboard.doctor_dashboard.services.FileStorageService;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import io.swagger.annotations.ApiOperation;
@@ -20,7 +20,7 @@ import java.io.IOException;
 public class FileController {
 
 
-    private FileStorageService storageService;
+    private final FileStorageService storageService;
 
     @Autowired
     public FileController(FileStorageService storageService) {

@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentDto;
+import com.dashboard.doctor_dashboard.dtos.AppointmentDto;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
+import com.dashboard.doctor_dashboard.services.AppointmentService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -28,7 +28,7 @@ import java.time.LocalDate;
 @Slf4j
 public class AppointmentController {
 
-    private AppointmentService appointmentService;
+    private final AppointmentService appointmentService;
 
     @Autowired
     public AppointmentController(AppointmentService appointmentService) {

@@ -1,11 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.utils.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ import javax.validation.Valid;
 public class DoctorController {
 
 
-    private DoctorService doctorService;
+    private final DoctorService doctorService;
 
     @Autowired
     public DoctorController(DoctorService doctorService) {
@@ -39,10 +37,8 @@ public class DoctorController {
     public ResponseEntity<GenericMessage> allDoctors(@PathVariable("doctorId") Long id) {
 
         log.info("DoctorController::getAllDoctors");
-        ResponseEntity<GenericMessage> details = doctorService.getAllDoctors(id);
-        if (details != null)
-            return details;
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
+        return doctorService.getAllDoctors(id);
+
     }
 
     /**
@@ -53,10 +49,7 @@ public class DoctorController {
     @GetMapping("/id/{id}")
     public ResponseEntity<GenericMessage> doctorById(@PathVariable("id") long id) {
         log.info("DoctorController::getDoctorById");
-
-        if (doctorService.getDoctorById(id) != null)
-            return doctorService.getDoctorById(id);
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
+        return doctorService.getDoctorById(id);
     }
 
     /**
@@ -92,7 +85,7 @@ public class DoctorController {
      * @return deleted successfully after triggering this api. Private API
      */
     @ApiOperation("return deleted successfully after triggering this api. Private API")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deleteDoctor(@PathVariable("id") int id) {
         log.info("DoctorController::deleteDoctor");
 
@@ -131,7 +124,6 @@ public class DoctorController {
     @GetMapping("/{doctorId}/blood-group")
     public ResponseEntity<GenericMessage> bloodGroup(@PathVariable("doctorId") Long doctorId) {
         log.info("DoctorController::bloodGroupChart");
-
         return doctorService.bloodGroupChart(doctorId);
     }
 

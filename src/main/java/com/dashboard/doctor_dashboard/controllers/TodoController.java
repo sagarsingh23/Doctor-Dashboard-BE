@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
+import com.dashboard.doctor_dashboard.services.TodoService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
 public class TodoController {
 
 
-    private TodoService todoService;
+    private final TodoService todoService;
 
     @Autowired
     public TodoController(TodoService todoService) {
@@ -71,7 +71,6 @@ public class TodoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<GenericMessage> deleteTodo(@PathVariable("id") Long id) {
         log.info("TodoController::deleteTodo");
-
         return todoService.deleteTodoById(id);
     }
 
@@ -81,7 +80,7 @@ public class TodoController {
      * @return Successfully updated after updating task details  in database
      */
     @ApiOperation("updates the todos from the database")
-    @PutMapping("/{id}")
+    @PutMapping("/private/{id}")
     public ResponseEntity<GenericMessage> updateTodo(@PathVariable("id") Long id, @Valid @RequestBody TodoListDto todolist, HttpServletRequest request) {
         log.info("TodoController::updateTodo");
         return todoService.updateTodo(id, todolist);

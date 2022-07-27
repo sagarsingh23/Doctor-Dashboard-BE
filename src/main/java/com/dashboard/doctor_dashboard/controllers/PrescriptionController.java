@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class PrescriptionController {
 
 
-    private  PrescriptionService prescriptionService;
+    private final PrescriptionService prescriptionService;
 
     @Autowired
     public PrescriptionController(PrescriptionService prescriptionService) {
@@ -60,9 +60,9 @@ public class PrescriptionController {
      * @return Appointment deleted after successful api call
      */
     @ApiOperation("This API is used for deleting Appointment from Appointment table")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<GenericMessage> deleteAppointment(@PathVariable("id") Long id) {
-        log.info("PrescriptionController::deleteAppointment");
+    @DeleteMapping("/private/{id}")
+    public ResponseEntity<GenericMessage> deletePrescription(@PathVariable("id") Long id) {
+        log.info("PrescriptionController::deletePrescription");
         return prescriptionService.deleteAppointmentById(id);
     }
 

@@ -1,9 +1,9 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientEntityDto;
-import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +19,7 @@ import javax.validation.Valid;
 public class PatientController {
 
 
-    private  PatientService patientService;
+    private final PatientService patientService;
 
     @Autowired
     public PatientController(PatientService patientService) {
@@ -38,6 +38,7 @@ public class PatientController {
     @PostMapping("/on-boarding/{loginId}")
     public ResponseEntity<GenericMessage> addPatientDetails(@Valid @RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
         log.info("PatientController::addPatientDetails");
+        System.out.println("patient"+patient);
         return patientService.addPatient(patient,loginId);
     }
 
@@ -84,7 +85,7 @@ public class PatientController {
      * @return Patient deleted after successful API call
      */
     @ApiOperation("This API is used for deleting patient from patients database")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/private/{id}")
     public ResponseEntity<GenericMessage> deletePatientById(@PathVariable("id") Long id) {
         log.info("PatientController::deletePatientById");
 

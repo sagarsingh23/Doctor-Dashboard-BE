@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.controllers;
 
 
-import com.dashboard.doctor_dashboard.entities.login_entity.JwtToken;
-import com.dashboard.doctor_dashboard.services.login_service.LoginService;
+import com.dashboard.doctor_dashboard.dtos.JwtToken;
+import com.dashboard.doctor_dashboard.services.LoginService;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -24,7 +25,7 @@ import java.security.GeneralSecurityException;
 public class LoginController {
 
 
-    private  LoginService loginService;
+    private final LoginService loginService;
 
     @Autowired
     public LoginController(LoginService loginService) {
@@ -46,6 +47,14 @@ public class LoginController {
         return loginService.tokenVerification(idToken.getIdtoken());
     }
 
+    @GetMapping(value = "/user/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<GenericMessage> refreshTokenAuthentication(HttpServletRequest request) throws GeneralSecurityException, IOException, JSONException {
+        //authToken
+        log.info("refreshTokenAuthentication:: tokenAuthentication");
+        return loginService.refreshTokenCreator(request);
+    }
+
+
     /**
      * @return status 200 ok if the server is up and running.
      * It's just a health check API
@@ -62,7 +71,7 @@ public class LoginController {
      * @return Successfully deleted message after deleting user details from database
      */
     @ApiOperation("This API is used for deleting user from login details")
-    @DeleteMapping(value = "/user/login/delete/{id}")
+    @DeleteMapping(value = "/private/user/login/delete/{id}")
     public String deleteUserById(@PathVariable("id") long id ){
         log.info("LoginController:: deleteDoctorById");
         return loginService.deleteDoctorById(id);
