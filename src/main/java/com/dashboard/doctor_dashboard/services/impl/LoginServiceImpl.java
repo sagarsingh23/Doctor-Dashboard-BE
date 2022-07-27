@@ -1,16 +1,18 @@
-package com.dashboard.doctor_dashboard.services.login_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.exceptions.GoogleLoginException;
 import com.dashboard.doctor_dashboard.jwt.entities.Login;
 import com.dashboard.doctor_dashboard.jwt.service.JwtService;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
+import com.dashboard.doctor_dashboard.services.LoginService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import io.jsonwebtoken.impl.DefaultClaims;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -19,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
@@ -31,9 +34,9 @@ import java.util.Map;
 @Slf4j
 public class LoginServiceImpl implements LoginService {
 
-    private LoginRepo loginRepo;
+    private final LoginRepo loginRepo;
 
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
     @Autowired
     public LoginServiceImpl(LoginRepo loginRepo, JwtService jwtService) {
@@ -157,6 +160,13 @@ public class LoginServiceImpl implements LoginService {
         loginRepo.deleteById(id);
         log.info("exit: LoginServiceImpl::deleteDoctorById");
         return "Successfully deleted";
+    }
+
+    @Override
+    public ResponseEntity<GenericMessage> refreshTokenCreator(HttpServletRequest request){
+        DefaultClaims defaultClaims= (DefaultClaims) request.getAttribute("claims");
+        System.out.println("defaultClaims "+defaultClaims);
+        return  new  ResponseEntity<>(new GenericMessage(Constants.SUCCESS,jwtService.createRefreshToken(defaultClaims)),HttpStatus.CREATED);
     }
 
 }

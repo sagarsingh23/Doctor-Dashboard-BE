@@ -1,11 +1,12 @@
-package com.dashboard.doctor_dashboard.services.receptionist;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.entities.model.Attributes;
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.Attributes;
+import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
+import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
@@ -31,10 +32,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ReceptionistServiceImpl implements ReceptionistService {
 
-    private  ModelMapper mapper;
-    private  DoctorRepository doctorRepository;
-    private  AppointmentRepository appointmentRepository;
-    private  AttributeRepository attributeRepository;
+    private final ModelMapper mapper;
+    private final DoctorRepository doctorRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final AttributeRepository attributeRepository;
 
     @Autowired
     public ReceptionistServiceImpl(ModelMapper mapper, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository) {

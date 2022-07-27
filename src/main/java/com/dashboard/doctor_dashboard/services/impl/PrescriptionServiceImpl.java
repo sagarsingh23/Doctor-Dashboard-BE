@@ -1,19 +1,19 @@
-package com.dashboard.doctor_dashboard.services.prescription_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
-import com.dashboard.doctor_dashboard.utils.PdFGeneratorServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -28,13 +28,13 @@ import java.io.UnsupportedEncodingException;
  */
 @Service
 @Slf4j
-public class PrescriptionServiceImpl implements PrescriptionService   {
+public class PrescriptionServiceImpl implements PrescriptionService {
 
-    private  PrescriptionRepository prescriptionRepository;
-    private  AppointmentRepository appointmentRepository;
-    private  AttributeRepository attributeRepository;
-    private  PdFGeneratorServiceImpl pdFGeneratorService;
-    private  MailServiceImpl mailService;
+    private final PrescriptionRepository prescriptionRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final AttributeRepository attributeRepository;
+    private final PdFGeneratorServiceImpl pdFGeneratorService;
+    private final MailServiceImpl mailService;
 
     @Autowired
     public PrescriptionServiceImpl(PrescriptionRepository prescriptionRepository, AppointmentRepository appointmentRepository, AttributeRepository attributeRepository, PdFGeneratorServiceImpl pdFGeneratorService, MailServiceImpl mailService) {
@@ -123,10 +123,11 @@ public class PrescriptionServiceImpl implements PrescriptionService   {
      * @throws MessagingException
      * @throws UnsupportedEncodingException
      */
+    @Value("${spring.mail.username}")
+    private String fromEmail;
     public void sendEmailToUserAfterPrescription(PatientDto patientDto) throws JSONException, MessagingException, UnsupportedEncodingException {
         log.info("Prescription Mail Service Started");
         String toEmail = patientDto.getPatientEmail();
-        var fromEmail = "mecareapplication@gmail.com";
         var senderName = "meCare Application";
         var subject = "Prescription Updated";
 

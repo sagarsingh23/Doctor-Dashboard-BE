@@ -1,9 +1,10 @@
-package com.dashboard.doctor_dashboard.services.todo_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.entities.model.Todolist;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
+import com.dashboard.doctor_dashboard.services.TodoService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,8 @@ import java.util.Optional;
 @Slf4j
 public class TodoServiceImpl implements TodoService {
 
-    private TodoRepository todoRepository;
-    private ModelMapper mapper;
+    private final TodoRepository todoRepository;
+    private final ModelMapper mapper;
 
     @Autowired
     public TodoServiceImpl(TodoRepository todoRepository, ModelMapper mapper) {

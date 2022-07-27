@@ -1,7 +1,10 @@
-package com.dashboard.doctor_dashboard.services.patient_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.model.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.*;
@@ -21,13 +24,13 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PatientServiceImpl implements PatientService {
 
-    private  PatientRepository patientRepository;
-    private  AttributeRepository attributeRepository;
-    private  DoctorRepository doctorRepository;
-    private  AppointmentRepository appointmentRepository;
-    private  PrescriptionRepository prescriptionRepository;
-    private  LoginRepo loginRepo;
-    private  ModelMapper mapper;
+    private final PatientRepository patientRepository;
+    private final AttributeRepository attributeRepository;
+    private final DoctorRepository doctorRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final PrescriptionRepository prescriptionRepository;
+    private final LoginRepo loginRepo;
+    private final ModelMapper mapper;
 
     @Autowired
     public PatientServiceImpl(PatientRepository patientRepository, AttributeRepository attributeRepository, DoctorRepository doctorRepository, AppointmentRepository appointmentRepository, PrescriptionRepository prescriptionRepository, LoginRepo loginRepo, ModelMapper mapper) {
@@ -55,13 +58,15 @@ public class PatientServiceImpl implements PatientService {
 
         Long temp = loginRepo.isIdAvailable(loginId);
         if(temp != null){
+            System.out.println(patient.getBloodGroup());
             patientRepository.
                     insertIntoPatient(patient.getAge(),patient.getMobileNo(),patient.getAlternateMobileNo(),
-                            patient.getGender(), patient.getAddress(), patient.getBloodGroup(),loginId);
+                            patient.getGender().toString(), patient.getAddress(), patient.getBloodGroup().getValue(),loginId);
 
             log.debug("Patient Service::Patient Successfully Added..");
 
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
+            System.out.println("patient:::::"+patientRepository.getPatientByLoginId(loginId));
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: PatientServiceImpl:: addPatient");

@@ -1,10 +1,11 @@
-package com.dashboard.doctor_dashboard.services.doctor_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
 
-import com.dashboard.doctor_dashboard.entities.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.utils.Constants;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorFormDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -30,9 +31,9 @@ import java.util.Map;
 @Slf4j
 public class DoctorServiceImpl implements DoctorService {
 
-    private  DoctorRepository doctorRepository;
-    private  LoginRepo loginRepo;
-    private  JwtTokenProvider jwtTokenProvider;
+    private final DoctorRepository doctorRepository;
+    private final LoginRepo loginRepo;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
     public DoctorServiceImpl(DoctorRepository doctorRepository, LoginRepo loginRepo, JwtTokenProvider jwtTokenProvider) {
@@ -111,7 +112,7 @@ public class DoctorServiceImpl implements DoctorService {
 
             if(doctorRepository.isIdAvailable(details.getId())==null) {
                 if (details.getId() == id && details.getId().equals(doctorLoginId)) {
-                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality(),details.getPhoneNo(),details.getGender(),doctorLoginId,details.getExp(),details.getDegree());
+                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),doctorLoginId,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor on boarding completed.");

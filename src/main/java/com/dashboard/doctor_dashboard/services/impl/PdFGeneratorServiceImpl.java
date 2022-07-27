@@ -1,7 +1,7 @@
-package com.dashboard.doctor_dashboard.utils;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.model.Prescription;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.FontSelector;

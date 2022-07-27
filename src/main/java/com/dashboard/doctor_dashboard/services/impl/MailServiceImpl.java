@@ -1,6 +1,7 @@
-package com.dashboard.doctor_dashboard.utils;
+package com.dashboard.doctor_dashboard.services.impl;
 
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
+import com.dashboard.doctor_dashboard.utils.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
@@ -18,9 +19,9 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 public class MailServiceImpl {
 
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    private ITemplateEngine templateEngine;
+    private final ITemplateEngine templateEngine;
 
     @Autowired
     public MailServiceImpl(JavaMailSender mailSender,ITemplateEngine templateEngine) {

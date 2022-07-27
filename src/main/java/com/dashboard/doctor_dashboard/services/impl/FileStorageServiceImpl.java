@@ -1,9 +1,10 @@
-package com.dashboard.doctor_dashboard.services.file_service;
+package com.dashboard.doctor_dashboard.services.impl;
 
-import com.dashboard.doctor_dashboard.entities.report.FileDB;
+import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.FileDBRepository;
+import com.dashboard.doctor_dashboard.services.FileStorageService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,8 @@ import java.io.IOException;
 @Slf4j
 public class FileStorageServiceImpl implements FileStorageService {
 
-    private FileDBRepository fileDBRepository;
-    private AppointmentRepository appointmentRepository;
+    private final FileDBRepository fileDBRepository;
+    private final AppointmentRepository appointmentRepository;
 
     @Autowired
     public FileStorageServiceImpl(FileDBRepository fileDBRepository, AppointmentRepository appointmentRepository) {
