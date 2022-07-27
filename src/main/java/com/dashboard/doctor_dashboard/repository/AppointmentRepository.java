@@ -1,8 +1,8 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto;
-import com.dashboard.doctor_dashboard.entities.dtos.NotificationDto;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.NotificationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -100,7 +100,7 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
     Page<Appointment> receptionistDoctorAppointment(Long doctorId,Pageable pageable);
 
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  pati.deleted = false and appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
+    @Query(value = "select new com.dashboard.doctor_dashboard.dtos.AppointmentViewDto(appo.doctorName,appo.category,appo.dateOfAppointment,appo.appointmentTime,appo.status,pati.bloodGroup,dd.age,dd.gender) from Appointment appo join Patient pati on  pati.deleted = false and appo.appointId=:appointmentId and appo.patient.pID=:patientId and appo.patient.pID=pati.pID join DoctorDetails dd on appo.doctorDetails.id=dd.id")
     AppointmentViewDto getBasicAppointmentDetails(long appointmentId,long patientId);
 
     @Query(value = "update appointments set status=:status where appoint_id=:appointmentId ", nativeQuery = true)
@@ -125,7 +125,7 @@ public interface AppointmentRepository extends PagingAndSortingRepository<Appoin
     @Query(value = "select email_id from login_details where deleted = false and id=:loginId",nativeQuery = true)
     String getEmailById(Long loginId);
 
-    @Query(value = "select new com.dashboard.doctor_dashboard.entities.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
+    @Query(value = "select new com.dashboard.doctor_dashboard.dtos.NotificationDto(appointId,doctorName) from Appointment a where a.patient.pID=:patientId and isRead=true")
     List<NotificationDto> getNotifications(Long patientId);
 
     @Query(value = "select * from appointments where  date_of_appointment = curdate() and status ='To be attended' order by appointment_time",nativeQuery = true)

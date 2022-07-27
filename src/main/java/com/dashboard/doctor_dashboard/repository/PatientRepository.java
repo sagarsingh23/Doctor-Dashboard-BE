@@ -1,6 +1,8 @@
 package com.dashboard.doctor_dashboard.repository;
 
-import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -21,7 +23,7 @@ public interface PatientRepository extends PagingAndSortingRepository<Patient, L
     @Query(value = "insert into patient_details (age,mobile_no,alternate_mobile_no,timestamp,gender,address,blood_group,login_id,created_at,deleted) values(:age,:mobileNo,:alternateMobileNo,now(),:gender,:address,:bloodGroup,:loginId,now(),false)",nativeQuery = true)
     @Transactional
     @Modifying
-    void insertIntoPatient(int age,String mobileNo,String alternateMobileNo,String gender,String address,String bloodGroup,Long loginId);
+    void insertIntoPatient(int age, String mobileNo, String alternateMobileNo, String gender, String address, String bloodGroup, Long loginId);
 
     @Query(value = "update patient_details set mobile_no=:mobileNo where deleted = false and id=:patientId",nativeQuery = true)
     @Modifying
