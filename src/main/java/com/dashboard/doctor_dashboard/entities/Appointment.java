@@ -1,5 +1,6 @@
-package com.dashboard.doctor_dashboard.entities.model;
+package com.dashboard.doctor_dashboard.entities;
 
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -33,9 +34,9 @@ public class Appointment {
 
     @NotNull
     @NotEmpty
-    @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
+    @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(20) ")
-    private String category;
+    private Category category;
 
     @NotNull
     @Future(message = "Only future dates can be entered ")

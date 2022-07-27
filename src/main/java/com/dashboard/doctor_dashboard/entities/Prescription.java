@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.model;
+package com.dashboard.doctor_dashboard.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;

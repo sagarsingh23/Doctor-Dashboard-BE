@@ -1,6 +1,7 @@
-package com.dashboard.doctor_dashboard.entities.model;
+package com.dashboard.doctor_dashboard.entities;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
@@ -36,13 +37,15 @@ public class DoctorDetails {
     private Short age;
 
     @Column(name = "speciality",columnDefinition = "varchar(20)",nullable = false)
-    private String speciality;
+    @Enumerated(EnumType.STRING)
+    private Category speciality;
 
     @Column(name = "phone_no",columnDefinition = "varchar(10)",nullable = false)
     private String phoneNo;
 
-    @Column(name = "gender",columnDefinition = "varchar(10)",nullable = false)
-    private String gender;
+    @Column(name = "gender",nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "experience",nullable = false)
     private short exp;
@@ -90,7 +93,7 @@ public class DoctorDetails {
         this.id = id;
     }
 
-    public DoctorDetails(Short age, String speciality, String phoneNo, String gender, short exp, String degree, Long loginId) {
+    public DoctorDetails(Short age, Category speciality, String phoneNo, Gender gender, short exp, String degree, Long loginId) {
         this.age = age;
         this.speciality = speciality;
         this.phoneNo = phoneNo;
@@ -108,7 +111,7 @@ public class DoctorDetails {
         return age;
     }
 
-    public String getSpeciality() {
+    public Category getSpeciality() {
         return speciality;
     }
 
@@ -116,7 +119,7 @@ public class DoctorDetails {
         return phoneNo;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 

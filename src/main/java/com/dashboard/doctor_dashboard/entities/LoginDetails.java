@@ -1,8 +1,8 @@
-package com.dashboard.doctor_dashboard.entities.login_entity;
+package com.dashboard.doctor_dashboard.entities;
 
 
-import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -38,6 +38,7 @@ public class LoginDetails {
     private String profilePic;
     @Column(name="role",nullable = false,columnDefinition = "varchar(8)")
     private String role;
+
 
     private boolean deleted = Boolean.FALSE;
 

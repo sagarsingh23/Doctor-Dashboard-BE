@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.report;
+package com.dashboard.doctor_dashboard.entities;
 
 
 import org.hibernate.annotations.CreationTimestamp;
