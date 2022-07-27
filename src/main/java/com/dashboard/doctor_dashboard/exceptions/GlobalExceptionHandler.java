@@ -86,7 +86,7 @@ public class GlobalExceptionHandler {
         errorMessage.setErrorData(errorDetails);
         errorMessage.setErrorStatus(Constants.FAIL);
 
-        return new ResponseEntity<>(errorMessage, HttpStatus.NOT_FOUND);   //status code 404
+        return new ResponseEntity<>(errorMessage, HttpStatus.BAD_REQUEST);   //status code 400
     }
 
 
