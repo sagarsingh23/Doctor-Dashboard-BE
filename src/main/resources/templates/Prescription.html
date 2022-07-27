@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }</style>
+</head>
+<body>
+<div style="background-color: white; color:black">
+ <p style="text-align: left; font-size:15px ;"> Hi <span th:text="${name}">,</span>
+ </p>
+ <p style ="text-align:left; font-size:15px ;line-height: 0.8; font-family: 'Arial' ";>
+ Dr. <span th:text="${doctorName}"></span> Completed Your Appointment. Check the prescription given below in the attachment.
+ </p>
+ <p style=" text-align: left ;font-size:13px">
+ For further queries, please mail to:<span style="color: #FFFFF;">
+     mecareapplication@gmail.com</span>
+ </p>
+ <p style=" ext-align: left;font-size:13px;line-height: 0.8">
+ Thanks & Regards,
+ </p>
+ <p style="font-size: 13px; text-align: left;line-height: 0.8">meCare Application team</span>
+ </p>
+ </div>
+</body>
+</html>
