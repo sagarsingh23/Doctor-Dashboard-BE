@@ -1,6 +1,7 @@
 package com.dashboard.doctor_dashboard.enums;
 
-enum Category  {
+@SuppressWarnings("squid:S115")
+public enum Category  {
     Orthologist,
     Dentist,
     General,
