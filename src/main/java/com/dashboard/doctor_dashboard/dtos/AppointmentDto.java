@@ -1,12 +1,15 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
-import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -18,8 +21,8 @@ import java.time.LocalTime;
 public class AppointmentDto {
     private Long appointId;
 
-    @Pattern(regexp = "^((?i)Orthologist|Dentist|General|Gastrologist|Dermatologist)", message = "Select from specified speciality [Orthologist,Dentist,Dermatologist,General,Gastrologist]")
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
 
     @NotNull
     @Future(message = "Only future dates can be entered ")

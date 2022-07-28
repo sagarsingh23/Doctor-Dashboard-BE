@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,12 +12,14 @@ import java.time.LocalTime;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PatientAppointmentListDto {
+public class DoctorAppointmentListDto {
+
     private Long appointId;
-    private String category;
     private LocalDate dateOfAppointment;
-    private LocalTime appointmentTime;
-    private String doctorName;
+    private String patientName;
+    private String patientEmail;
     private String status;
-    private Boolean isBookedAgain;
+    private LocalTime appointmentTime;
+
 }
+

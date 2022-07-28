@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.login_entity;
+package com.dashboard.doctor_dashboard.dtos;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;

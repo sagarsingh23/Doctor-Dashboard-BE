@@ -1,6 +1,6 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
-import com.dashboard.doctor_dashboard.entities.model.Prescription;
+import com.dashboard.doctor_dashboard.entities.Prescription;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 

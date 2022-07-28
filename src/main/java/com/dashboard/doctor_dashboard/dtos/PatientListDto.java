@@ -1,4 +1,4 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
 
 import lombok.AllArgsConstructor;
@@ -25,38 +25,6 @@ public class PatientListDto {
 
     public void setPID(Long pID) {
         this.pID = pID;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public String getEmailId() {
-        return emailId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public LocalDate getLastVisitedDate() {
-        return lastVisitedDate;
-    }
-
-    public String getMobileNo() {
-        return mobileNo;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public int getAge() {
-        return age;
     }
 
     public void setFullName(String fullName) {

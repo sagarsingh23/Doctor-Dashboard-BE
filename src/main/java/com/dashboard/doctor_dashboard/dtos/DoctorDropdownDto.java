@@ -1,5 +1,6 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
+import com.dashboard.doctor_dashboard.enums.Category;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -8,7 +9,7 @@ public class DoctorDropdownDto {
     private long id;
     private String name;
     private String emailId;
-    private String speciality;
+    private Category speciality;
 
 
 
@@ -27,11 +28,11 @@ public class DoctorDropdownDto {
         this.name = name;
     }
 
-    public String getSpeciality() {
+    public Category getSpeciality() {
         return speciality;
     }
 
-    public void setSpeciality(String speciality) {
+    public void setSpeciality(Category speciality) {
         this.speciality = speciality;
     }
 

@@ -1,5 +1,7 @@
-package com.dashboard.doctor_dashboard.entities.dtos;
+package com.dashboard.doctor_dashboard.dtos;
 
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import lombok.AllArgsConstructor;
 
 
@@ -7,9 +9,9 @@ import lombok.AllArgsConstructor;
 public class DoctorBasicDetailsDto {
     private String firstName;
     private String email;
-    private String speciality;
+    private Category speciality;
     private String phoneNo;
-    private String gender;
+    private Gender gender;
     private Short age;
     private String degree;
     private short exp;
@@ -23,7 +25,7 @@ public class DoctorBasicDetailsDto {
         return email;
     }
 
-    public String getSpeciality() {
+    public Category getSpeciality() {
         return speciality;
     }
 
@@ -31,7 +33,7 @@ public class DoctorBasicDetailsDto {
         return phoneNo;
     }
 
-    public String getGender() {
+    public Gender getGender() {
         return gender;
     }
 
