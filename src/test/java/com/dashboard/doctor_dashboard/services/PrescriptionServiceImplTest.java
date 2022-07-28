@@ -1,9 +1,10 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.entities.model.Prescription;
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.Prescription;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
@@ -12,9 +13,9 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PrescriptionRepository;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionServiceImpl;
-import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
-import com.dashboard.doctor_dashboard.utils.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.PrescriptionServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
@@ -74,6 +76,7 @@ class PrescriptionServiceImplTest {
     @BeforeEach
     void init(){
         MockitoAnnotations.openMocks(this);
+        ReflectionTestUtils.setField(prescriptionService, "fromEmail", "xyz@gmail.com");
         System.out.println("setting up");
     }
 
@@ -90,7 +93,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L, Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -98,7 +101,7 @@ class PrescriptionServiceImplTest {
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagar@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,prescriptions,"Vitals updated","mri check",true,1L);
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
@@ -119,7 +122,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -127,7 +130,7 @@ class PrescriptionServiceImplTest {
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagar@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,prescriptions,"Vitals updated","mri check",true,1L);
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
@@ -149,7 +152,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(2L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -157,7 +160,7 @@ class PrescriptionServiceImplTest {
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagar@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,prescriptions,"Vitals updated","mri check",true,1L);
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
@@ -175,7 +178,7 @@ class PrescriptionServiceImplTest {
         final Long appointId = 1L;
         String message = "prescription added";
 
-        Appointment appointment = new Appointment(2L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(2L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Prescription prescription1 = new Prescription(1L,"pcm",5L,"before food",5L,"morning",null,null,appointment);
@@ -183,7 +186,7 @@ class PrescriptionServiceImplTest {
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagar@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,prescriptions,"completed","mri check",true,1L);
 
         Mockito.when(appointmentRepository.getId(Mockito.any(Long.class))).thenReturn(appointId);
@@ -203,7 +206,7 @@ class PrescriptionServiceImplTest {
 
         List<Prescription> prescriptions = new ArrayList<>(Arrays.asList(prescription1,prescription2));
 
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","Vitals updated","sagar","sagar@gmail.com",21,"male");
 
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,prescriptions,"completed","mri check",true,1L);
 

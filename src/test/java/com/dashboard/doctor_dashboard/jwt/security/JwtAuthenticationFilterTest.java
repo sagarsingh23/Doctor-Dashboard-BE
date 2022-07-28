@@ -1,13 +1,9 @@
 package com.dashboard.doctor_dashboard.jwt.security;
 
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
-import com.dashboard.doctor_dashboard.jwt.security.CustomUserDetailsService;
-import com.dashboard.doctor_dashboard.jwt.security.JwtAuthenticationFilter;
-import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -56,7 +52,6 @@ class JwtAuthenticationFilterTest {
     void doFilterInternalTest() throws ServletException, IOException {
         String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWdtZXQucmluY2hlbkBuaW5lbGVhcHMuY29tIiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6NCwiZG9jdG9yTmFtZSI6ImppZ21ldCIsImRvY3RvckVtYWlsIjoiamlnbWV0LnJpbmNoZW5AbmluZWxlYXBzLmNvbSIsInJvbGUiOiJET0NUT1IiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FGZFp1Y3F1dUExT0FMQUZpVlRIMldxTV9mQ29LR0UzZmlGbk5RSUl1OEE9czk2LWMifSwicm9sZSI6IkRPQ1RPUiIsImV4cCI6MTY1NzQzMTQ5OCwiaWF0IjoxNjU3MzQ1MDk4fQ.5EsBF7HKfTkcpbOTK5ks1IClSHvo0swO8R6cvdv-40q85UgOs1YSIvn9R_iQtlNBlCGMUSLCq96XOOLA-f7Jag";
         HttpServletRequest request = mock(HttpServletRequest.class);
-        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
 
         Mockito.when(request.getHeader("Authorization")).thenReturn(token);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -104,8 +99,7 @@ class JwtAuthenticationFilterTest {
             }
         };
 
-
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(true);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(true);
         Mockito.when(tokenProvider.getUsernameFromJWT(Mockito.any(String.class))).thenReturn("jigmet");
         Mockito.when(customUserDetailsService.loadUserByUsername(Mockito.any(String.class))).thenReturn(userDetails);
 
@@ -158,7 +152,7 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class))).thenReturn(false);
+        Mockito.when(tokenProvider.validateToken(Mockito.any(String.class),Mockito.any(HttpServletRequest.class))).thenReturn(false);
 
         authenticationFilter.doFilterInternal(request,response,filterChain);
 

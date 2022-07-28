@@ -1,22 +1,19 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.model.Todolist;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoService;
+import com.dashboard.doctor_dashboard.services.TodoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -116,7 +112,7 @@ class TodoControllerTest {
         Mockito.when(todoService.updateTodo(Mockito.any(Long.class),Mockito.any(TodoListDto.class))).thenReturn(new ResponseEntity<>(message, HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/api/v1/todolist/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+                .put("/api/v1/todolist/private/1").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 }

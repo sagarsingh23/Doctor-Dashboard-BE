@@ -1,10 +1,13 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.entities.login_entity.LoginDetails;
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
-import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.dtos.*;
+import com.dashboard.doctor_dashboard.entities.LoginDetails;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
@@ -14,10 +17,10 @@ import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import com.dashboard.doctor_dashboard.repository.PatientRepository;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.AppointmentServiceImpl;
 import com.dashboard.doctor_dashboard.utils.Constants;
-import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
-import com.dashboard.doctor_dashboard.utils.PdFGeneratorServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.PdFGeneratorServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -119,17 +122,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L, Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,patient,doctorDetails);
 
 
@@ -179,20 +182,20 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
-        AppointmentDto appointment2 = new AppointmentDto(1L,"dentist", localDate1,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment2 = new AppointmentDto(1L,Category.Dentist, localDate1,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -244,17 +247,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-//        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+//        Appointment appointment = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
 //                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -293,14 +296,14 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
         HttpServletRequest request = mock(HttpServletRequest.class);
@@ -336,14 +339,14 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -385,17 +388,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(4L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,null,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -440,17 +443,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
 
 
@@ -511,17 +514,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
 
 
@@ -575,17 +578,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,null,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -623,17 +626,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -672,17 +675,17 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
         doctorDetails.setId(12L);
 
-        Appointment appointment1 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment1 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,null,patient,doctorDetails,null,null);
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",true,null,patient,doctorDetails);
 
 
@@ -721,16 +724,16 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         Patient patient1 = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(2L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -738,13 +741,13 @@ class AppointmentServiceImplTest {
 
 
 
-        AppointmentDto appointment1 = new AppointmentDto(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",true,2L,patient,doctorDetails);
 
-        Appointment appointment = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
-        Appointment appointment2 = new Appointment(1L,"dentist", localDate,"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment2 = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
                 "pranay", localTime,true,"completed",null,null,null,false,true,2L,patient1,doctorDetails,null,null);
 
 
@@ -776,8 +779,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -785,10 +788,10 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.of(loginDetails1));
@@ -804,8 +807,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -813,10 +816,10 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.empty());
@@ -832,8 +835,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -841,10 +844,10 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranay","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.of(loginDetails1));
@@ -859,8 +862,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -868,10 +871,10 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
         LoginDetails loginDetails2 = new LoginDetails(2L,"pranay","pranay@gmail.com","nineleaps","profilePic1","DOCTOR",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmal.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.of(loginDetails1));
@@ -890,8 +893,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -901,7 +904,7 @@ class AppointmentServiceImplTest {
 
         LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagarrr","sagarssn@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagarrr","sagarssn@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.of(loginDetails1));
@@ -920,8 +923,8 @@ class AppointmentServiceImplTest {
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         DoctorDetails doctorDetails = new DoctorDetails();
@@ -929,10 +932,10 @@ class AppointmentServiceImplTest {
 
 
 
-        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
-        LoginDetails loginDetails2 = new LoginDetails(1L,"pranayyy","sagarssn23@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails1 = new LoginDetails(1L,"sagar","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
+        LoginDetails loginDetails2 = new LoginDetails(1L,"pranayyy","sagar@gmail.com","google","profilePic","PATIENT",false,null,null,null);
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmail.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,patient,doctorDetails,null,null);
 
         Mockito.when(loginRepo.findById(patient.getPID())).thenReturn(Optional.of(loginDetails1));
@@ -958,7 +961,7 @@ class AppointmentServiceImplTest {
 
         Map<String, List<PatientAppointmentListDto>> getAllAppointment =new HashMap<>();
         PatientAppointmentListDto dto1 = new PatientAppointmentListDto(2L,"dentist", LocalDate.now(),LocalTime.now(),"sagar","completed",true);
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
@@ -1006,10 +1009,10 @@ class AppointmentServiceImplTest {
         Pageable paging= PageRequest.of(pageNo, pageSize);
 
         Map<String, List<DoctorAppointmentListDto>> getAllAppointment =new HashMap<>();
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagar@gmal.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
@@ -1194,7 +1197,7 @@ class AppointmentServiceImplTest {
         final Long appointIdDb = 1L;
         FollowUpDto followUpDto = new FollowUpDto(1L,"sagar",1L,"dentist","completed");
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Mockito.when(appointmentRepository.getId(appointId)).thenReturn(appointIdDb);
@@ -1242,7 +1245,7 @@ class AppointmentServiceImplTest {
         PatientProfileDto patientProfileDto = new PatientProfileDto(1L,LocalDate.now(),"sagar","sagarssn3@gmail.com",
                 "fever","dentist",true,1L,null,null,null,"completed");
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         Mockito.when(appointmentRepository.getId(appointId)).thenReturn(appointIdDb);
@@ -1272,10 +1275,10 @@ class AppointmentServiceImplTest {
     @Test
     void recentAppointment_SUCCESS() {
         Long id = 1L;
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed", LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagar@gmail.com","completed", LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto1));
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
        List<Appointment> list = new ArrayList<>(Arrays.asList(appointment,appointment));
 

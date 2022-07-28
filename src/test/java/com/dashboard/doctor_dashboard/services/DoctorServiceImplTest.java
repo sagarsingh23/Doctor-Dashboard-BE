@@ -1,13 +1,18 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.DoctorServiceImpl;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,8 +61,8 @@ class DoctorServiceImplTest {
     @Test
     void testGetAllDoctors() {
         final Long id = 1L;
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1", Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<>(Arrays.asList(doctorListDto1, doctorListDto2));
 
 
@@ -74,8 +79,8 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorIfIdNotPresentInDb() {
         final Long id = 1L;
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         Mockito.when(doctorRepository.isIdAvailable(id)).thenReturn(null);
@@ -89,8 +94,8 @@ class DoctorServiceImplTest {
     @Test
     void getDoctorById() {
         Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21,"MBBS",(short)8);
+        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagar@gmail.com",
+                Category.Orthologist,null, Gender.Male, (short) 21,"MBBS",(short)8);
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(id);
         Mockito.when(doctorRepository.findDoctorById(Mockito.any(Long.class))).thenReturn(doctorDetails);
@@ -104,8 +109,8 @@ class DoctorServiceImplTest {
     @Test
     void throwErrorWhenIdNoPresent() {
         Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21,"MBBS",(short)8);
+        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagar@gmail.com",
+                Category.Orthologist,null,Gender.Male, (short) 21,"MBBS",(short)8);
 
         Mockito.when(doctorRepository.isIdAvailable(Mockito.any(Long.class))).thenReturn(null);
 
@@ -120,8 +125,8 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long tokenId = 1L;
         Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(tokenId);
         Mockito.when(loginRepo.isIdAvailable(tokenId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId())).thenReturn(null);
@@ -133,9 +138,9 @@ class DoctorServiceImplTest {
                 .insertARowIntoTheTable(
                         doctorFormDto.getId(),
                         doctorFormDto.getAge(),
-                        doctorFormDto.getSpeciality(),
+                        doctorFormDto.getSpeciality().toString(),
                         doctorFormDto.getPhoneNo(),
-                        doctorFormDto.getGender(),
+                        doctorFormDto.getGender().toString(),
                         1L,
                         doctorFormDto.getExp(),
                         doctorFormDto.getDegree()
@@ -149,8 +154,8 @@ class DoctorServiceImplTest {
         long id = 1L;
         Long doctorLoginId = 1L;
         Long loginId = 1L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(4L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(4L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
@@ -167,8 +172,8 @@ class DoctorServiceImplTest {
         long id = 3L;
         Long doctorLoginId = 2L;
         Long loginId = 3L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(6L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(6L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
@@ -186,8 +191,8 @@ class DoctorServiceImplTest {
         long id = 3L;
         Long doctorLoginId = 6L;
         Long loginId = 3L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(3L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(3L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
@@ -205,8 +210,8 @@ class DoctorServiceImplTest {
         Long id=1L;
         Long id2 = 2L;
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(id);
 
         Mockito.when(doctorRepository.isIdAvailable(id))
@@ -224,8 +229,8 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"orthology","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
+                "1234567890",(short)6,"MBBS");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(id))
@@ -244,7 +249,7 @@ class DoctorServiceImplTest {
         Long id = 1L;
         Long doctorLoginId = 1L;
         Long loginId = 1L;
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
 
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
@@ -268,7 +273,7 @@ class DoctorServiceImplTest {
         long id = 1L;
         Long doctorLoginId = 1L;
         Long loginId = 1L;
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(4L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(4L,"1234567890");
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
         Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
@@ -285,7 +290,7 @@ class DoctorServiceImplTest {
         long id = 3L;
         Long doctorLoginId = 4L;
         Long loginId = 3L;
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(5L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(5L,"1234567890");
 
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
@@ -304,7 +309,7 @@ class DoctorServiceImplTest {
         long id = 6L;
         Long doctorLoginId = 4L;
         Long loginId = 6L;
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(6L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(6L,"1234567890");
 
         Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
         Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
@@ -322,7 +327,7 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(id))
@@ -338,7 +343,7 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(Mockito.any(Long.class)))
@@ -356,7 +361,7 @@ class DoctorServiceImplTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         Long id=1L;
 
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
         Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
 
         Mockito.when(loginRepo.isIdAvailable(id))
@@ -386,8 +391,8 @@ class DoctorServiceImplTest {
     @Test
     void getAllDoctorsBySpeciality() {
         final String speciality = "orthologist";
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         Mockito.when(doctorRepository.isSpecialityAvailable(speciality)).thenReturn(speciality);

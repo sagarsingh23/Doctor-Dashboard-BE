@@ -1,19 +1,17 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.model.Prescription;
+import com.dashboard.doctor_dashboard.entities.Prescription;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientDto;
-import com.dashboard.doctor_dashboard.entities.dtos.UpdatePrescriptionDto;
-import com.dashboard.doctor_dashboard.services.prescription_service.PrescriptionService;
+import com.dashboard.doctor_dashboard.dtos.PatientDto;
+import com.dashboard.doctor_dashboard.dtos.UpdatePrescriptionDto;
+import com.dashboard.doctor_dashboard.services.PrescriptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +57,7 @@ class PrescriptionControllerTest {
     @DisplayName("Add Prescription details")
     void addPrescriptionTest() throws Exception {
         final Long id =1L;
-        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","completed","sagar","sagarssn23@gmail.com",21,"male");
+        PatientDto patientDto = new PatientDto("dentist","Dr.pranay","completed","sagar","sagar@gmail.com",21,"male");
         UpdatePrescriptionDto details = new UpdatePrescriptionDto(patientDto,null,"completed","mri check",true,1L);
 
         Mockito.when(prescriptionService.addPrescription(Mockito.any(Long.class),Mockito.any(UpdatePrescriptionDto.class))).thenReturn(
@@ -100,7 +98,7 @@ class PrescriptionControllerTest {
                 new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message), HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/prescription/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/prescription/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
 

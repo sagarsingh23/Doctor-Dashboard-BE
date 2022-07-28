@@ -1,9 +1,15 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.model.Patient;
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.AppointmentViewDto;
+import com.dashboard.doctor_dashboard.dtos.NotificationDto;
+import com.dashboard.doctor_dashboard.dtos.PatientEntityDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.BloodGroup;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.patient_service.PatientService;
+import com.dashboard.doctor_dashboard.services.PatientService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -59,13 +65,13 @@ class PatientControllerTest {
     @DisplayName("Add Patient Details")
     void addPatientTest() throws Exception {
         Long id = 1L;
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("1234567890",Gender.Male,21,BloodGroup.Apositive,"Address1","1234567890");
         Patient patient = new Patient();
         patient.setAge(21);
         patient.setMobileNo("900011112");
         patient.setPID(1L);
-        patient.setGender("male");
-        patient.setBloodGroup("A+");
+        patient.setGender(Gender.Male);
+        patient.setBloodGroup(BloodGroup.Apositive);
         patient.setAlternateMobileNo("900011112");
 
         Mockito.when(patientService.addPatient(Mockito.any(PatientEntityDto.class),Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patient), HttpStatus.CREATED));
@@ -81,7 +87,7 @@ class PatientControllerTest {
     @DisplayName("View Appointment Details By Appointment Id")
     void getAppointmentViewByAppointmentIdTest() throws Exception {
 
-        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar","genral",LocalDate.now(),LocalTime.now(),"completed","B+", (short) 21,"Male");
+        AppointmentViewDto viewDto = new AppointmentViewDto("Sagar", Category.General,LocalDate.now(),LocalTime.now(),"completed",BloodGroup.Apositive, (short) 21,Gender.Male);
 
 
         Mockito.when(patientService.viewAppointment(Mockito.any(Long.class),Mockito.any(Long.class)))
@@ -98,7 +104,7 @@ class PatientControllerTest {
     @DisplayName("View Patient Appointment Details")
     void patientProfileTest() throws Exception {
 
-        PatientEntityDto patientEntityDto = new PatientEntityDto("9728330045","Male",21,"A+","Address1","9728330045");
+        PatientEntityDto patientEntityDto = new PatientEntityDto("1234567890",Gender.Male,21,BloodGroup.Apositive,"Address1","1234567890");
 
         Mockito.when(patientService.getPatientDetailsById(Mockito.any(Long.class)))
                 .thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,patientEntityDto),HttpStatus.OK));
@@ -115,7 +121,7 @@ class PatientControllerTest {
         final Long id = 1L;
         String message = "Mobile No. Successfully Updated";
 
-        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(id,"9728330045");
+        UserDetailsUpdateDto updateDto = new UserDetailsUpdateDto(id,"1234567890");
 
         Mockito.when(patientService.updatePatientDetails(Mockito.any(Long.class),Mockito.any(UserDetailsUpdateDto.class))).thenReturn(new ResponseEntity<>(new GenericMessage(Constants.SUCCESS,message),HttpStatus.OK));
 
@@ -138,7 +144,7 @@ class PatientControllerTest {
         verify(patientService,times(2)).deletePatientById(id);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/patient/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/patient/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
 
     }

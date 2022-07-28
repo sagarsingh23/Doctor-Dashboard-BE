@@ -1,12 +1,12 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.TodoListDto;
-import com.dashboard.doctor_dashboard.entities.model.Todolist;
+import com.dashboard.doctor_dashboard.dtos.TodoListDto;
+import com.dashboard.doctor_dashboard.entities.Todolist;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.repository.TodoRepository;
-import com.dashboard.doctor_dashboard.services.todo_service.TodoServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.TodoServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,18 +1,19 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
+import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistService;
+import com.dashboard.doctor_dashboard.services.ReceptionistService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +60,8 @@ class ReceptionistControllerTest {
     @DisplayName("View All Doctor Names")
     void getDoctorNamesTest() throws Exception {
 
-        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
-        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com","dentist");
+        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagar@gmail.com", Category.Orthologist);
+        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com",Category.Dentist);
         List<DoctorDropdownDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
         Mockito.when(receptionistService.getDoctorDetails()).thenReturn(
@@ -74,7 +75,7 @@ class ReceptionistControllerTest {
     @Test
     @DisplayName("View All Appointment By Doctor")
     void getAppointmentListTest() throws Exception {
-        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
+        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagar@gmail.com","completed");
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
@@ -107,7 +108,7 @@ class ReceptionistControllerTest {
     @DisplayName("View Today's All Appointment For Clinic Staff")
     void getTodayAllAppointmentForClinicStaffTest() throws Exception {
         int pageNo = 1;
-        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
+        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagar@gmail.com","completed");
         PatientViewDto dto2 = new PatientViewDto(2L, LocalTime.now(),"pranay","pranay@gmail.com","follow up");
         PatientViewDto dto3 = new PatientViewDto(3L, LocalTime.now(),"gokul","gokul@gmail.com"," complete");
 

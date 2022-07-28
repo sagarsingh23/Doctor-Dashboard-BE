@@ -52,9 +52,9 @@ class JwtServiceImplTest {
         String token = "ejsdetyfrbendsntsqodqpepmmgrewfetesdy";
 
         Login login = new Login();
-        login.setEmail("sagar.singh@nineleaps.com");
+        login.setEmail("xyz@nineleaps.com");
         login.setId(1L);
-        login.setUsername("sagar24");
+        login.setUsername("xyz");
         login.setRole("DOCTOR");
         login.setProfilePic("profilePic");
 
@@ -77,11 +77,11 @@ class JwtServiceImplTest {
                 login.getEmail(),login.getUsername(),authorities
         ))).thenReturn(authentication);
         System.out.println(authentication.getAuthorities());
-
+        Mockito.when(authentication.getName()).thenReturn("xyz");
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
 
-        Mockito.when(jwtTokenProvider.generateToken(Mockito.any(Authentication.class),Mockito.any(Claims.class))).thenReturn(token);
+        Mockito.when(jwtTokenProvider.generateToken(Mockito.any(String.class),Mockito.any(Claims.class))).thenReturn(token);
 
         String newToken = jwtService.authenticateUser(login);
         System.out.println(newToken);

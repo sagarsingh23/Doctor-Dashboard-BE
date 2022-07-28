@@ -1,14 +1,12 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.services.file_service.FileStorageService;
+import com.dashboard.doctor_dashboard.services.FileStorageService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.entities.report.FileDB;
-import com.dashboard.doctor_dashboard.services.file_service.FileStorageServiceImpl;
+import com.dashboard.doctor_dashboard.entities.FileDB;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;

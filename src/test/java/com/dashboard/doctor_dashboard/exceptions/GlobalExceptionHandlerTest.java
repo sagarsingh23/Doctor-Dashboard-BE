@@ -55,7 +55,7 @@ class GlobalExceptionHandlerTest {
         WebRequest request = mock(WebRequest.class);
         ErrorDetails details = new ErrorDetails(new Date(), "test for global exception", request.getDescription(false));
         ResponseEntity<ErrorMessage> response = globalExceptionHandler.handleGlobalException(new Exception("test for global exception"), request);
-        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         Assertions.assertEquals(details.getClass(), Objects.requireNonNull(response.getBody()).getErrorData().getClass());
 
     }

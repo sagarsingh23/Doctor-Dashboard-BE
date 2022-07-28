@@ -1,21 +1,20 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
-import com.dashboard.doctor_dashboard.entities.model.DoctorDetails;
-import com.dashboard.doctor_dashboard.entities.model.Patient;
+import com.dashboard.doctor_dashboard.dtos.*;
+import com.dashboard.doctor_dashboard.entities.DoctorDetails;
+import com.dashboard.doctor_dashboard.entities.Patient;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.appointment_service.AppointmentService;
+import com.dashboard.doctor_dashboard.services.AppointmentService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +69,7 @@ class AppointmentControllerTest {
         m.put("appointId","1L");
         m.put("message","Successfully created");
 
-        AppointmentDto appointment = new AppointmentDto(1L,"dentist",localDate,"fever","sagar","sagarssn23@gmal.com",
+        AppointmentDto appointment = new AppointmentDto(1L, Category.Dentist,localDate,"fever","sagar","xyz@gmail.com",
                 "pranay", localTime,true,"completed",null,null,new Patient(),new DoctorDetails());
 
         Mockito.when(appointmentService.addAppointment(Mockito.any(AppointmentDto.class),Mockito.any(HttpServletRequest.class))).thenReturn(
@@ -133,8 +132,8 @@ class AppointmentControllerTest {
         int pageNo = 1;
 
         Map<String, List<DoctorAppointmentListDto>> map =new HashMap<>();
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
-        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","xyz@gmail.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","xyz@gmail.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto2));
         map.put("past",dto);
         map.put("today",dto);
@@ -274,8 +273,8 @@ class AppointmentControllerTest {
     void recentAppointment() throws Exception {
         final Long doctorId = 1L;
 
-        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
-        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","sagarssn23@gmal.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto1 = new DoctorAppointmentListDto(2L, LocalDate.now(),"sagar","xyz@gmail.com","completed",LocalTime.now());
+        DoctorAppointmentListDto dto2 = new DoctorAppointmentListDto(3L, LocalDate.now(),"sagar","xyz@gmail.com","completed",LocalTime.now());
         List<DoctorAppointmentListDto> dto = new ArrayList<>(Arrays.asList(dto1,dto2));
 
         Mockito.when(appointmentService.recentAppointment(Mockito.any(Long.class))).thenReturn(
@@ -292,7 +291,7 @@ class AppointmentControllerTest {
     void getAppointmentByIdTest() throws Exception {
         final Long appointId = 1L;
 
-        PatientProfileDto patientProfileDto = new PatientProfileDto(1L,LocalDate.now(),"sagar","sagarssn3@gmail.com",
+        PatientProfileDto patientProfileDto = new PatientProfileDto(1L,LocalDate.now(),"sagar","xyz@gmail.com",
                 "fever","dentist",true,1L,null,null,null,"completed");
 
         Mockito.when(appointmentService.getAppointmentById(Mockito.any(Long.class))).thenReturn(

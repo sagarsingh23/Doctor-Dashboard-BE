@@ -1,8 +1,6 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.utils.Constants;
-import com.dashboard.doctor_dashboard.exceptions.MailErrorException;
-import com.dashboard.doctor_dashboard.utils.MailServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.MailServiceImpl;
 import org.codehaus.jettison.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,14 +11,12 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.ITemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.context.IContext;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import java.io.UnsupportedEncodingException;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -51,8 +47,8 @@ class MailServiceTest {
         Mockito.doNothing().when(mailSender).send((MimeMessage) any());
         Mockito.doReturn(mimeMessage).when(mailSender).createMimeMessage();
         Mockito.doReturn("text").when(templateEngine).process(Mockito.any(String.class),Mockito.any(Context.class));
-        mailService.mailServiceHandler("sagarssn23@gmail.com","sagarssn23@gmail.com","sagar","Prescription" ,"templatePrescription", new Context());
-        mailService.mailServiceHandler("sagarssn23@gmail.com","sagarssn23@gmail.com","sagar","Prescription" ,"templatePrescription", new Context());
+        mailService.mailServiceHandler("xyz@gmail.com","xyz@gmail.com","sagar","Prescription" ,"templatePrescription", new Context());
+        mailService.mailServiceHandler("xyz@gmail.com","xyz@gmail.com","sagar","Prescription" ,"templatePrescription", new Context());
 
         verify(mailSender,times(2)).send((MimeMessage) any());
 
@@ -62,7 +58,7 @@ class MailServiceTest {
 //    void mailServiceHandler_FAILURE() throws MessagingException, JSONException, UnsupportedEncodingException {
 //
 //        MailErrorException mailErrorException = assertThrows(MailErrorException.class,()->{
-//            mailService.mailServiceHandler("sagarssn23@gmail.com","sagarssn23@gmail.com","sagar","Prescription" ,"templatePrescription",new Context());
+//            mailService.mailServiceHandler("xyz@gmail.com","xyz@gmail.com","sagar","Prescription" ,"templatePrescription",new Context());
 //
 //        });
 //        assertEquals(Constants.MAIL_ERROR,mailErrorException.getMessage());

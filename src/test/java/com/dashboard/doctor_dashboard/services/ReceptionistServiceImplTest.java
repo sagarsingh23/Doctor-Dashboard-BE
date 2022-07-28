@@ -1,16 +1,17 @@
 package com.dashboard.doctor_dashboard.services;
 
-import com.dashboard.doctor_dashboard.entities.dtos.AttributesDto;
-import com.dashboard.doctor_dashboard.entities.dtos.DoctorDropdownDto;
-import com.dashboard.doctor_dashboard.entities.dtos.PatientViewDto;
-import com.dashboard.doctor_dashboard.entities.model.Appointment;
+import com.dashboard.doctor_dashboard.dtos.AttributesDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
+import com.dashboard.doctor_dashboard.dtos.PatientViewDto;
+import com.dashboard.doctor_dashboard.entities.Appointment;
+import com.dashboard.doctor_dashboard.enums.Category;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.AttributeRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
-import com.dashboard.doctor_dashboard.services.receptionist.ReceptionistServiceImpl;
+import com.dashboard.doctor_dashboard.services.impl.ReceptionistServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,8 +71,8 @@ class ReceptionistServiceImplTest {
 
     @Test
     void getDoctorDetails_SUCCESS() {
-        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagarssn23@gmail.com","orthology");
-        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com","dentist");
+        DoctorDropdownDto dto1 = new DoctorDropdownDto(1L,"Sagar","sagar@gmail.com", Category.Orthologist);
+        DoctorDropdownDto dto2 = new DoctorDropdownDto(2L,"pranay","pranay@gmail.com",Category.General);
         List<DoctorDropdownDto> list = new ArrayList<>(Arrays.asList(dto1, dto2));
 
         Mockito.when(doctorRepository.getDoctorDetails()).thenReturn(list);
@@ -91,10 +92,10 @@ class ReceptionistServiceImplTest {
         Pageable paging= PageRequest.of(pageNo, pageSize);
 
 
-        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
+        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagar@gmail.com","completed");
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1));
 
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<Appointment> appointmentList = new ArrayList<>(Arrays.asList(appointment,appointment));
@@ -133,8 +134,8 @@ class ReceptionistServiceImplTest {
         Pageable paging= PageRequest.of(pageNo, pageSize);
 
 
-        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagarssn23@gmail.com","completed");
-        Appointment appointment = new Appointment(1L,"dentist", LocalDate.now(),"fever","sagar","sagarssn23@gmal.com",
+        PatientViewDto dto1 = new PatientViewDto(1L, LocalTime.now(),"sagar","sagar@gmail.com","completed");
+        Appointment appointment = new Appointment(1L,Category.Dentist, LocalDate.now(),"fever","sagar","sagar@gmail.com",
                 "pranay", LocalTime.now(),true,"completed",null,null,null,false,true,2L,null,null,null,null);
 
         List<PatientViewDto> list = new ArrayList<>(Arrays.asList(dto1,dto1,dto1,dto1));

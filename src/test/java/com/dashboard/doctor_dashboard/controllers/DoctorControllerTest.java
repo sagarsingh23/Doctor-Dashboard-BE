@@ -1,18 +1,21 @@
 package com.dashboard.doctor_dashboard.controllers;
 
-import com.dashboard.doctor_dashboard.entities.dtos.*;
+import com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
+import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
+import com.dashboard.doctor_dashboard.dtos.UserDetailsUpdateDto;
+import com.dashboard.doctor_dashboard.enums.Category;
+import com.dashboard.doctor_dashboard.enums.Gender;
 import com.dashboard.doctor_dashboard.exceptions.GlobalExceptionHandler;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
-import com.dashboard.doctor_dashboard.services.doctor_service.DoctorService;
+import com.dashboard.doctor_dashboard.services.DoctorService;
 import com.dashboard.doctor_dashboard.utils.Constants;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.context.request.WebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,8 +67,8 @@ class DoctorControllerTest {
     void  getAllDoctors() throws Exception {
         final Long id = 1L;
         List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1", Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
@@ -79,28 +81,13 @@ class DoctorControllerTest {
 
     }
 
-    @Test
-    void throwErrorIfIdNotPresentDbForAllDoctor() throws Exception {
-        final Long id = 1L;
-        List<DoctorListDto> list = new ArrayList<DoctorListDto>();
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
-        list.addAll(Arrays.asList(doctorListDto1,doctorListDto2));
-
-        Mockito.when(doctorService.getAllDoctors(Mockito.any(Long.class))).thenReturn(null);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/doctor/get-all/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-
-
-    }
 
     @Test
     @DisplayName("View Doctor Details By Id")
     void getDoctorsByIdIfIdPresent() throws Exception {
         final Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21,"MBBS",(short)8);
+        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagar@gmail.com",
+                Category.Orthologist,null,Gender.Male, (short) 21,"MBBS",(short)8);
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorDetails);
 
@@ -112,19 +99,6 @@ class DoctorControllerTest {
 
     }
 
-    @Test
-    void throwErrorIfIdNotPresentDb() throws Exception {
-        final Long id = 1L;
-        DoctorBasicDetailsDto doctorDetails = new DoctorBasicDetailsDto("Sagar","sagarssn23@gmail.com",
-                "orthology",null,"male", (short) 21,"MBBS",(short)8);
-
-        Mockito.when(doctorService.getDoctorById(id)).thenReturn(null);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/api/v1/doctor/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isNotFound());
-
-
-    }
 
     @Test
     @DisplayName("Add Doctor Details")
@@ -133,8 +107,8 @@ class DoctorControllerTest {
         WebRequest webRequest = mock(WebRequest.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
 
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,"Orthologist","male",
-                "9728330045",(short)6,"MBBS");
+        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist, Gender.Male,
+                "1234567890",(short)6,"MBBS");
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,doctorFormDto);
 
 
@@ -153,7 +127,7 @@ class DoctorControllerTest {
     @DisplayName("Update Doctor Details")
     void updateDoctorDetails() throws Exception {
 
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"9728330045");
+        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,userDetailsUpdateDto);
 
@@ -190,15 +164,14 @@ class DoctorControllerTest {
         Mockito.when(doctorService.deleteDoctor(Mockito.any(Long.class))).thenReturn(new ResponseEntity<>(message,HttpStatus.OK));
 
         mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/doctor/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .delete("/api/v1/doctor/private/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     @DisplayName("View All Doctor By Speciality")
     void getAllDoctorsBySpecialityTest() throws Exception {
-        final String speciality = "orthology";
-        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1","orthology",(short)8,"MBBS");
-        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2","orthology",(short)6,"MBBS");
+        DoctorListDto doctorListDto1 = new DoctorListDto(1,"sagar","sagar@gmail.com","profile1",Category.Orthologist,(short)8,"MBBS");
+        DoctorListDto doctorListDto2 = new DoctorListDto(2,"gokul","gokul@gmail.com","profile2",Category.Orthologist,(short)6,"MBBS");
         List<DoctorListDto> list = new ArrayList<DoctorListDto>(Arrays.asList(doctorListDto1, doctorListDto2));
 
         GenericMessage message  = new GenericMessage(Constants.SUCCESS,list);
