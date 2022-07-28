@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,6 +24,8 @@ public class JwtTokenProvider {
     private String jwtSecret;
     @Value("${app.jwt-expiration-milliseconds}")
     private int jwtExpirationInMs;
+    @Value("${app.jwt-refresh-expiration-milliseconds}")
+    private int jwtRefreshExpirationInMs;
 
     public String generateToken(String email, Claims tokenClaims) {
 
@@ -47,13 +48,24 @@ public class JwtTokenProvider {
                 .compact();
     }
 
+    public String doGenerateRefreshToken(String email,Map<String,Object> claims){
+        var currentDate = new Date();
+        var expireDate = new Date(currentDate.getTime() + jwtRefreshExpirationInMs);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(email)
+                .setIssuedAt(new Date())
+                .setExpiration(expireDate)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
+
     // get username from the token
     public String getUsernameFromJWT(String token) {
         var claims = Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
-        System.out.println(claims);
         return claims.getSubject();
     }
 
@@ -79,18 +91,12 @@ public class JwtTokenProvider {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        } catch (SignatureException ex) {
-            throw new APIException( "Invalid JWT signature");
-        } catch (MalformedJwtException ex) {
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException | IllegalArgumentException ex) {
             throw new APIException( "Invalid JWT token");
         } catch (ExpiredJwtException ex) {
             if(refreshToken(ex,request))
                 return false;
             throw new ExpiredJwtException(ex.getHeader(), ex.getClaims(), "Expired JWT token");
-        } catch (UnsupportedJwtException ex) {
-            throw new APIException("Unsupported JWT token");
-        } catch (IllegalArgumentException ex) {
-            throw new APIException("JWT claims string is empty.");
         }
     }
 
@@ -99,7 +105,7 @@ public class JwtTokenProvider {
         log.info("inside::refreshToken");
         String isRefreshToken = request.getHeader("isRefreshToken");
         log.info("refresh",isRefreshToken);
-        String requestURL = request.getRequestURL().toString();
+        var requestURL = request.getRequestURL().toString();
         if (isRefreshToken != null && isRefreshToken.equals("true") && requestURL.contains("refresh-token")) {
             log.info("inside");
             allowForRefreshToken(ex, request);
@@ -112,7 +118,7 @@ public class JwtTokenProvider {
 
     private void allowForRefreshToken(ExpiredJwtException ex, HttpServletRequest request) {
         log.info("allowForRefreshToken");
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+        var usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 null, null, null);
         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
         request.setAttribute("claims", ex.getClaims());

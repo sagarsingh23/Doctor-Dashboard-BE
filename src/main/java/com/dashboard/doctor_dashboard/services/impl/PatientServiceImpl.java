@@ -58,15 +58,13 @@ public class PatientServiceImpl implements PatientService {
 
         Long temp = loginRepo.isIdAvailable(loginId);
         if(temp != null){
-            System.out.println(patient.getBloodGroup());
             patientRepository.
                     insertIntoPatient(patient.getAge(),patient.getMobileNo(),patient.getAlternateMobileNo(),
-                            patient.getGender().toString(), patient.getAddress(), patient.getBloodGroup().getValue(),loginId);
+                            patient.getGender().toString(), patient.getAddress(), patient.getBloodGroup().toString(),loginId);
 
             log.debug("Patient Service::Patient Successfully Added..");
 
             var patientDetails = patientRepository.getPatientByLoginId(loginId);
-            System.out.println("patient:::::"+patientRepository.getPatientByLoginId(loginId));
             genericMessage.setData(mapToDto(patientDetails));
             genericMessage.setStatus(Constants.SUCCESS);
             log.info("exit: PatientServiceImpl:: addPatient");

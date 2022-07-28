@@ -46,7 +46,6 @@ public class JwtServiceImpl implements JwtService {
                 login.getEmail(), login.getUsername(),authorities));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        System.out.println("auth"+authentication);
 
         var claims = new Claims();
         claims.setDoctorEmail(login.getEmail());
@@ -67,7 +66,7 @@ public class JwtServiceImpl implements JwtService {
     Map<String,Object> claims= new HashMap<>();
 
         claims.put("DoctorDetails",defaultClaims.get("DoctorDetails"));
-        return jwtTokenProvider.doGenerateToken(defaultClaims.get("sub").toString(), claims);
+        return jwtTokenProvider.doGenerateRefreshToken(defaultClaims.get("sub").toString(), claims);
     }
 
 

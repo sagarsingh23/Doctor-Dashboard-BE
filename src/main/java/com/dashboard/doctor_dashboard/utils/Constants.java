@@ -1,6 +1,6 @@
 package com.dashboard.doctor_dashboard.utils;
 
-@SuppressWarnings("squid:S6126")
+
 public class Constants {
     public static final String SUCCESS = "success";
     public static final String FAIL = "failure";

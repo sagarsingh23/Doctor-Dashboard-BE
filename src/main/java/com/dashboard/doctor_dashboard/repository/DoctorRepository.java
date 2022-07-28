@@ -5,8 +5,6 @@ import com.dashboard.doctor_dashboard.dtos.DoctorBasicDetailsDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorDropdownDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorFormDto;
 import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
-import com.dashboard.doctor_dashboard.enums.Category;
-import com.dashboard.doctor_dashboard.enums.Gender;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

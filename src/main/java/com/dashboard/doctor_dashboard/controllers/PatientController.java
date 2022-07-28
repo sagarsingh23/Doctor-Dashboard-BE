@@ -38,7 +38,6 @@ public class PatientController {
     @PostMapping("/on-boarding/{loginId}")
     public ResponseEntity<GenericMessage> addPatientDetails(@Valid @RequestBody PatientEntityDto patient,@PathVariable("loginId") Long loginId) {
         log.info("PatientController::addPatientDetails");
-        System.out.println("patient"+patient);
         return patientService.addPatient(patient,loginId);
     }
 

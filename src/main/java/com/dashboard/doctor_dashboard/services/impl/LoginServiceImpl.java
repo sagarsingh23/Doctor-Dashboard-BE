@@ -164,8 +164,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public ResponseEntity<GenericMessage> refreshTokenCreator(HttpServletRequest request){
-        DefaultClaims defaultClaims= (DefaultClaims) request.getAttribute("claims");
-        System.out.println("defaultClaims "+defaultClaims);
+        var defaultClaims= (DefaultClaims) request.getAttribute("claims");
         return  new  ResponseEntity<>(new GenericMessage(Constants.SUCCESS,jwtService.createRefreshToken(defaultClaims)),HttpStatus.CREATED);
     }
 
