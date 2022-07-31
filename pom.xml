@@ -8,8 +8,8 @@
 		<version>2.6.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.doctors_dashboard</groupId>
-	<artifactId>dashboard</artifactId>
+	<groupId>com.nineleaps</groupId>
+	<artifactId>doctor_dashboard</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>dashboard</name>
 	<description>Dashboard</description>
@@ -17,9 +17,13 @@
 		<java.version>17</java.version>
 		<sonar.coverage.exclusions>
 			**/com/dashboard/doctor_dashboard/entities/**,
-			**/com/dashboard/doctor_dashboard/jwt/config/*,
-			**/com/dashboard/doctor_dashboard/jwt/entities/*,
+			**/com/dashboard/doctor_dashboard/dtos/**,
 			**/com/dashboard/doctor_dashboard/utils/**,
+			**/com/dashboard/doctor_dashboard/interceptor/**,
+			**/com/dashboard/doctor_dashboard/jwt/config/*,
+			**/com/dashboard/doctor_dashboard/jwt/**,
+			**/com/dashboard/doctor_dashboard/services/impl/PdFGeneratorServiceImpl.java,
+			**/com/dashboard/doctor_dashboard/services/impl/MailServiceImpl.java,
 			**/com/dashboard/DashboardApplication.java
 		</sonar.coverage.exclusions>
 	</properties>
