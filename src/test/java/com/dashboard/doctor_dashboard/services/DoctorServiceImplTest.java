@@ -185,24 +185,6 @@ class DoctorServiceImplTest {
 
     }
 
-    @Test
-    void throwErrorDetailsNotEqualsWithTheDoctorLoginIdForAddDoctor() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 3L;
-        Long doctorLoginId = 6L;
-        Long loginId = 3L;
-        DoctorFormDto doctorFormDto = new DoctorFormDto(3L,(short) 26,Category.Orthologist,Gender.Male,
-                "1234567890",(short)6,"MBBS");
-        Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
-        Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(doctorFormDto.getId()))
-                .thenReturn(null);
-
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.addDoctorDetails(doctorFormDto,id,request);
-        });
-
-    }
 
     @Test
     void ThrowErrorIfIdNotPresentInDoctorDetailsForAddDoctor() {
@@ -223,23 +205,6 @@ class DoctorServiceImplTest {
         });
     }
 
-
-    @Test
-    void ThrowErrorIfIdNotPresentInLoginDetailsForAddDoctor() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        Long id=1L;
-
-        DoctorFormDto doctorFormDto = new DoctorFormDto(1L,(short) 26,Category.Orthologist,Gender.Male,
-                "1234567890",(short)6,"MBBS");
-        Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(id);
-
-        Mockito.when(loginRepo.isIdAvailable(id))
-                .thenReturn(null);
-
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.addDoctorDetails(doctorFormDto,id,request);
-        });
-    }
 
 
 
@@ -303,40 +268,40 @@ class DoctorServiceImplTest {
 
     }
 
-    @Test
-    void throwErrorDetailsNotEqualsWithTheDoctorLoginIdForUpdateDoctor() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        long id = 6L;
-        Long doctorLoginId = 4L;
-        Long loginId = 6L;
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(6L,"1234567890");
-
-        Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
-        Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
-        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
-                .thenReturn(userDetailsUpdateDto.getId());
-
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
-        });
-
-    }
-
-    @Test
-    void ThrowErrorIfIdNotPresentInLoginDetailsForUpdateDoctor() {
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        Long id=1L;
-
-        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
-        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
-
-        Mockito.when(loginRepo.isIdAvailable(id))
-                .thenReturn(null);
-
-        assertThrows(ResourceNotFoundException.class,()->{
-            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
-        });
-    }
+//    @Test
+//    void throwErrorDetailsNotEqualsWithTheDoctorLoginIdForUpdateDoctor() {
+//        HttpServletRequest request = mock(HttpServletRequest.class);
+//        long id = 6L;
+//        Long doctorLoginId = 4L;
+//        Long loginId = 6L;
+//        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(6L,"1234567890");
+//
+//        Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(doctorLoginId);
+//        Mockito.when(loginRepo.isIdAvailable(doctorLoginId)).thenReturn(loginId);
+//        Mockito.when(doctorRepository.isIdAvailable(userDetailsUpdateDto.getId()))
+//                .thenReturn(userDetailsUpdateDto.getId());
+//
+//        assertThrows(ResourceNotFoundException.class,()->{
+//            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
+//        });
+//
+//    }
+//
+//    @Test
+//    void ThrowErrorIfIdNotPresentInLoginDetailsForUpdateDoctor() {
+//        HttpServletRequest request = mock(HttpServletRequest.class);
+//        Long id=1L;
+//
+//        UserDetailsUpdateDto userDetailsUpdateDto = new UserDetailsUpdateDto(1L,"1234567890");
+//        Mockito.when(jwtTokenProvider.getIdFromToken(Mockito.any())).thenReturn(id);
+//
+//        Mockito.when(loginRepo.isIdAvailable(id))
+//                .thenReturn(null);
+//
+//        assertThrows(ResourceNotFoundException.class,()->{
+//            doctorService.updateDoctor(userDetailsUpdateDto,id,request);
+//        });
+//    }
 
     @Test
     void ThrowErrorIfIdNotPresentInDoctorDetailsForUpdateDoctor() {

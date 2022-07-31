@@ -228,55 +228,6 @@ class AppointmentServiceImplTest {
         );
     }
 
-
-
-    @Test
-    void addAppointment_LoginIdNotPresentInLoginDb() throws MessagingException, JSONException, UnsupportedEncodingException {
-
-        Long loginId = 1L;
-
-        LocalDate localDate = LocalDate.of(2022,07,12);
-        LocalTime localTime = LocalTime.of(8,30);
-
-        Map<String,String> expected = new HashMap<>();
-        expected.put("appointId","1");
-        expected.put("message",Constants.APPOINTMENT_CREATED);
-
-
-        Patient patient = new Patient();
-        patient.setAge(21);
-        patient.setMobileNo("900011112");
-        patient.setPID(1L);
-        patient.setGender(Gender.Male);
-        patient.setBloodGroup(BloodGroup.Apositive);
-        patient.setAlternateMobileNo("900011112");
-
-        DoctorDetails doctorDetails = new DoctorDetails();
-        doctorDetails.setId(4L);
-
-//        Appointment appointment = new Appointment(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
-//                "pranay", localTime,true,"completed",null,null,null,null,2L,patient,doctorDetails,null,null);
-
-        AppointmentDto appointment1 = new AppointmentDto(1L,Category.Dentist, localDate,"fever","sagar","sagar@gmail.com",
-                "pranay", localTime,true,"completed",null,2L,patient,doctorDetails);
-
-
-
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        Mockito.when(jwtTokenProvider.getIdFromToken(request)).thenReturn(loginId);
-        Mockito.when(loginRepo.isIdAvailable(loginId)).thenReturn(null);
-
-        ResourceNotFoundException resourceNotFoundException = assertThrows(ResourceNotFoundException.class,()->{
-            appointmentService.addAppointment(appointment1,request);
-        });
-
-        assertThat(resourceNotFoundException).isNotNull();
-        assertEquals(Constants.LOGIN_DETAILS_NOT_FOUND,resourceNotFoundException.getMessage());
-
-    }
-
-
-
     @Test
     void addAppointment_throwErrorIfPatientNotPresentInPatientDb() throws MessagingException, JSONException, UnsupportedEncodingException {
 
