@@ -63,6 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] DOCTOR_URL={             //  all the allowed Apis which need Role as Doctor to run
 
             "/api/todolist/**",
+            "/api/v1/doctor/**",
             "api/appointment/getAllAppointments/doctor/*",
             "api/attribute/changeNotes/*",
             "api/appointment/*/activePatient",
