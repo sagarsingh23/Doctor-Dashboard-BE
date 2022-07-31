@@ -6,6 +6,8 @@ public class Constants {
     public static final String FAIL = "failure";
     public static final String LOGIN = "Login";
     public static final String  DEFAULT_PAGE_SIZE="10";
+    public static final String  UNAUTHORIZED="Authentication failed,token is not valid";
+
 
     public static final String DETAILS_MISMATCH = "details provided is not correct";
 
