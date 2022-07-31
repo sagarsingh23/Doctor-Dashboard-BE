@@ -8,7 +8,6 @@ import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.InvalidDate;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
 import com.dashboard.doctor_dashboard.exceptions.ValidationsException;
-import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.AppointmentRepository;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
 import com.dashboard.doctor_dashboard.repository.LoginRepo;
@@ -50,18 +49,16 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final PdFGeneratorServiceImpl pdFGeneratorService;
     private final LoginRepo loginRepo;
     private final MailServiceImpl mailService;
-    private  final JwtTokenProvider jwtTokenProvider;
     private final ModelMapper mapper;
 
     @Autowired
-    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, PatientRepository patientRepository, DoctorRepository doctorRepository, PdFGeneratorServiceImpl pdFGeneratorService, LoginRepo loginRepo, MailServiceImpl mailService, JwtTokenProvider jwtTokenProvider, ModelMapper mapper) {
+    public AppointmentServiceImpl(AppointmentRepository appointmentRepository, PatientRepository patientRepository, DoctorRepository doctorRepository, PdFGeneratorServiceImpl pdFGeneratorService, LoginRepo loginRepo, MailServiceImpl mailService, ModelMapper mapper) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
         this.pdFGeneratorService = pdFGeneratorService;
         this.loginRepo = loginRepo;
         this.mailService = mailService;
-        this.jwtTokenProvider = jwtTokenProvider;
         this.mapper = mapper;
     }
 
@@ -86,8 +83,6 @@ public class AppointmentServiceImpl implements AppointmentService {
     @Override
     public ResponseEntity<GenericMessage>  addAppointment(AppointmentDto appointment, HttpServletRequest request) throws MessagingException, JSONException, UnsupportedEncodingException {
         Map<String,String> response = new HashMap<>();
-        Long loginId=jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(loginId) != null) { //checking if the patient exists database.
             Long patientId=patientRepository.getId(appointment.getPatient().getPID());
             if ( patientId!= null && doctorRepository.isIdAvailable(appointment.getDoctorDetails().getId()) != null) { //checking if the doctor and patient details exists in database.
                 checkSanityOfAppointment(mapper.map(appointment,Appointment.class)); //cross-checking the values inside the object with the database.
@@ -120,9 +115,6 @@ public class AppointmentServiceImpl implements AppointmentService {
                 logger.info(Constants.DOCTOR_NOT_FOUND);
                 throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);                      //  Doctor Not Found with id provided
             }
-        }
-        logger.info(Constants.LOGIN_DETAILS_NOT_FOUND);
-        throw new ResourceNotFoundException(Constants.LOGIN_DETAILS_NOT_FOUND);                       //  login details Not Found with id provided
     }
 
     /**

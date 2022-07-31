@@ -12,7 +12,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Enumeration;
 
 
 @Component
@@ -34,7 +33,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         try {
-            int userId = Integer.parseInt(request.getHeader("userId"));
+            var userId = Integer.parseInt(request.getHeader("userId"));
             String jwtToken;
             String bearerToken = request.getHeader("Authorization");
             if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {

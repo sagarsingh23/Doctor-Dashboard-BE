@@ -9,9 +9,7 @@ import com.dashboard.doctor_dashboard.dtos.DoctorListDto;
 import com.dashboard.doctor_dashboard.utils.wrapper.GenericMessage;
 import com.dashboard.doctor_dashboard.exceptions.APIException;
 import com.dashboard.doctor_dashboard.exceptions.ResourceNotFoundException;
-import com.dashboard.doctor_dashboard.jwt.security.JwtTokenProvider;
 import com.dashboard.doctor_dashboard.repository.DoctorRepository;
-import com.dashboard.doctor_dashboard.repository.LoginRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,14 +30,10 @@ import java.util.Map;
 public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorRepository doctorRepository;
-    private final LoginRepo loginRepo;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public DoctorServiceImpl(DoctorRepository doctorRepository, LoginRepo loginRepo, JwtTokenProvider jwtTokenProvider) {
+    public DoctorServiceImpl(DoctorRepository doctorRepository) {
         this.doctorRepository = doctorRepository;
-        this.loginRepo = loginRepo;
-        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     /**
@@ -105,14 +99,10 @@ public class DoctorServiceImpl implements DoctorService {
     public ResponseEntity<GenericMessage> addDoctorDetails(DoctorFormDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::addDoctorDetails");
 
-
         var genericMessage = new GenericMessage();
-        Long doctorLoginId=jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(doctorLoginId) != null) {
-
             if(doctorRepository.isIdAvailable(details.getId())==null) {
-                if (details.getId() == id && details.getId().equals(doctorLoginId)) {
-                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),doctorLoginId,details.getExp(),details.getDegree());
+                if (details.getId() == id ) {
+                    doctorRepository.insertARowIntoTheTable(details.getId(),details.getAge(),details.getSpeciality().toString(),details.getPhoneNo(),details.getGender().toString(),id,details.getExp(),details.getDegree());
                     genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                     genericMessage.setStatus(Constants.SUCCESS);
                     log.debug("Doctor: Doctor on boarding completed.");
@@ -125,10 +115,6 @@ public class DoctorServiceImpl implements DoctorService {
                 log.error("Doctor Service Impl: update not allowed in this API endpoint.");
                 throw new APIException("update not allowed in this API endpoint.");
             }
-        }
-
-        log.info("DoctorServiceImpl::addDoctorDetails"+Constants.DOCTOR_NOT_FOUND);
-        throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
     /**
@@ -141,13 +127,9 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public ResponseEntity<GenericMessage>  updateDoctor(UserDetailsUpdateDto details, long id, HttpServletRequest request){
         log.info("inside: DoctorServiceImpl::updateDoctor");
-
-
         var genericMessage = new GenericMessage();
-
-        Long doctorLoginId = jwtTokenProvider.getIdFromToken(request);
-        if (loginRepo.isIdAvailable(doctorLoginId) != null && doctorRepository.isIdAvailable(details.getId()) != null) {
-            if (details.getId().equals(id) && details.getId().equals(doctorLoginId)) {
+        if (doctorRepository.isIdAvailable(details.getId()) != null) {
+            if (details.getId().equals(id)) {
                 doctorRepository.updateDoctorDb(details.getMobileNo());
                 genericMessage.setData( doctorRepository.getDoctorById(details.getId()));
                 genericMessage.setStatus(Constants.SUCCESS);
@@ -157,11 +139,9 @@ public class DoctorServiceImpl implements DoctorService {
             }
 
             log.info("DoctorServiceImpl::updateDoctor"+Constants.DETAILS_MISMATCH);
-
             throw new ResourceNotFoundException(Constants.DETAILS_MISMATCH);
         }
         log.info("DoctorServiceImpl::updateDoctor"+Constants.DOCTOR_NOT_FOUND);
-
         throw new ResourceNotFoundException(Constants.DOCTOR_NOT_FOUND);
     }
 
