@@ -142,5 +142,6 @@ public class Appointment {
                 ", prescription=" + prescription +
                 '}';
     }
+    
 }
 
