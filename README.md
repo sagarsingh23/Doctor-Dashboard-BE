@@ -1,4 +1,4 @@
-# Doctor-Dashboard-BE
+# Doctor-Dashboard-BEee
 
 Description
 Technology is constantly changing the way we live our lives, from living in the metaverse to getting a prescription on a smartphone app, our lives are transforming fast. My Care an interactive Appointment booking system serves right from booking an appointment to tracking down the performance of the patient and manage the appointment flow. The flow of it helps the patient, doctor and a Patient care technician to easily track down the respective details of the Patient Appointment ,Patient details which include various vitals such as the Blood Group , Blood Pressure, Glucose level and the Temperature which is updated by the Patient care assistant and which can be reviewed by the doctor . The doctor would be able to assist the patient accordingly from the details updated.
