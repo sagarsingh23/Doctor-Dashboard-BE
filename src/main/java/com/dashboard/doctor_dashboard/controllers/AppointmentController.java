@@ -22,6 +22,7 @@ import java.time.LocalDate;
 /**
  * AppointmentController
  */
+
 @RestController
 @RequestMapping("api/v1/appointment")
 @CrossOrigin(origins = "http://localhost:3000")
