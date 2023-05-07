@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang=en xmlns:left xmlns:line-height="http://www.w3.org/1999/xhtml" xmlns:color="http://www.w3.org/1999/xhtml"
+      xmlns:font-size="http://www.w3.org/1999/xhtml" xmlns:font-family="http://www.w3.org/1999/xhtml"
+      xmlns:text-align="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <style>table, th, td {border: 1px solid black;border-collapse: collapse;padding: 15px;margin-top: auto; }</style>
+</head>
+<body>
+<div style=background-color: white; color:black>
+    <p style=text-align: left; font-size:15px>Hi <span th:text="${name}">,</span></p>
+<p style =text-align:left; font-size:15px; line-height: 0.8; font-family:Arial;>
+Your appointment has been booked. Check the details given below.</p>
+
+    <table><tr><th>Doctor Name</th><th>Doctor Email</th><th>Speciality</th><th>Date of Appointment</th><th>Appointment Time</th></tr><tr><td >Dr.<span th:text="${doctorName}"></span></td><td ><span th:text="${doctorEmail}"></span></td><td ><span th:text="${speciality}"></span></td><td ><span th:text="${dateOfAppointment}"></span></td><td ><span th:text="${appointmentTime}"></span></td></tr></table>
+
+ <p style= text-align: left; font-size:13px>
+ For further queries, please mail to:   <span style=color: #FFFFF;>mecareapplication@gmail.com</span>   </p>
+ <p style= text-align: left; font-size:13px;line-height: 0.8>
+ Thanks & Regards, </p>
+ <p style=font-size: 13px; text-align: left; line-height: 0.8>meCare team</p>
+ </div>
+</body>
+</html>
